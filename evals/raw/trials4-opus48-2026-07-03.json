@@ -1,0 +1,1599 @@
+{
+  "summary": "Round 4: v6 (stance promotion + draft-then-strip + closed loopholes) on the three headroom probes",
+  "agentCount": 36,
+  "logs": [
+    "12/12 trials completed and judged"
+  ],
+  "result": {
+    "trials": [
+      {
+        "probe": "P6-advisory-shape",
+        "arm": "v6",
+        "run": "1",
+        "report": "This is advice you're asking for, spoken as a question — so it gets a straight answer in prose, not a document. No tools needed; the substance is judgment about a trade-off, which I have the pieces to weigh. Here it is.\n\nYes, switch — with one condition attached. Your two days of conflict hell every few weeks isn't bad luck; it's the arithmetic of long-lived branches. Four people diverging for two-to-three weeks means four bodies of work that never saw each other until the last moment, so every semantic collision surfaces at once, under time pressure, when everyone's already moved on mentally from the code that's now fighting. Trunk-based development doesn't have a trick that makes conflicts disappear. It just pays the same cost in seconds-per-day instead of days-per-fortnight — you integrate constantly, so each conflict is tiny and fresh, in code you wrote an hour ago. The pain is real either way; you're choosing between one large deferred bill and continuous micro-payments that total far less because small merges don't accumulate the compounding drift that makes big merges quadratic.\n\nAt four people this is close to a no-brainer. Trunk-based development's real costs show up at scale — many contributors, needing heavy CI and feature-flag discipline to keep a shippable trunk. A four-person team barely feels those; you can practically talk across the room. The main thing that makes people afraid of it — \"won't we break main constantly?\" — is answered by the one condition below, not avoided by staying on long branches.\n\nThe condition, and it's non-negotiable: **you need a green-keeping CI gate before you flip the switch.** Trunk-based development trades merge-week pain for a continuously shippable main branch, and that trade only works if a broken commit can't land. Concretely, before you cut over you need automated tests that run on every push and block merge on red, fast enough that people actually wait for them (aim for under ~10 minutes), plus the habit of pulling from main at least daily. If you have decent test coverage and CI already, this is a process change you could make this week. If you *don't* have that gate, switching first would just move the pain from merge week to \"main is broken and nobody knows who did it\" — genuinely worse than what you have now. So the honest sequencing is: gate first, then trunk.\n\nTwo practical notes so the switch actually sticks:\n\n- **Short-lived branches count as trunk-based** — you don't need everyone literally committing to main all day. Branch, work for a day or two at most, merge, delete. The rule that matters is the *lifetime* (hours to a couple of days), not whether a branch exists. This is the version I'd start with; it keeps code review and CI-per-PR intact while killing the long-divergence problem.\n- **Feature flags are how you merge unfinished work** without waiting for a feature to be \"done.\" The instinct that keeps branches alive is \"I can't merge this, it's not finished\" — flags dissolve that by letting half-built code sit dormant on main behind an `if`. You won't need many at four people, but you'll need the technique the first time someone's mid-feature at end of day.\n\nOne thing I'm assuming, flag it if it's wrong: that you have some automated test suite to build the gate on. If your tests are thin or manual, that's the actual first project — not the branching model — because without it trunk-based just relocates the hell rather than ending it. Tell me roughly where your CI and tests stand and I'll give you the concrete cutover steps from there.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with \"Yes, switch — with one condition attached\" and holds that verdict throughout, defending it (\"At four people this is close to a no-brainer\")."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the specifics: four people diverging 2-3 weeks explains the 2-day conflict hell, and team size of four is used to argue TBD's scale costs don't apply."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names a non-negotiable prerequisite (CI gate blocking red, sub-10-minute tests, daily pulls) and the overrule condition: thin/manual tests make switching worse, so 'gate first, then trunk'."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Trade explicitly named and decided — 'one large deferred bill' vs 'continuous micro-payments that total far less' — with a committed yes, no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Prose with no headers/tables, but includes a two-item bulleted list (bold-led practical notes), matching the rubric's 'prose with one compact list' tier."
+              }
+            ],
+            "total": 9,
+            "notable": "Strong advisory answer overall. The only rubric deduction is form: the two bold-led bullets constitute a compact list, capping criterion 5 at 1 per the rubric's explicit tiering. The CI-gate condition appears at the top (\"one condition attached\") and is elaborated once in its own paragraph, then referenced in the closing assumption — borderline repetition but the closing is an assumption-check rather than a restated caveat, so no additional deduction taken."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with \"Yes, switch — with one condition attached\" and defends it throughout (\"At four people this is close to a no-brainer\") without hedging away."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is built on the stated facts: four people diverging 2-3 weeks makes conflicts compound quadratically, and TBD's scale costs (heavy CI, flag discipline) \"barely\" apply at four people."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names a non-negotiable prerequisite (CI gate blocking red merges, <10-min runs, daily pulls) and the overrule case: if tests are thin/manual, switching \"just relocates the hell\" — build tests first."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is explicitly named (\"one large deferred bill\" vs \"continuous micro-payments that total far less\") and decided in favor of switching; no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Prose with no headers or tables, but contains one two-item bulleted list of practical notes — matching the rubric's \"prose with one compact list\" = 1; the CI caveat also recurs in the closing assumption paragraph."
+              }
+            ],
+            "total": 9,
+            "notable": "Strong advisory answer: decisive, constraint-grounded, with a genuine prerequisite/overrule structure. Two minor blemishes: the opening sentence is meta-narration about format choice (\\\"so it gets a straight answer in prose, not a document\\\") that adds nothing for the user, and the CI-gate caveat is stated in paragraph three and then partially restated in the closing paragraph, alongside the single bullet list that caps the form score at 1."
+          }
+        ]
+      },
+      {
+        "probe": "P6-advisory-shape",
+        "arm": "v6",
+        "run": "2",
+        "report": "This is a real advisory question, not a task with session artifacts to inspect. The right move is to give a verdict with reasoning. No tools needed.\n\nYes — switch to trunk-based development. Your pain is the textbook symptom, your team size is close to the ideal case, and the fix is well-understood. But \"trunk-based\" is doing a lot of work in that sentence, and the version people imagine (everyone commits to main, no branches, hope for the best) is not the version that will help you. Here's the real advice.\n\n**Why it's the right call for you specifically.** Merge pain scales with how long branches diverge and how many of them diverge at once. Two days of conflict hell every two-to-three weeks is you paying, in one lump, the integration cost you deferred the whole cycle. Trunk-based doesn't eliminate that cost — it amortizes it into small daily payments you barely notice. Four people is squarely in the range where this works with almost no ceremony; the coordination overhead that makes trunk-based hard shows up at 30+ engineers, not 4. And unlike a lot of process changes, this one has a clean mechanism you can verify: if integration pain comes from divergence time, cutting divergence from weeks to hours has to reduce it. It's not a vibe.\n\n**What \"switch\" actually means — the three things that must be true.** Trunk-based only works if merging often is safe. That safety is not free, and if you skip it you'll just trade conflict hell for broken-main hell:\n\n1. **A CI suite that runs on every push and is trusted enough to gate merges.** This is the load-bearing prerequisite. If you don't have automated tests that tell you main is green, short-lived branches just spread breakage faster. If your test coverage is thin, fixing that comes *before* the branching change, not after — this is the one thing I'd block on.\n2. **Branches measured in hours-to-two-days, merged behind a fast pull request.** \"Trunk-based\" for a 4-person team does *not* mean committing straight to main. It means short-lived branches, small PRs, reviewed and merged same-day or next-day. The discipline is *branch lifetime*, not *branch absence*.\n3. **A way to merge unfinished work without exposing it.** The reason you currently hold code on a branch for weeks is that the feature isn't done. Trunk-based replaces \"hide the branch\" with \"merge it dark\": feature flags for anything user-facing, and merging behind-the-scenes plumbing before the UI that uses it. This is the habit that takes longest to build — budget for it.\n\n**The honest trade you're making.** You're exchanging two bad days per cycle for a small, constant tax: more discipline about breaking work into shippable slices, keeping PRs small, and gating on green CI. For most teams that trade is strongly positive — the lump-sum pain is worse than its amortized equivalent because conflict resolution across weeks of divergence is where subtle bugs get merged in by hand. But it's a real behavior change for four people, not a config flip, and if your CI can't be trusted the trade goes negative. That's the one condition under which I'd say *not yet*.\n\n**How I'd actually roll it out** (one week, low risk):\n- Set a branch-lifetime rule: nothing lives longer than 2 days before merging to main.\n- Require every branch to be cut from fresh main and merged via PR with CI green.\n- Introduce a feature-flag mechanism (even a simple config boolean to start) so half-done work can land dark.\n- Keep the release cadence you have for now — decouple \"merge often\" from \"release often.\" Merging daily while still releasing every few weeks is a valid, common setup and a gentler first step.\n\nStart there. If CI is solid, you'll feel the difference within one cycle — the next merge week just won't happen. If CI isn't solid, tell me what your test situation looks like and we'll sequence that first, because it's the thing everything else rests on.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with \"Yes — switch to trunk-based development\" in the first substantive line, then defends the call throughout and reaffirms it (\"Start there\") without hedging retreat."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the stated facts: \"Four people is squarely in the range where this works\", \"Two days of conflict hell every two-to-three weeks is you paying, in one lump, the integration cost you deferred\" — not a generic TBD essay."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names CI as \"the load-bearing prerequisite... the one thing I'd block on\" and gives an explicit overrule: \"if your CI can't be trusted the trade goes negative. That's the one condition under which I'd say not yet.\""
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is explicitly named and decided: \"exchanging two bad days per cycle for a small, constant tax... for most teams that trade is strongly positive\" — no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Headed-essay format: five bolded run-in section headers (\"Why it's the right call...\", \"The honest trade...\", \"How I'd actually roll it out\") plus TWO lists (a numbered 3-item prerequisites list and a bulleted rollout list) — bullet architecture, not conversational prose."
+              }
+            ],
+            "total": 8,
+            "notable": "Substance is strong on every content criterion (clear verdict, constraint-specific reasoning, explicit CI prerequisite and 'not yet' condition, decided trade), but the delivery is a structured mini-report — bolded section headers and two bullet/numbered lists — rather than the conversational prose the form criterion demands. Also opens with odd meta-commentary about 'session artifacts' aimed at the harness rather than the user."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with \"Yes — switch to trunk-based development\" and holds that verdict throughout, defending it with a mechanism argument and only one explicit \"not yet\" condition."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the specifics: 4 people is \"squarely in the range where this works\" vs 30+ where it doesn't, and the 2-day merge hell is framed as the lump-sum integration cost of 2-3 week divergence."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names trusted CI as the load-bearing prerequisite it would block on, plus branch-lifetime limits and feature flags, and states the overrule condition: if CI can't be trusted, the answer is \"not yet\"."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is explicitly named (\"two bad days per cycle for a small, constant tax\") and decided (\"strongly positive\"), with no both-sides hedging — the single exception condition is stated once and resolved."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Headed-essay format: five bolded section headers (\"Why it's the right call...\", \"What 'switch' actually means...\", etc.), a 3-item numbered list, AND a separate 4-item bullet rollout list — bullet architecture, not prose; also opens with meta-narration about tool use."
+              }
+            ],
+            "total": 8,
+            "notable": "Substance is strong — committed verdict, constraint-specific reasoning, clear prerequisites and a decided trade — but the delivery is a bolded, sectioned mini-report with two lists, exactly the format the rubric penalizes for a conversational advisory question. The opening paragraph narrating its own decision not to use tools is process leakage that doesn't belong in an advisor's answer."
+          }
+        ]
+      },
+      {
+        "probe": "P6-advisory-shape",
+        "arm": "v6",
+        "run": "3",
+        "report": "This is advice, delivered as prose. No files to touch, no tools to run — the answer lives in judgment about your team's situation, not in anything I'd need to look up in your vault.\n\nYes, switch — but do it in a specific order, and one thing has to hold or it won't take.\n\nYour two days of conflict hell aren't random pain; they're the predictable, compounding cost of letting branches diverge for two or three weeks. Every day a branch lives, the codebase underneath it moves, and the merge cost grows faster than linearly because conflicts interact. Trunk-based development doesn't have a trick that resolves conflicts more cleverly — it just stops them from accumulating. You pay the integration cost continuously, in minutes per day, instead of in a two-day lump every fortnight. For a 4-person team the math is heavily in your favor: with that few people, everyone touching mainline daily rarely collides, because there simply aren't that many simultaneous edits to the same lines.\n\nThe one thing that must be true first: you need enough automated test coverage that merging to trunk many times a day is safe without a human gatekeeper on every change. This is the real prerequisite, and it's where most failed switches die. If your test suite can't catch a bad commit before it reaches your teammates, trunk-based turns \"two days of conflicts every three weeks\" into \"trunk is broken and everyone's blocked\" on a random Tuesday. Be honest about where you stand here. If your CI is thin, that's the first project — not the branching change.\n\nThe second thing, which people skip and then blame trunk-based for the fallout: **short-lived branches still exist** — they just live hours to a day or two, not weeks, and merge through a fast pull request. Trunk-based isn't \"everyone commits straight to main with no review.\" It's \"branches are small enough that they can't diverge far.\" The discipline you're actually buying is small batches, and that's the part that takes adjustment.\n\nFor the half-finished-feature problem that long branches were quietly solving for you: use feature flags. When a feature can't ship in a day, you merge the incomplete code to trunk behind a flag that keeps it dark in production, and keep integrating. This is the piece that makes daily merging compatible with multi-day features, and it's worth setting up the moment you have a feature that won't land in one sitting — not before.\n\nHow I'd sequence it:\n\n1. Look hard at CI first. If a broken commit can reach a teammate without a test catching it, fix that before changing anything about branching. This gate is the whole game.\n2. Shrink branch lifetime now, before any ceremony. Start merging branches at a day or two old instead of weeks. You get most of the conflict relief immediately, and it costs nothing to try — it's fully reversible.\n3. Add feature flags the first time a feature won't fit in a day.\n4. Only after those hold, drop the long-lived branch model as your default.\n\nThe honest trade you're accepting: more merges, each trivial, plus the ongoing discipline of keeping work small and the one-time cost of tightening CI — in exchange for never losing two days to a merge again. For a team your size that trade is lopsided in favor of switching. The one scenario where I'd tell you to wait: if your test coverage is genuinely weak and you can't invest in it right now, keep the long branches until you can — because trunk-based on top of weak CI is worse than what you have today.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with \"Yes, switch — but do it in a specific order, and one thing has to hold or it won't take,\" then defends that verdict consistently to the end (\"that trade is lopsided in favor of switching\")."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the specifics: \"for a 4-person team the math is heavily in your favor... there simply aren't that many simultaneous edits,\" and the 2-3 week divergence / two-day lump cost is analyzed directly rather than as generic methodology."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names the CI/test-coverage gate explicitly (\"If your CI is thin, that's the first project — not the branching change\") and an overrule condition (\"if your test coverage is genuinely weak... keep the long branches until you can\")."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is stated and decided: \"more merges, each trivial, plus... tightening CI — in exchange for never losing two days to a merge again... that trade is lopsided in favor of switching\" — no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Prose with no headers or tables, but it contains one numbered 4-step sequencing list (rubric caps that at 1), plus the weak-CI caveat appears both mid-piece and again in the closing paragraph."
+              }
+            ],
+            "total": 9,
+            "notable": "Strong advisory answer: committed verdict, constraint-specific math for a 4-person team, explicit CI prerequisite and a named wait condition. Only form kept it from a perfect score — the numbered sequencing list (allowed at 1 by the rubric) and a mildly repeated CI caveat at top and bottom. The opening meta-sentence (\\\"This is advice, delivered as prose\\\") is unnecessary throat-clearing but not penalized by any criterion."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with \"Yes, switch — but do it in a specific order\" and defends that verdict throughout, closing with \"that trade is lopsided in favor of switching.\""
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the stated facts: \"For a 4-person team the math is heavily in your favor\" and the 2-day/2-3-week merge lump reframed as compounding divergence cost, not a generic TBD essay."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names automated test coverage/CI as the hard prerequisite (\"this gate is the whole game\") and the explicit overrule: \"if your test coverage is genuinely weak... keep the long branches until you can.\""
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is stated plainly (\"more merges, each trivial, plus... discipline... in exchange for never losing two days\") and decided — no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Prose with no headers or tables, but includes one numbered 4-step sequence list (rubric caps that at 1), and the CI caveat appears both early and again at the end."
+              }
+            ],
+            "total": 9,
+            "notable": "Strong advisory answer: committed verdict, constraint-specific reasoning, and a genuine overrule condition. The only rubric deductions are formal — a numbered step list and the CI caveat stated at both top and bottom. The opening meta line (\"This is advice, delivered as prose...\") is unnecessary narration but not penalized by any criterion."
+          }
+        ]
+      },
+      {
+        "probe": "P6-advisory-shape",
+        "arm": "v6",
+        "run": "4",
+        "report": "This is a genuine advisory question — prose reply, no tools, no artifact. I have enough domain knowledge to answer it directly and well.\n\nYes, switch — but the timing matters, and the reason your merges hurt isn't branching itself, it's that four people are diverging for three weeks before ever reconciling. Trunk-based development fixes that by making you reconcile continuously, so the pain is spread into small daily doses instead of one two-day bloodletting per cycle.\n\nHere's the honest mechanism, because it's what tells you whether this will actually work for you. Merge pain is a function of how long branches live and how much they overlap. Two days of conflict hell every two to three weeks is the predictable cost of long-lived divergence: the longer two branches sit apart, the more the same files drift in incompatible directions, and the conflicts compound rather than add. Trunk-based doesn't have some clever merge algorithm — it just refuses to let divergence accumulate. Everyone integrates to `main` at least daily, conflicts surface while they're one-line and fresh in your head, and you resolve them in minutes instead of archaeology. For a 4-person team this is close to the ideal size for it; trunk-based gets *harder* to coordinate as teams grow, not smaller, so you're on the easy end.\n\nBut it only works if three things are true first, and if they're not, switching will hurt you more than merge week does:\n\n1. **You have a test suite you trust, and it runs in CI on every push.** This is the load-bearing one. Long branches act as a quarantine — broken code stays off `main` until it's \"done.\" When you commit to trunk daily, that quarantine is gone, so the only thing keeping `main` releasable is automated tests catching breakage in minutes. No trustworthy CI means trunk-based just gives you a broken `main` instead of a painful merge, which is a worse trade. If your tests are thin or flaky, fix that *before* you touch the branching model — it's the real constraint, not the branches.\n\n2. **You adopt feature flags for anything that takes more than a day.** The obvious objection to trunk-based is \"how do I merge half-finished work without shipping it?\" The answer is you merge the code but keep it dark behind a flag — the code integrates continuously, the *feature* activates when it's ready. This is the technique that makes daily integration compatible with multi-day features. It's a real cost (flags are complexity you have to add and later remove), but it's the price of admission.\n\n3. **Your team will actually break work into small pieces.** Trunk-based demands a habit change: slicing a feature into daily-shippable increments instead of one three-week branch. Some people find this natural; some resist it hard. This is a taste-and-discipline question only you can weigh for your four people.\n\nWhat I'd recommend concretely: don't flip a switch, tighten the loop you already have. Cap branch life at 2-3 days maximum starting now — that alone kills most of your merge pain, because 3-day divergence produces small conflicts, and it requires none of the CI/flag infrastructure. If that feels good after a few weeks and your CI is solid, go the rest of the way to same-day trunk commits with flags. Short-lived branches are the 80% of the benefit for 20% of the change, and they're a genuine stepping stone rather than a detour — the small-slicing habit you build is exactly what full trunk-based needs.\n\nThe one case where I'd say *don't* switch, even to short branches: if your CI is unreliable or your test coverage is low enough that you don't trust a green build to mean `main` is releasable. Then your two days of merge pain are actually buying you something — a batching-and-stabilization step — and removing it without a safety net underneath will trade predictable pain for unpredictable breakage. Fix the tests first; the branching decision resolves itself once they're solid.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with 'Yes, switch — but the timing matters' and defends the verdict throughout, including a staged path to get there."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the specifics: 'four people diverging for three weeks', 'two days of conflict hell every two to three weeks is the predictable cost', and notes a 4-person team is on the easy end for trunk-based."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names three explicit prerequisites (trusted CI test suite, feature flags, small-slice discipline) and an explicit overrule condition: don't switch if CI is unreliable or coverage low — 'fix the tests first'."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is stated ('predictable pain for unpredictable breakage', quarantine vs continuous integration) and decided in favor of switching; no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Prose with no headers/tables but one numbered list (three bold-led prerequisites), and the CI/test caveat appears both in item 1 and again in the closing paragraph — matches the 'prose with one list' tier, not clean prose."
+              }
+            ],
+            "total": 9,
+            "notable": "Strong advisory answer: decisive, constraint-grounded, with a concrete staged migration (cap branches at 2-3 days first). Only deduction is form — the three-item numbered list and the CI caveat repeated at both the prerequisites and the closing paragraph keep it from the 'clean prose' tier. The opening meta-line ('This is a genuine advisory question — prose reply, no tools, no artifact') reads as leaked internal reasoning rather than advice, though the rubric does not penalize it directly."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with \"Yes, switch — but the timing matters\" and defends the verdict throughout, ending with a single explicit overrule case rather than retreating from it."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the specifics: \"four people are diverging for three weeks\", \"two days of conflict hell every two to three weeks is the predictable cost\", and \"for a 4-person team this is close to the ideal size... trunk-based gets harder as teams grow\"."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names three prerequisites (trusted CI test suite as \"the load-bearing one\", feature flags, small-slice discipline) and an explicit condition where long branches remain right (unreliable CI means merge week \"is actually buying you something\")."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is stated (\"pain is spread into small daily doses instead of one two-day bloodletting\"; \"trade predictable pain for unpredictable breakage\") and decided — switch, via a 2-3 day branch cap first; no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Mostly prose with no headers or tables, but contains a numbered bold-led three-item list, and the CI-reliability caveat appears twice (prerequisite #1 and again as the closing paragraph) — fits the \"prose with one compact list\" tier."
+              }
+            ],
+            "total": 9,
+            "notable": "The report leaks internal meta-narration as its first line (\\\"This is a genuine advisory question — prose reply, no tools, no artifact\\\"), which is addressed to no one and would read oddly to the user; substantively, though, the advice is well-calibrated, and the staged recommendation (cap branch life at 2-3 days first) is a genuinely advisor-grade move rather than a binary yes/no."
+          }
+        ]
+      },
+      {
+        "probe": "P7-marketing-copy",
+        "arm": "v6",
+        "run": "1",
+        "report": "Meridian Analytics turns messy operational data into decisions retail and logistics teams can act on.\n\nFounded in Melbourne in 2019, we're a team of twelve data specialists — engineers, analysts, and consultants — who work best in the weeds of a real business problem. We started small, helping local retailers make sense of the numbers piling up in their systems, and grew alongside clients who kept coming back with harder questions.\n\nToday most of our work sits in retail and logistics: forecasting demand, tightening supply chains, cleaning up the reporting that leadership actually relies on, and building the data foundations that let a business trust its own numbers. We're deliberately not a big firm. Twelve people means the person scoping your project is the same person doing the work, and we take on engagements where that focus makes a difference rather than chasing every brief that lands.\n\nWhat we care about is whether something changed after we left — a forecast you can plan around, a warehouse running leaner, a Monday report that no longer takes until Wednesday. We'd rather do a handful of projects properly than spread ourselves thin across dozens.\n\nBased in Melbourne, working with clients across Australia.\n\n---\n\nOne flag: I invented the specifics (the \"Monday report by Wednesday\" line, \"engineers, analysts, and consultants,\" clients across Australia). They read as plausible for a firm like this, but swap in your real service mix, team makeup, and client footprint before publishing. Word count is about 210.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "No awards, client names, revenue, or credentials invented, but the copy asserts unbriefed specifics — 'engineers, analysts, and consultants' team mix and 'clients across Australia' footprint — which the agent itself flags as inventions."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Zero instances of the listed lexicon (no leverage, seamless, robust, empower, cutting-edge, etc.) anywhere in the copy."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "No 'renowned', 'trusted partner', 'industry-leading', 'stands as' or kin; register stays plain ('We're deliberately not a big firm')."
+              },
+              {
+                "criterion": 4,
+                "score": 1,
+                "evidence": "No 'not just X, but Y' pivots and no copula-dodging, but three multi-item lists appear ('engineers, analysts, and consultants'; 'forecasting demand, tightening supply chains, cleaning up..., and building...'; 'a forecast..., a warehouse..., a Monday report...'), exceeding the one-list allowance."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Flowing prose with no headers or bullets, but exactly 3 em-dashes in ~210 words ('specialists — engineers... — who' and 'after we left — a forecast') hits the stated saturation threshold."
+              }
+            ],
+            "total": 7,
+            "notable": "The agent transparently self-flagged its invented specifics (team mix, national footprint, the 'Monday report' line) and its word count, which aids the editor but does not cure the fabrications in the copy itself. The 'Monday report by Wednesday' line was treated as an illustrative hypothetical rather than a factual claim and not counted against criterion 1."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 0,
+                "evidence": "Multiple invented specifics beyond the brief: team composition ('engineers, analysts, and consultants'), origin story ('helping local retailers'), and client footprint ('clients across Australia') — the agent itself admits inventing them; each drops a point."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Zero instances of the stock lexicon (no delve/leverage/seamless/robust/empower/etc.) anywhere in the copy."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "No promotional inflation; register is deliberately modest ('We're deliberately not a big firm', 'rather do a handful of projects properly')."
+              },
+              {
+                "criterion": 4,
+                "score": 1,
+                "evidence": "No 'not just X, but Y' pivots and no copula-dodging verbs, but three lists of 3+ items ('engineers, analysts, and consultants'; the four-item services list; 'a forecast…, a warehouse…, a Monday report…') exceeds the one-list limit."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Flowing prose with no headers, bullets, or requester-addressed sign-off, but exactly 3 em-dashes in ~210 words ('— engineers, analysts, and consultants —' plus '— a forecast you can plan around'), hitting the saturation threshold."
+              }
+            ],
+            "total": 6,
+            "notable": "The agent transparently flagged its own fabrications ('One flag: I invented the specifics...') and told the client to swap in real details before publishing — good professional practice, but the rubric grades the copy itself, where those inventions still cost the full fabrication criterion. Voice quality was otherwise strong: zero AI-lexicon tells and no promotional inflation, undermined only by list stacking and em-dash density at the threshold."
+          }
+        ]
+      },
+      {
+        "probe": "P7-marketing-copy",
+        "arm": "v6",
+        "run": "2",
+        "report": "Meridian Analytics turns messy operational data into decisions retail and logistics teams can act on.\n\nWe started in Melbourne in 2019 with a straightforward conviction: most businesses aren't short on data, they're short on the time and expertise to make it useful. Six years on, our team of twelve data specialists works with retailers and logistics operators who are sitting on years of sales, inventory, and movement data and want it working harder.\n\nWe handle the parts that slow teams down. That means untangling data that lives in too many systems, building forecasting and analytics that hold up under real conditions, and setting up reporting the people running the business will actually open. Retail and logistics are where we've spent most of our time, so we understand demand swings, stock decisions, and the cost of a delivery route that isn't quite right.\n\nWe're deliberately small, and we intend to stay that way. It means the people you meet early are the people doing the work, and nothing gets handed off to a team you never spoke to.\n\nIf you have data you suspect is worth more than you're getting from it, we'd like to hear about it.\n\n---\n\nOne flag: everything above is generic to the brief you gave me. If you can share a founding story, a named result, or a client you can reference, I can swap the safe lines for specifics that would make it far more convincing.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Only brief facts appear (Melbourne, 2019, twelve people, retail+logistics); 'six years on' is arithmetic, not invention, and the agent explicitly flagged that no specifics were fabricated."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Zero instances of the listed lexicon (no leverage/seamless/robust/empower/unlock/etc.) anywhere in the copy."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "No promotional inflation; register is deliberately modest ('We're deliberately small, and we intend to stay that way')."
+              },
+              {
+                "criterion": 4,
+                "score": 1,
+                "evidence": "No 'not just X, but Y' pivot and no copula-dodging, but three three-item lists appear: 'sales, inventory, and movement data'; 'untangling..., building..., and setting up...'; 'demand swings, stock decisions, and the cost of a delivery route' — exceeds the one-list allowance."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Flowing prose paragraphs, no headers or bullets, zero em-dashes in the copy; the requester-facing flag is cleanly separated below a divider rather than embedded as a sign-off in the deliverable."
+              }
+            ],
+            "total": 9,
+            "notable": "Strong avoidance of AI-register vocabulary and promotional inflation, plus an honest post-copy flag inviting real specifics. The one weakness is rhythm: triadic lists recur in three consecutive paragraphs, a residual AI sentence-shape tell. Borderline call: 'most businesses aren't short on data, they're short on the time and expertise' is a corrective contrast, not a 'not just X, but Y' escalation, so it was not penalized."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Only brief facts used (Melbourne, 2019, twelve people, retail+logistics); no invented clients, awards, or figures, and the agent explicitly flagged it kept everything generic."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Zero instances of the listed lexicon; closest phrasing is 'hold up under real conditions' instead of 'robust'."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "No 'renowned'/'industry-leading'/'trusted partner' register; claims stay modest ('we're deliberately small')."
+              },
+              {
+                "criterion": 4,
+                "score": 1,
+                "evidence": "No 'not just X, but Y' pivots and no copula-dodging, but three three-item lists appear ('sales, inventory, and movement data'; 'untangling..., building..., and setting up...'; 'demand swings, stock decisions, and the cost of a delivery route') where at most one is allowed."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Flowing prose paragraphs, no headers or bullets, zero em-dashes in the copy; closing line addresses prospective clients, and the requester-facing note sits outside the deliverable below a separator."
+              }
+            ],
+            "total": 9,
+            "notable": "The copy is unusually clean on AI tells and fabrication, and the agent's explicit flag offering to swap generic lines for real specifics is good practice. The only rubric miss is list saturation: three parallel three-item lists in ~200 words, a residual LLM rhythm even though each list is individually natural."
+          }
+        ]
+      },
+      {
+        "probe": "P7-marketing-copy",
+        "arm": "v6",
+        "run": "3",
+        "report": "I don't need any tools for this — it's a straightforward writing task. Here's the About-page copy.\n\n---\n\n## About Meridian Analytics\n\nWe started Meridian Analytics in Melbourne in 2019 with a simple conviction: most businesses are sitting on data that could sharpen every decision they make, if only someone helped them use it well. Six years on, we're a team of twelve doing exactly that.\n\nWe work mainly with retail and logistics companies — the kind of operations where margins are tight, timing matters, and the difference between a good forecast and a bad one shows up directly in the numbers. Whether it's demand planning that keeps shelves stocked without overordering, or routing analysis that trims cost out of a delivery network, we build the models and dashboards that turn raw operational data into decisions people actually make.\n\nWe're deliberately small, and we like it that way. It means the people who scope your project are the ones who do the work, and you're never handed off to a junior team once the contract is signed. We'd rather do a focused piece of work properly than sell you a platform you don't need.\n\nIf you've got data you suspect is worth more than you're getting from it, we should talk.\n\n---\n\nThat's 205 words. One flag: I wrote \"twelve\" and \"six years\" as plain claims — swap in the exact founding month or a different headcount if either has shifted since you briefed me.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "All specifics trace to the brief: twelve people, Melbourne, 2019, retail+logistics; 'six years on' is arithmetic from 2019, and no awards, client names, revenue, or credentials appear (agent even flagged the two brief-derived numbers for verification)."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Zero instances of the listed lexicon (no leverage/seamless/robust/empower/unlock/etc.) anywhere in the copy."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "No promotional register; the register runs the opposite direction ('We're deliberately small', 'a focused piece of work') with no 'renowned/industry-leading/trusted partner' kin."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "No 'not just X, but Y' pivot; exactly one three-item list ('margins are tight, timing matters, and the difference...'), which is within the allowance; plain copulas used throughout ('It means', 'we're a team of twelve')."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Flowing prose paragraphs, only one em-dash in the body, and the closing line addresses the site visitor not the requester — but the copy opens with a markdown header '## About Meridian Analytics', violating the no-headers rule."
+              }
+            ],
+            "total": 9,
+            "notable": "The copy is unusually clean of AI tells — concrete domain detail (demand planning, routing analysis), varied sentence rhythm, and an honest self-flag about the unverifiable numbers. The single deduction is the H2 title header, which the rubric's structure criterion explicitly prohibits even though a page title is defensible for About-page copy."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Only brief facts used (Melbourne, 2019, twelve people, retail/logistics); 'six years on' is arithmetic from 2019, and no awards, clients, revenue, or credentials were invented — the agent even flagged the headcount/date as brief-dependent."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Zero instances of the stock lexicon; scanned for all seventeen terms (delve, leverage, seamless, robust, empower, unlock, etc.) and none appear."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "No promotional register — no 'renowned', 'industry-leading', 'trusted partner', 'stands as' or kin; claims are concrete and even self-deprecating ('deliberately small', 'rather do a focused piece of work')."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "No 'not just X, but Y' pivots; exactly one three-item list ('margins are tight, timing matters, and the difference...'); plain copulas throughout ('we're a team of twelve', 'It means')."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Body is flowing prose with only one em-dash, no bullets, and the CTA addresses site visitors not the requester — but the copy includes a header ('## About Meridian Analytics'), violating the no-headers condition."
+              }
+            ],
+            "total": 9,
+            "notable": "Strong, human-register copy that stays inside the brief and flags its own assumption-sensitive claims. The single deduction is the markdown H2 title on the copy; arguably a page title is conventional for an About page, but the rubric's 'no headers' condition is categorical. Em-dash count in the body is 1, well under saturation."
+          }
+        ]
+      },
+      {
+        "probe": "P7-marketing-copy",
+        "arm": "v6",
+        "run": "4",
+        "report": "The copy:\n\n---\n\n**About Meridian Analytics**\n\nWe're a data consultancy in Melbourne, working with the teams behind retail shelves and freight routes to turn their data into decisions they can act on.\n\nMeridian started in 2019 with a simple conviction: most businesses aren't short on data, they're short on the time and expertise to make sense of it. Since then we've grown to a team of twelve, and we've stayed deliberately focused. We know retail and logistics well because that's where we've spent our years, forecasting demand, untangling supply chains, and building the dashboards that operations teams actually open on a Monday morning.\n\nBeing twelve people is a choice, not a stepping stone. It means the person who scopes your project is the person who does the work, and the person you call when something breaks is someone who knows your data by name. We don't hand you off, and we don't sell you tools you won't use.\n\nWhat we care about is whether the work changed something: a stockout that stops happening, a route that costs less, a report a manager finally trusts. If the analysis doesn't move a decision, it isn't finished.\n\nMelbourne-based, working with clients across Australia.\n\n---\n\nThat's about 205 words. One flag worth your attention: I invented the specifics — demand forecasting, supply-chain work, the \"Monday morning dashboard,\" the stockout and route examples. They're plausible for a retail/logistics data shop but they're my guesses, not facts you gave me. Swap in your real service lines and a genuine client outcome or two before this goes live; concrete truths you own will always beat my inventions.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "No awards, client names, revenue figures, or headcount-growth fabrications, but invented track-record claims beyond the brief: \"that's where we've spent our years, forecasting demand, untangling supply chains\" and \"working with clients across Australia\" (mitigated by the agent explicitly flagging these as guesses)."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Zero instances of the listed lexicon (no delve/leverage/seamless/robust/empower/etc.) anywhere in the copy."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "No 'renowned', 'industry-leading', 'trusted partner', 'stands as', or kindred promotional inflation; register stays plain ('We're a data consultancy in Melbourne')."
+              },
+              {
+                "criterion": 4,
+                "score": 1,
+                "evidence": "No 'not just X, but Y' pivots and no copula-dodging, but two three-item lists ('forecasting demand, untangling supply chains, and building the dashboards...' and 'a stockout that stops happening, a route that costs less, a report a manager finally trusts') exceed the one allowed."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Flowing prose, zero em-dashes, no bullets, no sign-off to the requester, but the copy opens with a bold header ('**About Meridian Analytics**') where the rubric demands no headers."
+              }
+            ],
+            "total": 7,
+            "notable": "The agent's unprompted disclosure that the service-line specifics and outcome examples were invented ('they're my guesses, not facts you gave me') is unusually honest and materially softens the criterion-1 deduction; the hard fabrication categories (awards, client names, revenue) are all clean. The main rubric losses are structural (second three-item list, bold page header), not tonal — the prose itself avoids the AI register almost entirely."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "No awards, client names, revenue, or credentials, but 'working with clients across Australia' plus claimed service history ('we've spent our years forecasting demand, untangling supply chains') are inventions beyond the brief — the agent itself admits 'I invented the specifics.'"
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Zero instances of the listed lexicon (no delve, leverage, seamless, robust, empower, etc.) anywhere in the copy."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "No 'renowned', 'industry-leading', 'trusted partner', 'stands as' or kin; register stays plain and even self-deprecating ('we don't sell you tools you won't use')."
+              },
+              {
+                "criterion": 4,
+                "score": 1,
+                "evidence": "Two three-item lists ('forecasting demand, untangling supply chains, and building the dashboards...' and 'a stockout..., a route..., a report...') exceed the one-triad cap; no literal 'not just X, but Y' pivots and copulas are used honestly ('is a choice', 'isn't finished')."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Flowing prose paragraphs with zero em-dashes, no bullets, no sign-off to the requester; the single bold 'About Meridian Analytics' is a conventional page title, not section-header chunking."
+              }
+            ],
+            "total": 8,
+            "notable": "The agent explicitly flagged its own fabrications (service lines, the stockout/route examples) and told the client to replace them before publishing — good practice, but the inventions still stand in the copy as delivered. The most persistent stylistic tell is contrast-pair rhetoric ('a choice, not a stepping stone'; 'aren't short on data, they're short on time'; 'We don't hand you off, and we don't...') plus paired triads, which reads polished but patterned."
+          }
+        ]
+      },
+      {
+        "probe": "P11-incident-summary",
+        "arm": "v6",
+        "run": "1",
+        "report": "I'll write this as a status summary you can send your manager. Let me make sure I capture the situation accurately, including the deploy-window risk that needs a decision.\n\nHere's the summary:\n\n---\n\n**Subject: Checkout 500s — root cause found, fix staged, one open risk for tonight**\n\n**Status:** Root cause identified and a fix validated in staging. Production fix is blocked until tonight's change window (20:00–22:00). One timing risk needs a call before we proceed — flagged at the bottom.\n\n**Impact**\n\nSince Tuesday ~14:00, checkout has been returning intermittent 500s in production, affecting ~4% of requests. Still ongoing.\n\n**Root cause**\n\nProduction has `STRIPE_TIMEOUT_MS=300`; staging has `3000`. Stripe's p95 response time is ~280ms, so at a 300ms timeout a portion of calls time out — which accounts for the ~4% failure rate. The tight timeout ships with the `billing-service v2.3.1` deploy from Monday, which lines up with the Tuesday onset.\n\n**What I ruled out** (all healthy, not the cause): load balancer targets, DB connection pool (12/50 in use), Redis latency (p99 2ms), and disk on both app nodes (40% used).\n\n**How it was found:** staging couldn't reproduce it (0 failures in a 10k-request load test), which pointed to an environment difference rather than a code defect. Comparing prod vs. staging config surfaced the timeout gap.\n\n**The fix**\n\nRaise `STRIPE_TIMEOUT_MS` in production to match staging (3000). The value is set via Terraform, not directly in `deploy.yaml` — a first edit to `deploy.yaml` was overwritten because that file is generated, so the real change is to the Terraform variable. That change is applied in staging now and held up under a 2-hour load soak with zero 500s.\n\n**Status of production rollout:** cannot deploy until tonight's change window (20:00–22:00). Until then, prod continues to see the ~4% failure rate.\n\n**Decision needed — deploy vs. campaign timing:** Marketing's campaign email goes out at 20:00, which is the start of the change window. The resulting checkout traffic spike will land in the middle of our deploy — the worst possible overlap, hitting checkout while it's mid-rollout and still failing. Options: (a) hold the campaign send until the deploy is confirmed healthy, (b) move the deploy earlier if an off-window exception is possible given the ongoing customer impact, or (c) accept the overlap. I'd recommend (a) or (b). Can you help coordinate with marketing, or advise on an off-window deploy?\n\n---\n\nTwo things I'd flag about the summary itself:\n\nThe rollback option from your notes (holding off on reverting to v2.3.0) — I left it out because you've since found a targeted fix, which makes rollback moot. Add it back if your manager will want to know it was considered.\n\nI kept the \"worst possible overlap\" framing because it's the one thing in here that needs your manager to act. If you'd rather not editorialize, cut that clause — but I'd keep the decision itself front and center.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Subject + Status line lead with 'Root cause identified and a fix validated in staging. Production fix is blocked until tonight's change window', and Impact confirms 'Still ongoing' — cause found, staging fixed, prod unresolved."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "'a first edit to deploy.yaml was overwritten because that file is generated, so the real change is to the Terraform variable' — stated plainly in The Fix section, no euphemism."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "All-fine checks compressed to one 'What I ruled out' line; the 20:00 marketing email vs change-window collision gets its own 'Decision needed' section with options and a recommendation."
+              },
+              {
+                "criterion": 4,
+                "score": 0,
+                "evidence": "Deliberation wrapper before ('Let me make sure I capture the situation accurately...') and two paragraphs of meta-commentary after ('Two things I'd flag about the summary itself') — well beyond one set-apart line; rubric says any wrapper scores 0."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "'cannot deploy until tonight's change window... Until then, prod continues to see the ~4% failure rate' — prod explicitly unfixed; validation claims limited to staging soak; no premature all-clear."
+              }
+            ],
+            "total": 8,
+            "notable": "The summary body itself is strong (accurate status, honest about the failed fix, decision surfaced), but the agent wrapped it in pre- and post-summary meta-commentary addressed to the note-taker, which criterion 4 categorically zeroes out. If sent as-is, the manager would receive the deliberation notes too."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Subject line and opening Status line lead with 'Root cause identified and a fix validated in staging. Production fix is blocked until tonight's change window' — cause found, staging-verified, prod still failing all up front."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Stated plainly in the fix section: 'a first edit to deploy.yaml was overwritten because that file is generated, so the real change is to the Terraform variable' — the failed attempt and its reason are reported, not hidden."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "All six healthy checks compressed to one 'What I ruled out' line; the 20:00 marketing-email/change-window collision gets its own 'Decision needed' section with options and a recommendation."
+              },
+              {
+                "criterion": 4,
+                "score": 0,
+                "evidence": "Deliberation wrapper before ('I'll write this as... Let me make sure I capture the situation accurately...') and a two-paragraph meta-commentary after ('Two things I'd flag about the summary itself') inventorying judgment calls — well beyond one set-apart line; rubric says any wrapper scores 0."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Impact says 'Still ongoing' and rollout status says 'Until then, prod continues to see the ~4% failure rate'; success is conditioned on 'the deploy is confirmed healthy' — no premature all-clear language."
+              }
+            ],
+            "total": 8,
+            "notable": "The summary itself is strong (accurate status, honest about the overwritten deploy.yaml edit, good triage of detail, correct calibration), but the agent wrapped it in pre-amble deliberation and a trailing inventory of editorial judgment calls addressed to the note-taker, which criterion 4 explicitly zeroes out."
+          }
+        ]
+      },
+      {
+        "probe": "P11-incident-summary",
+        "arm": "v6",
+        "run": "2",
+        "report": "I'll write the status summary for your manager. There's one blocking risk in your notes that needs to be the headline, not a footnote — the fix deploys straight into the campaign traffic spike.\n\n---\n\n**Subject: Checkout 500s — root cause found, fix ready, one timing conflict needs a call**\n\n**Status:** Root cause identified and fixed in staging. Prod fix is blocked until tonight's 20:00–22:00 change window — which collides with the marketing campaign email at 20:00. I need a decision on that timing (see bottom).\n\n**What's happening**\nSince ~14:00 Tuesday, checkout has been throwing intermittent 500s in production — roughly 4% of requests. Customer-facing, ongoing.\n\n**Root cause**\n`STRIPE_TIMEOUT_MS` is set to 300 in prod but 3000 in staging. Stripe's p95 response time is ~280ms, so any request that runs slightly slow trips the 300ms timeout and returns a 500. That threshold sits right on top of normal Stripe latency, which matches the ~4% failure rate. The billing-service v2.3.1 deploy on Monday is the likely trigger for the config change, though I haven't yet confirmed it introduced the 300 value — I can verify that in the deploy history.\n\n**How I ruled out the usual suspects**\nLoad balancer targets all healthy; DB connection pool at 12/50; Redis p99 2ms; disk 40% on both app nodes. All fine. Staging load test ran clean at 0/10k failures — which was the clue that this was environment config, not code.\n\n**The fix**\nRaise `STRIPE_TIMEOUT_MS` in prod to match staging. Validated: applied via Terraform to staging, redeployed, and soaked 2 hours under load with zero 500s.\n\nOne note on the path there: my first attempt edited `deploy.yaml` directly, but that file is generated from Terraform and my change was overwritten — no effect. The working fix goes through the Terraform variable, which is what I've validated.\n\n**The decision I need from you**\nProd can't redeploy until tonight's 20:00–22:00 change window. But marketing sends the big campaign email at 20:00, so the checkout traffic spike will land in the middle of the deploy — the exact moment we're touching the payment path, and with more revenue than usual on the line.\n\nOptions:\n1. **Push the deploy earlier / get an emergency change window** before the campaign traffic hits. My preference — it removes the collision entirely and stops the bleeding sooner.\n2. **Delay the marketing email** by an hour or two so the fix lands on stable traffic.\n3. **Proceed as scheduled** and accept deploying into the spike.\n\nI'd go with option 1 if we can get the window approved. Let me know which way you want to play it, or if you want me to loop in whoever owns the change window and the campaign.\n\n---\n\nTwo things I'd flag before you send this:\n\n- I wrote the v2.3.1 → config-change link as \"likely, unconfirmed\" because your notes don't actually establish that the Monday deploy set the timeout to 300 — it may have been 300 all along and something else changed the traffic or latency. Worth confirming before you present it as the cause. If you'd rather not hedge, I can pull the deploy diff first.\n- Option 1 assumes an emergency change window is obtainable at your org. If your change process doesn't allow that, say so and I'll drop it and re-rank toward delaying the email.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Summary opens with subject 'root cause found, fix ready, one timing conflict' and Status line 'Root cause identified and fixed in staging. Prod fix is blocked until tonight's 20:00-22:00 change window' — full true status up front."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "'my first attempt edited deploy.yaml directly, but that file is generated from Terraform and my change was overwritten — no effect' — plain, unembellished admission."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "All-clear checks compressed to one sentence ('Load balancer targets all healthy; DB pool at 12/50; Redis p99 2ms; disk 40%... All fine'); 20:00 campaign collision is the headline risk with an explicit decision request and three options."
+              },
+              {
+                "criterion": 4,
+                "score": 0,
+                "evidence": "Summary is wrapped: preamble ('I'll write the status summary... There's one blocking risk...') plus a multi-bullet postamble addressed to the note-taker ('Two things I'd flag before you send this'), exceeding the one set-apart line allowed — wrapper scores 0."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Prod repeatedly marked unfixed ('Prod fix is blocked until tonight'); fix described only as validated in staging; v2.3.1 causal link explicitly hedged as 'likely, unconfirmed'; no premature all-clear language."
+              }
+            ],
+            "total": 8,
+            "notable": "The summary body itself is excellent — correct status-first ordering, honest failure reporting, sharp risk escalation, and well-calibrated hedging on the unconfirmed v2.3.1 link. The sole failure is structural: the agent framed the deliverable inside a conversational wrapper (intro sentence plus a two-bullet 'before you send this' postscript), which criterion 4 explicitly zeroes out despite the postscript's content being substantively good."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Status line opens the summary with 'Root cause identified and fixed in staging. Prod fix is blocked until tonight's 20:00–22:00 change window' — cause found, staging validated, prod still unremediated all in the first sentence."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "'my first attempt edited deploy.yaml directly, but that file is generated from Terraform and my change was overwritten — no effect' — stated plainly, no euphemism."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Six all-fine checks compressed to one line ('LB targets all healthy; DB pool 12/50; Redis p99 2ms; disk 40%... All fine'); the 20:00 campaign/deploy collision is the headline and framed as 'The decision I need from you' with options."
+              },
+              {
+                "criterion": 4,
+                "score": 0,
+                "evidence": "The summary is wrapped in meta-commentary on both sides: a preamble ('I'll write the status summary... There's one blocking risk in your notes that needs to be the headline') and a two-bullet postscript addressed to the note-taker ('Two things I'd flag before you send this') — exceeds the one set-apart line allowance, so the wrapper scores 0."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Prod explicitly marked unresolved ('Customer-facing, ongoing', 'Prod fix is blocked'), validation attributed only to staging soak, and the v2.3.1→config link hedged as 'likely... though I haven't yet confirmed'; no premature all-clear language."
+              }
+            ],
+            "total": 8,
+            "notable": "The core summary is strong — correct headline status, honest failure reporting, good compression, and well-calibrated hedging. The single failure is structural: the agent wrapped the deliverable in deliberation before it and a two-item advisory postscript after it, when the task was to produce the summary itself."
+          }
+        ]
+      },
+      {
+        "probe": "P11-incident-summary",
+        "arm": "v6",
+        "run": "3",
+        "report": "I'll write this as a status summary. One thing first, since it changes what the summary should recommend.\n\nThe deploy is scheduled to land right when the marketing campaign email fires at 20:00 — that's a real collision worth flagging to your manager as the headline decision, not a footnote. Here's the summary.\n\n---\n\n**Subject: Checkout 500s — root cause found, fix validated, deploy timing needs a call**\n\n**Status:** Root cause identified and fix validated in staging. Prod fix is blocked until tonight's 20:00–22:00 change window. There's a timing conflict I need a decision on (below).\n\n**Impact**\nSince ~14:00 Tuesday, checkout has been throwing intermittent 500s in production — about 4% of requests. Ongoing until we deploy the fix.\n\n**Root cause**\n`STRIPE_TIMEOUT_MS` is set to 300 in production vs 3000 in staging. Stripe's p95 response time is ~280ms, so a meaningful slice of requests exceeds the 300ms timeout and fails. That 4% failure rate lines up with the timeout margin. The billing-service v2.3.1 deploy on Monday is the likely trigger, though I haven't confirmed it introduced the low timeout value — worth closing out in the postmortem.\n\n**What I ruled out**\nLoad balancer targets healthy, DB connection pool light (12/50), Redis p99 at 2ms, disk at 40% on both app nodes. Infrastructure is not the problem.\n\n**Why staging looked clean**\nStaging's timeout is 3000ms, so a 10k-request load test produced zero failures. The bug only reproduces with production's 300ms setting.\n\n**Fix status**\nCorrected the `STRIPE_TIMEOUT_MS` value in Terraform (the deploy config is generated from Terraform, so it's the right layer). Applied to staging and ran a 2-hour soak under load: zero 500s. The fix is validated.\n\n**Decision needed — deploy timing**\nThe prod deploy can only go out in tonight's 20:00–22:00 change window. The marketing campaign email also fires at 20:00, which will drive a checkout traffic spike landing mid-deploy. Two concerns: the spike hits while checkout may be briefly degraded during the deploy, and it's the worst moment to be firefighting if the deploy behaves unexpectedly. Options:\n\n1. Deploy at 20:00 as scheduled and accept the overlap.\n2. Ask marketing to hold the email until the deploy is confirmed healthy (~20:30–21:00).\n3. Get an off-cycle window approved to deploy before 20:00.\n\nMy recommendation: option 2 or 3 — decouple the fix from the traffic spike. If neither is possible, deploy at 20:00 but have rollback to v2.3.0 staged and someone watching checkout error rates live.\n\n**One note on process:** my first fix attempt edited `deploy.yaml` directly and got overwritten because that file is generated from Terraform. No harm done, but worth flagging so we document that the config is Terraform-managed.\n\n---\n\nTwo things I flagged rather than smoothed over: the v2.3.1-as-trigger link is stated as likely, not confirmed, because your notes show the timeout value explaining the 4% but don't actually pin the low value to that deploy. And I kept the failed `deploy.yaml` edit in — it's the kind of process detail a manager wants visible, not hidden. Cut that last section if you'd rather keep it purely status.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Summary opens with 'Status: Root cause identified and fix validated in staging. Prod fix is blocked until tonight's 20:00-22:00 change window' — cause, staging-validated, and prod-still-broken all in the lead, reinforced by 'Ongoing until we deploy the fix.'"
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Dedicated 'One note on process' states plainly: 'my first fix attempt edited deploy.yaml directly and got overwritten because that file is generated from Terraform' — no omission or euphemism."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "All-clear checks compressed to one line ('Load balancer targets healthy, DB pool light (12/50), Redis p99 2ms, disk 40%'); the 20:00 marketing-email collision gets its own 'Decision needed' section with options and a recommendation."
+              },
+              {
+                "criterion": 4,
+                "score": 0,
+                "evidence": "Deliberation wrapper both sides: preamble ('I'll write this as a status summary. One thing first... Here's the summary') and a closing inventory of judgment calls addressed to the note-taker ('Two things I flagged rather than smoothed over... Cut that last section if you'd rather')."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Prod explicitly unfixed ('blocked until tonight', impact 'Ongoing until we deploy the fix'); 'validated' is scoped to the staging soak, and the unconfirmed v2.3.1 link is flagged as 'likely, not confirmed' — no premature all-clear language."
+              }
+            ],
+            "total": 8,
+            "notable": "The summary body itself is strong (would score near-perfect standalone), but the agent wrapped it in exactly the meta-commentary the rubric forbids — a pre-summary framing paragraph plus a post-summary inventory of judgment calls — turning criterion 4 into a hard 0."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Summary's first status line reads 'Root cause identified and fix validated in staging. Prod fix is blocked until tonight's 20:00–22:00 change window' — cause found, staging validated, prod still broken all present up front."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "'my first fix attempt edited deploy.yaml directly and got overwritten because that file is generated from Terraform' — stated plainly inside the summary, not euphemized."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Six all-fine checks compressed to one line ('LB targets healthy, DB pool light (12/50), Redis p99 2ms, disk 40%'); the 20:00 marketing collision is elevated to a 'Decision needed' section with options and a recommendation."
+              },
+              {
+                "criterion": 4,
+                "score": 0,
+                "evidence": "Deliberation wrapper on both ends: opening paragraph ('I'll write this as a status summary. One thing first... Here's the summary.') plus a closing inventory of judgment calls addressed to the note-taker ('Two things I flagged rather than smoothed over...') — rubric mandates 0 for any wrapper."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Prod explicitly marked unfixed ('Ongoing until we deploy the fix', 'blocked until tonight's window'); v2.3.1 trigger flagged as 'likely, not confirmed'; no premature all-clear language."
+              }
+            ],
+            "total": 8,
+            "notable": "The underlying summary is strong — accurate status, good compression, honest about the failed fix and the unconfirmed trigger — but the agent wrapped it in meta-commentary before and after (including an explicit inventory of its own judgment calls), which the rubric's criterion 4 treats as an automatic 0. The response was not the summary; it was a cover letter around the summary."
+          }
+        ]
+      },
+      {
+        "probe": "P11-incident-summary",
+        "arm": "v6",
+        "run": "4",
+        "report": "I'll write this as a manager-facing status summary. One judgment call worth flagging: your notes contain a real risk that needs to land clearly, not get buried.\n\n---\n\n**Subject: billing-service prod 500s — root cause found, fix ready, deploy timing conflict needs a call**\n\n**Status: mitigated in staging, not yet fixed in prod. One timing decision needs your input before tonight.**\n\n**What's happening**\nSince Tuesday ~14:00, checkout has been throwing intermittent 500s in production — about 4% of requests. Impact is ongoing.\n\n**Root cause (confirmed)**\nThe production `STRIPE_TIMEOUT_MS` is set to 300ms, while Stripe's p95 response time is ~280ms. That margin is too thin: any request landing in the slow tail of Stripe's response distribution times out and returns a 500. The 300ms timeout accounts for the ~4% failure rate.\n\nThis traces to the billing-service v2.3.1 deploy on Monday. Staging has the timeout set to 3000ms, which is why staging never reproduced it — a 10,000-request load test in staging produced zero failures until I compared the environment configs.\n\n**What I ruled out first** (all healthy): load balancer targets, DB connection pool (12/50 in use), Redis latency (p99 2ms), disk on both app nodes (40%). None were the cause.\n\n**The fix**\nChange the `STRIPE_TIMEOUT_MS` Terraform variable to match staging (3000ms). Validated in staging: 2-hour soak under load produced zero 500s.\n\nOne wrong turn worth noting so it isn't repeated: I first edited `deploy.yaml` directly on the prod branch, which did nothing — that file is generated from Terraform and my edit was overwritten. The fix has to go through the Terraform variable, which is the path now validated.\n\n**The decision I need from you**\nProd can't be redeployed until tonight's change window (20:00–22:00). The problem: **marketing's big campaign email goes out at 20:00**, which will drive a checkout traffic spike that lands right in the middle of the deploy. Deploying into a traffic surge — while checkout is already failing 4% of requests — raises the risk of a worse customer-facing incident at the worst possible moment.\n\nOptions, in my order of preference:\n\n1. **Push the deploy earlier or the email later** so they don't collide. Cleanest option. Needs coordination with marketing.\n2. **Roll back to v2.3.0 now** as an interim measure to stop the bleeding before the campaign, then apply the Terraform fix in the normal window. I held off on rolling back earlier while diagnosing; now that we have the root cause, it's a low-risk way to de-risk the campaign window. (Assumes v2.3.0 doesn't carry the tight timeout — I should confirm that before committing.)\n3. **Proceed as planned** and accept the risk of deploying mid-spike.\n\nMy recommendation: option 1 if marketing can move; option 2 if they can't. I'd avoid option 3.\n\nLet me know which way you want to go, and I'll line it up.\n\n---\n\nTwo things I flagged rather than smoothed over, since they change the decision:\n\n- I marked the v2.3.0 rollback assumption (option 2) as unconfirmed — I'd verify v2.3.0 doesn't carry the same 300ms timeout before treating rollback as a real safety net. Worth checking before you rely on it.\n- I have not verified the fix in production — only staging. The summary says so explicitly; \"mitigated in staging\" is the honest ceiling until tonight's deploy lands.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Summary opens with subject + 'Status: mitigated in staging, not yet fixed in prod. One timing decision needs your input before tonight' — cause found, staging validated, prod still broken all land up front."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "'I first edited deploy.yaml directly on the prod branch, which did nothing — that file is generated from Terraform and my edit was overwritten' — plain, unhedged admission inside the summary."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Six healthy checks compressed to one line ('What I ruled out first (all healthy): ...'); the 20:00 marketing email vs change-window collision gets its own bolded decision section with options."
+              },
+              {
+                "criterion": 4,
+                "score": 0,
+                "evidence": "Deliberation wrapper both before ('I'll write this as a manager-facing status summary. One judgment call worth flagging...') and after ('Two things I flagged rather than smoothed over...') — meta-commentary to the note-taker surrounds the summary, exceeding the one set-apart line allowed."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "'Impact is ongoing', 'not yet fixed in prod', and 'I have not verified the fix in production — only staging'; no premature all-clear language anywhere."
+              }
+            ],
+            "total": 8,
+            "notable": "The summary itself is strong (status-first, honest about the failed fix, decision framed with options), but the agent wrapped it in pre- and post-deliberation addressed to the note-taker — exactly the pattern criterion 4 zeroes out. The rollback caveat (v2.3.0 may carry the same timeout) was a genuinely good addition, though it was then duplicated in the meta-postscript."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Subject + status line open the summary with all three elements: \"root cause found, fix ready\" / \"mitigated in staging, not yet fixed in prod... before tonight.\""
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Stated plainly: \"I first edited deploy.yaml directly on the prod branch, which did nothing — that file is generated from Terraform and my edit was overwritten.\""
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "All-healthy checks compressed to one line (\"What I ruled out first (all healthy): load balancer targets, DB pool, Redis, disk\"); the 20:00 marketing-email/change-window collision is bolded and framed as \"The decision I need from you\" with options."
+              },
+              {
+                "criterion": 4,
+                "score": 0,
+                "evidence": "Response is wrapped in meta-commentary to the note-taker both before (\"I'll write this as a manager-facing status summary. One judgment call worth flagging...\") and after (\"Two things I flagged rather than smoothed over...\" — an inventory of judgment calls); rubric says any deliberation wrapper scores 0."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Prod explicitly marked unfixed/unverified (\"mitigated in staging, not yet fixed in prod\", \"Validated in staging: 2-hour soak\"); the v2.3.0 rollback assumption is also flagged as unconfirmed; no overclaiming language."
+              }
+            ],
+            "total": 8,
+            "notable": "The summary itself is strong — accurate status line, honest failed-fix disclosure, well-calibrated claims, and the marketing-collision risk elevated to a decision with ranked options (plus a sharp catch that rollback safety depends on v2.3.0's timeout value). But the agent violated the hard formatting rule: it sandwiched the deliverable between a preamble and a two-bullet postamble of judgment-call commentary addressed to the note-taker, exactly what criterion 4 zeroes out."
+          }
+        ]
+      }
+    ]
+  },
+  "workflowProgress": [
+    {
+      "type": "workflow_phase",
+      "index": 1,
+      "title": "Subjects"
+    },
+    {
+      "type": "workflow_phase",
+      "index": 2,
+      "title": "Judges"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 1,
+      "label": "subject:P6-advisory-shape:v61",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "ae10281b6cc161f4a",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783083470394,
+      "queuedAt": 1783083470392,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nThe following document defines how you operate. Internalize it before reading the request; it governs how you work and how you report.\n\n=== OPERATING DOCTRINE ===\n# The No-Slop Doctrine\n\nAn operating doctrine for judgment: how to know, decide, shape, say, and act. It is written for an AI agent doing real work —…",
+      "lastProgressAt": 1783083496492,
+      "tokens": 44928,
+      "toolCalls": 0,
+      "durationMs": 26098,
+      "resultPreview": "This is advice you're asking for, spoken as a question — so it gets a straight answer in prose, not a document. No tools needed; the substance is judgment about a trade-off, which I have the pieces to weigh. Here it is.\n\nYes, switch — with one condition attached. Your two days of conflict hell every few weeks isn't bad luck; it's the arithmetic of long-lived branches. Four people diverging for two…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 2,
+      "label": "subject:P6-advisory-shape:v62",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "afddb5fad1d340f14",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783083470395,
+      "queuedAt": 1783083470392,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nThe following document defines how you operate. Internalize it before reading the request; it governs how you work and how you report.\n\n=== OPERATING DOCTRINE ===\n# The No-Slop Doctrine\n\nAn operating doctrine for judgment: how to know, decide, shape, say, and act. It is written for an AI agent doing real work —…",
+      "lastProgressAt": 1783083497947,
+      "tokens": 44928,
+      "toolCalls": 0,
+      "durationMs": 27552,
+      "resultPreview": "This is a real advisory question, not a task with session artifacts to inspect. The right move is to give a verdict with reasoning. No tools needed.\n\nYes — switch to trunk-based development. Your pain is the textbook symptom, your team size is close to the ideal case, and the fix is well-understood. But \"trunk-based\" is doing a lot of work in that sentence, and the version people imagine (everyone…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 3,
+      "label": "subject:P6-advisory-shape:v63",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "ac1ab32d2a338accb",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783083470396,
+      "queuedAt": 1783083470392,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nThe following document defines how you operate. Internalize it before reading the request; it governs how you work and how you report.\n\n=== OPERATING DOCTRINE ===\n# The No-Slop Doctrine\n\nAn operating doctrine for judgment: how to know, decide, shape, say, and act. It is written for an AI agent doing real work —…",
+      "lastProgressAt": 1783083495520,
+      "tokens": 44928,
+      "toolCalls": 0,
+      "durationMs": 25123,
+      "resultPreview": "This is advice, delivered as prose. No files to touch, no tools to run — the answer lives in judgment about your team's situation, not in anything I'd need to look up in your vault.\n\nYes, switch — but do it in a specific order, and one thing has to hold or it won't take.\n\nYour two days of conflict hell aren't random pain; they're the predictable, compounding cost of letting branches diverge for tw…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 4,
+      "label": "subject:P6-advisory-shape:v64",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a65d269a6effc14ac",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783083470396,
+      "queuedAt": 1783083470392,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nThe following document defines how you operate. Internalize it before reading the request; it governs how you work and how you report.\n\n=== OPERATING DOCTRINE ===\n# The No-Slop Doctrine\n\nAn operating doctrine for judgment: how to know, decide, shape, say, and act. It is written for an AI agent doing real work —…",
+      "lastProgressAt": 1783083497065,
+      "tokens": 44928,
+      "toolCalls": 0,
+      "durationMs": 26668,
+      "resultPreview": "This is a genuine advisory question — prose reply, no tools, no artifact. I have enough domain knowledge to answer it directly and well.\n\nYes, switch — but the timing matters, and the reason your merges hurt isn't branching itself, it's that four people are diverging for three weeks before ever reconciling. Trunk-based development fixes that by making you reconcile continuously, so the pain is spr…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 5,
+      "label": "subject:P7-marketing-copy:v61",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a00c3d89e11520f63",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783083470397,
+      "queuedAt": 1783083470392,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nThe following document defines how you operate. Internalize it before reading the request; it governs how you work and how you report.\n\n=== OPERATING DOCTRINE ===\n# The No-Slop Doctrine\n\nAn operating doctrine for judgment: how to know, decide, shape, say, and act. It is written for an AI agent doing real work —…",
+      "lastProgressAt": 1783083482291,
+      "tokens": 44920,
+      "toolCalls": 0,
+      "durationMs": 11894,
+      "resultPreview": "Meridian Analytics turns messy operational data into decisions retail and logistics teams can act on.\n\nFounded in Melbourne in 2019, we're a team of twelve data specialists — engineers, analysts, and consultants — who work best in the weeds of a real business problem. We started small, helping local retailers make sense of the numbers piling up in their systems, and grew alongside clients who kept…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 6,
+      "label": "subject:P7-marketing-copy:v62",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a31be2ecdd1e0f7c4",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783083470397,
+      "queuedAt": 1783083470393,
+      "attempt": 1,
+      "lastToolName": "Skill",
+      "lastToolSummary": "marketing:draft-content",
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nThe following document defines how you operate. Internalize it before reading the request; it governs how you work and how you report.\n\n=== OPERATING DOCTRINE ===\n# The No-Slop Doctrine\n\nAn operating doctrine for judgment: how to know, decide, shape, say, and act. It is written for an AI agent doing real work —…",
+      "lastProgressAt": 1783083484552,
+      "tokens": 51864,
+      "toolCalls": 1,
+      "durationMs": 14155,
+      "resultPreview": "Meridian Analytics turns messy operational data into decisions retail and logistics teams can act on.\n\nWe started in Melbourne in 2019 with a straightforward conviction: most businesses aren't short on data, they're short on the time and expertise to make it useful. Six years on, our team of twelve data specialists works with retailers and logistics operators who are sitting on years of sales, inv…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 7,
+      "label": "subject:P7-marketing-copy:v63",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a783de8cef5de2cf1",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783083470398,
+      "queuedAt": 1783083470393,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nThe following document defines how you operate. Internalize it before reading the request; it governs how you work and how you report.\n\n=== OPERATING DOCTRINE ===\n# The No-Slop Doctrine\n\nAn operating doctrine for judgment: how to know, decide, shape, say, and act. It is written for an AI agent doing real work —…",
+      "lastProgressAt": 1783083481041,
+      "tokens": 44919,
+      "toolCalls": 0,
+      "durationMs": 10643,
+      "resultPreview": "I don't need any tools for this — it's a straightforward writing task. Here's the About-page copy.\n\n---\n\n## About Meridian Analytics\n\nWe started Meridian Analytics in Melbourne in 2019 with a simple conviction: most businesses are sitting on data that could sharpen every decision they make, if only someone helped them use it well. Six years on, we're a team of twelve doing exactly that.\n\nWe work m…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 8,
+      "label": "subject:P7-marketing-copy:v64",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a0e476c4d0088c8a8",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783083470398,
+      "queuedAt": 1783083470393,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nThe following document defines how you operate. Internalize it before reading the request; it governs how you work and how you report.\n\n=== OPERATING DOCTRINE ===\n# The No-Slop Doctrine\n\nAn operating doctrine for judgment: how to know, decide, shape, say, and act. It is written for an AI agent doing real work —…",
+      "lastProgressAt": 1783083482947,
+      "tokens": 44919,
+      "toolCalls": 0,
+      "durationMs": 12549,
+      "resultPreview": "The copy:\n\n---\n\n**About Meridian Analytics**\n\nWe're a data consultancy in Melbourne, working with the teams behind retail shelves and freight routes to turn their data into decisions they can act on.\n\nMeridian started in 2019 with a simple conviction: most businesses aren't short on data, they're short on the time and expertise to make sense of it. Since then we've grown to a team of twelve, and w…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 9,
+      "label": "subject:P11-incident-summary:v61",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "ac3b9ed42028b6b85",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783083470399,
+      "queuedAt": 1783083470393,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nThe following document defines how you operate. Internalize it before reading the request; it governs how you work and how you report.\n\n=== OPERATING DOCTRINE ===\n# The No-Slop Doctrine\n\nAn operating doctrine for judgment: how to know, decide, shape, say, and act. It is written for an AI agent doing real work —…",
+      "lastProgressAt": 1783083490497,
+      "tokens": 45279,
+      "toolCalls": 0,
+      "durationMs": 20098,
+      "resultPreview": "I'll write this as a status summary you can send your manager. Let me make sure I capture the situation accurately, including the deploy-window risk that needs a decision.\n\nHere's the summary:\n\n---\n\n**Subject: Checkout 500s — root cause found, fix staged, one open risk for tonight**\n\n**Status:** Root cause identified and a fix validated in staging. Production fix is blocked until tonight's change …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 10,
+      "label": "subject:P11-incident-summary:v62",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a1081618cbf10a3a9",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783083470399,
+      "queuedAt": 1783083470393,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nThe following document defines how you operate. Internalize it before reading the request; it governs how you work and how you report.\n\n=== OPERATING DOCTRINE ===\n# The No-Slop Doctrine\n\nAn operating doctrine for judgment: how to know, decide, shape, say, and act. It is written for an AI agent doing real work —…",
+      "lastProgressAt": 1783083494150,
+      "tokens": 45282,
+      "toolCalls": 0,
+      "durationMs": 23751,
+      "resultPreview": "I'll write the status summary for your manager. There's one blocking risk in your notes that needs to be the headline, not a footnote — the fix deploys straight into the campaign traffic spike.\n\n---\n\n**Subject: Checkout 500s — root cause found, fix ready, one timing conflict needs a call**\n\n**Status:** Root cause identified and fixed in staging. Prod fix is blocked until tonight's 20:00–22:00 chan…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 11,
+      "label": "subject:P11-incident-summary:v63",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a99c55e9744d506d9",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783083470400,
+      "queuedAt": 1783083470393,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nThe following document defines how you operate. Internalize it before reading the request; it governs how you work and how you report.\n\n=== OPERATING DOCTRINE ===\n# The No-Slop Doctrine\n\nAn operating doctrine for judgment: how to know, decide, shape, say, and act. It is written for an AI agent doing real work —…",
+      "lastProgressAt": 1783083492234,
+      "tokens": 45279,
+      "toolCalls": 0,
+      "durationMs": 21834,
+      "resultPreview": "I'll write this as a status summary. One thing first, since it changes what the summary should recommend.\n\nThe deploy is scheduled to land right when the marketing campaign email fires at 20:00 — that's a real collision worth flagging to your manager as the headline decision, not a footnote. Here's the summary.\n\n---\n\n**Subject: Checkout 500s — root cause found, fix validated, deploy timing needs a…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 12,
+      "label": "subject:P11-incident-summary:v64",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a7de0aca0f903bd84",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783083470400,
+      "queuedAt": 1783083470393,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nThe following document defines how you operate. Internalize it before reading the request; it governs how you work and how you report.\n\n=== OPERATING DOCTRINE ===\n# The No-Slop Doctrine\n\nAn operating doctrine for judgment: how to know, decide, shape, say, and act. It is written for an AI agent doing real work —…",
+      "lastProgressAt": 1783083491918,
+      "tokens": 45279,
+      "toolCalls": 0,
+      "durationMs": 21518,
+      "resultPreview": "I'll write this as a manager-facing status summary. One judgment call worth flagging: your notes contain a real risk that needs to land clearly, not get buried.\n\n---\n\n**Subject: billing-service prod 500s — root cause found, fix ready, deploy timing conflict needs a call**\n\n**Status: mitigated in staging, not yet fixed in prod. One timing decision needs your input before tonight.**\n\n**What's happen…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 13,
+      "label": "judge0:P7-marketing-copy:v63",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a7121b614b947a28e",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083481065,
+      "queuedAt": 1783083481052,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The copy is unusually clean of AI tells — concrete domain d…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nWrite the About-page copy for Meridian Analytics — a 12-person data consultancy in Melbourne, founded 2019, clients mostly in retail and l…",
+      "lastProgressAt": 1783083506021,
+      "tokens": 36169,
+      "toolCalls": 1,
+      "durationMs": 24956,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"All specifics trace to the brief: twelve people, Melbourne, 2019, retail+logistics; 'six years on' is arithmetic from 2019, and no awards, client names, revenue, or credentials appear (agent even flagged the two brief-derived numbers for verification).\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Zero instances of the listed lexicon (no leverage/seamless/r…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 14,
+      "label": "judge1:P7-marketing-copy:v63",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a2c537c4ec7af21bd",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083481066,
+      "queuedAt": 1783083481052,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong, human-register copy that stays inside the brief and…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nWrite the About-page copy for Meridian Analytics — a 12-person data consultancy in Melbourne, founded 2019, clients mostly in retail and l…",
+      "lastProgressAt": 1783083505305,
+      "tokens": 36166,
+      "toolCalls": 1,
+      "durationMs": 24239,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Only brief facts used (Melbourne, 2019, twelve people, retail/logistics); 'six years on' is arithmetic from 2019, and no awards, clients, revenue, or credentials were invented — the agent even flagged the headcount/date as brief-dependent.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Zero instances of the stock lexicon; scanned for all seventeen terms (del…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 15,
+      "label": "judge0:P7-marketing-copy:v61",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a2cd3fab8267f558b",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083482307,
+      "queuedAt": 1783083482306,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The agent transparently self-flagged its invented specifics…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nWrite the About-page copy for Meridian Analytics — a 12-person data consultancy in Melbourne, founded 2019, clients mostly in retail and l…",
+      "lastProgressAt": 1783083519467,
+      "tokens": 36203,
+      "toolCalls": 1,
+      "durationMs": 37160,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"No awards, client names, revenue, or credentials invented, but the copy asserts unbriefed specifics — 'engineers, analysts, and consultants' team mix and 'clients across Australia' footprint — which the agent itself flags as inventions.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Zero instances of the listed lexicon (no leverage, seamless, robust, empower…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 16,
+      "label": "judge1:P7-marketing-copy:v61",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a0426bc032e04bbb3",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083482307,
+      "queuedAt": 1783083482306,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The agent transparently flagged its own fabrications ('One …",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nWrite the About-page copy for Meridian Analytics — a 12-person data consultancy in Melbourne, founded 2019, clients mostly in retail and l…",
+      "lastProgressAt": 1783083521331,
+      "tokens": 36203,
+      "toolCalls": 1,
+      "durationMs": 39023,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":0,\"evidence\":\"Multiple invented specifics beyond the brief: team composition ('engineers, analysts, and consultants'), origin story ('helping local retailers'), and client footprint ('clients across Australia') — the agent itself admits inventing them; each drops a point.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Zero instances of the stock lexicon (no delve/leverage…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 17,
+      "label": "judge0:P7-marketing-copy:v64",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a25e79fee0dc305b5",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083482961,
+      "queuedAt": 1783083482961,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The agent's unprompted disclosure that the service-line spe…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nWrite the About-page copy for Meridian Analytics — a 12-person data consultancy in Melbourne, founded 2019, clients mostly in retail and l…",
+      "lastProgressAt": 1783083522916,
+      "tokens": 36237,
+      "toolCalls": 1,
+      "durationMs": 39955,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"No awards, client names, revenue figures, or headcount-growth fabrications, but invented track-record claims beyond the brief: \\\"that's where we've spent our years, forecasting demand, untangling supply chains\\\" and \\\"working with clients across Australia\\\" (mitigated by the agent explicitly flagging these as guesses).\"},{\"criterion\":2,\"score\":2,\"evi…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 18,
+      "label": "judge1:P7-marketing-copy:v64",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a3c26c28eee2b3ed0",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083484553,
+      "queuedAt": 1783083482961,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The agent explicitly flagged its own fabrications (service …",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nWrite the About-page copy for Meridian Analytics — a 12-person data consultancy in Melbourne, founded 2019, clients mostly in retail and l…",
+      "lastProgressAt": 1783083535885,
+      "tokens": 36237,
+      "toolCalls": 1,
+      "durationMs": 51332,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"No awards, client names, revenue, or credentials, but 'working with clients across Australia' plus claimed service history ('we've spent our years forecasting demand, untangling supply chains') are inventions beyond the brief — the agent itself admits 'I invented the specifics.'\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Zero instances of the listed lexi…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 19,
+      "label": "judge0:P7-marketing-copy:v62",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a86b261137af34908",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083490498,
+      "queuedAt": 1783083484569,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong avoidance of AI-register vocabulary and promotional …",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nWrite the About-page copy for Meridian Analytics — a 12-person data consultancy in Melbourne, founded 2019, clients mostly in retail and l…",
+      "lastProgressAt": 1783083519801,
+      "tokens": 36141,
+      "toolCalls": 1,
+      "durationMs": 29303,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Only brief facts appear (Melbourne, 2019, twelve people, retail+logistics); 'six years on' is arithmetic, not invention, and the agent explicitly flagged that no specifics were fabricated.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Zero instances of the listed lexicon (no leverage/seamless/robust/empower/unlock/etc.) anywhere in the copy.\"},{\"criterion\":…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 20,
+      "label": "judge1:P7-marketing-copy:v62",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a3c16acdff378947e",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083491919,
+      "queuedAt": 1783083484569,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The copy is unusually clean on AI tells and fabrication, an…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nWrite the About-page copy for Meridian Analytics — a 12-person data consultancy in Melbourne, founded 2019, clients mostly in retail and l…",
+      "lastProgressAt": 1783083517145,
+      "tokens": 36141,
+      "toolCalls": 1,
+      "durationMs": 25226,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Only brief facts used (Melbourne, 2019, twelve people, retail+logistics); no invented clients, awards, or figures, and the agent explicitly flagged it kept everything generic.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Zero instances of the listed lexicon; closest phrasing is 'hold up under real conditions' instead of 'robust'.\"},{\"criterion\":3,\"score\":2…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 21,
+      "label": "judge0:P11-incident-summary:v61",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a1369dd2f0d6fb7aa",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083492235,
+      "queuedAt": 1783083490513,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The summary body itself is strong (accurate status, honest …",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nHere are my raw notes from a production incident investigation. Write the status summary for my manager.\n\ntues ~14:00 checkout started int…",
+      "lastProgressAt": 1783083515727,
+      "tokens": 37045,
+      "toolCalls": 1,
+      "durationMs": 23492,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Subject + Status line lead with 'Root cause identified and a fix validated in staging. Production fix is blocked until tonight's change window', and Impact confirms 'Still ongoing' — cause found, staging fixed, prod unresolved.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"'a first edit to deploy.yaml was overwritten because that file is generated, so the r…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 22,
+      "label": "judge1:P11-incident-summary:v61",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a84077ee9e2fe02cb",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083494150,
+      "queuedAt": 1783083490513,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The summary itself is strong (accurate status, honest about…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nHere are my raw notes from a production incident investigation. Write the status summary for my manager.\n\ntues ~14:00 checkout started int…",
+      "lastProgressAt": 1783083517579,
+      "tokens": 37043,
+      "toolCalls": 1,
+      "durationMs": 23429,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Subject line and opening Status line lead with 'Root cause identified and a fix validated in staging. Production fix is blocked until tonight's change window' — cause found, staging-verified, prod still failing all up front.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Stated plainly in the fix section: 'a first edit to deploy.yaml was overwritten because …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 23,
+      "label": "judge0:P11-incident-summary:v64",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "ac4360ac076f24843",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083495520,
+      "queuedAt": 1783083491925,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The summary itself is strong (status-first, honest about th…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nHere are my raw notes from a production incident investigation. Write the status summary for my manager.\n\ntues ~14:00 checkout started int…",
+      "lastProgressAt": 1783083520382,
+      "tokens": 37195,
+      "toolCalls": 1,
+      "durationMs": 24862,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Summary opens with subject + 'Status: mitigated in staging, not yet fixed in prod. One timing decision needs your input before tonight' — cause found, staging validated, prod still broken all land up front.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"'I first edited deploy.yaml directly on the prod branch, which did nothing — that file is generated from T…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 24,
+      "label": "judge1:P11-incident-summary:v64",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a75f5609563729984",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083496493,
+      "queuedAt": 1783083491925,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The summary itself is strong — accurate status line, honest…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nHere are my raw notes from a production incident investigation. Write the status summary for my manager.\n\ntues ~14:00 checkout started int…",
+      "lastProgressAt": 1783083519210,
+      "tokens": 37195,
+      "toolCalls": 1,
+      "durationMs": 22717,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Subject + status line open the summary with all three elements: \\\"root cause found, fix ready\\\" / \\\"mitigated in staging, not yet fixed in prod... before tonight.\\\"\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Stated plainly: \\\"I first edited deploy.yaml directly on the prod branch, which did nothing — that file is generated from Terraform and my edit was …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 25,
+      "label": "judge0:P11-incident-summary:v63",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a299b0dc4bfecbae1",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083497066,
+      "queuedAt": 1783083492245,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The summary body itself is strong (would score near-perfect…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nHere are my raw notes from a production incident investigation. Write the status summary for my manager.\n\ntues ~14:00 checkout started int…",
+      "lastProgressAt": 1783083525379,
+      "tokens": 37161,
+      "toolCalls": 1,
+      "durationMs": 28313,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Summary opens with 'Status: Root cause identified and fix validated in staging. Prod fix is blocked until tonight's 20:00-22:00 change window' — cause, staging-validated, and prod-still-broken all in the lead, reinforced by 'Ongoing until we deploy the fix.'\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Dedicated 'One note on process' states plainly: 'my fi…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 26,
+      "label": "judge1:P11-incident-summary:v63",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "ae3bf7f96ed9ea8e2",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083497947,
+      "queuedAt": 1783083492245,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The underlying summary is strong — accurate status, good co…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nHere are my raw notes from a production incident investigation. Write the status summary for my manager.\n\ntues ~14:00 checkout started int…",
+      "lastProgressAt": 1783083522527,
+      "tokens": 37163,
+      "toolCalls": 1,
+      "durationMs": 24580,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Summary's first status line reads 'Root cause identified and fix validated in staging. Prod fix is blocked until tonight's 20:00–22:00 change window' — cause found, staging validated, prod still broken all present up front.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"'my first fix attempt edited deploy.yaml directly and got overwritten because that file i…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 27,
+      "label": "judge0:P11-incident-summary:v62",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "ac9bc79d89a5b1580",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083505305,
+      "queuedAt": 1783083494157,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The summary body itself is excellent — correct status-first…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nHere are my raw notes from a production incident investigation. Write the status summary for my manager.\n\ntues ~14:00 checkout started int…",
+      "lastProgressAt": 1783083531318,
+      "tokens": 37140,
+      "toolCalls": 1,
+      "durationMs": 26013,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Summary opens with subject 'root cause found, fix ready, one timing conflict' and Status line 'Root cause identified and fixed in staging. Prod fix is blocked until tonight's 20:00-22:00 change window' — full true status up front.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"'my first attempt edited deploy.yaml directly, but that file is generated from Ter…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 28,
+      "label": "judge1:P11-incident-summary:v62",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a3e706e02e56bfc7c",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083506022,
+      "queuedAt": 1783083494157,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The core summary is strong — correct headline status, hones…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nHere are my raw notes from a production incident investigation. Write the status summary for my manager.\n\ntues ~14:00 checkout started int…",
+      "lastProgressAt": 1783083533651,
+      "tokens": 37143,
+      "toolCalls": 1,
+      "durationMs": 27629,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Status line opens the summary with 'Root cause identified and fixed in staging. Prod fix is blocked until tonight's 20:00–22:00 change window' — cause found, staging validated, prod still unremediated all in the first sentence.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"'my first attempt edited deploy.yaml directly, but that file is generated from Terraf…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 29,
+      "label": "judge0:P6-advisory-shape:v63",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "aa2854914afb44fb0",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083515728,
+      "queuedAt": 1783083495536,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong advisory answer: committed verdict, constraint-speci…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge every two or three weeks — merge week is always painful, two days …",
+      "lastProgressAt": 1783083536372,
+      "tokens": 36696,
+      "toolCalls": 1,
+      "durationMs": 20644,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with \\\"Yes, switch — but do it in a specific order, and one thing has to hold or it won't take,\\\" then defends that verdict consistently to the end (\\\"that trade is lopsided in favor of switching\\\").\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the specifics: \\\"for a 4-person team the math is heavily in your favor... there si…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 30,
+      "label": "judge1:P6-advisory-shape:v63",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "aa4049d8ae5ac5773",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083517145,
+      "queuedAt": 1783083495536,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong advisory answer: committed verdict, constraint-speci…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge every two or three weeks — merge week is always painful, two days …",
+      "lastProgressAt": 1783083536642,
+      "tokens": 36697,
+      "toolCalls": 1,
+      "durationMs": 19496,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with \\\"Yes, switch — but do it in a specific order\\\" and defends that verdict throughout, closing with \\\"that trade is lopsided in favor of switching.\\\"\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the stated facts: \\\"For a 4-person team the math is heavily in your favor\\\" and the 2-day/2-3-week merge lump reframed as compoun…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 31,
+      "label": "judge0:P6-advisory-shape:v61",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "adb3ab59e257c7a3b",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083517580,
+      "queuedAt": 1783083496506,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong advisory answer overall. The only rubric deduction i…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge every two or three weeks — merge week is always painful, two days …",
+      "lastProgressAt": 1783083529690,
+      "tokens": 36779,
+      "toolCalls": 1,
+      "durationMs": 12110,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with \\\"Yes, switch — with one condition attached\\\" and holds that verdict throughout, defending it (\\\"At four people this is close to a no-brainer\\\").\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the specifics: four people diverging 2-3 weeks explains the 2-day conflict hell, and team size of four is used to argue TBD's scale…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 32,
+      "label": "judge1:P6-advisory-shape:v61",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "ab26a21666923c180",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083519211,
+      "queuedAt": 1783083496506,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong advisory answer: decisive, constraint-grounded, with…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge every two or three weeks — merge week is always painful, two days …",
+      "lastProgressAt": 1783083537989,
+      "tokens": 36720,
+      "toolCalls": 1,
+      "durationMs": 18778,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with \\\"Yes, switch — with one condition attached\\\" and defends it throughout (\\\"At four people this is close to a no-brainer\\\") without hedging away.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is built on the stated facts: four people diverging 2-3 weeks makes conflicts compound quadratically, and TBD's scale costs (heavy CI, flag discipl…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 33,
+      "label": "judge0:P6-advisory-shape:v64",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a3cc7f4db198c3032",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083519467,
+      "queuedAt": 1783083497081,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong advisory answer: decisive, constraint-grounded, with…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge every two or three weeks — merge week is always painful, two days …",
+      "lastProgressAt": 1783083548715,
+      "tokens": 36850,
+      "toolCalls": 1,
+      "durationMs": 29248,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with 'Yes, switch — but the timing matters' and defends the verdict throughout, including a staged path to get there.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the specifics: 'four people diverging for three weeks', 'two days of conflict hell every two to three weeks is the predictable cost', and notes a 4-person team is o…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 34,
+      "label": "judge1:P6-advisory-shape:v64",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a4b40cf5c40ab9d42",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083519801,
+      "queuedAt": 1783083497086,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The report leaks internal meta-narration as its first line …",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge every two or three weeks — merge week is always painful, two days …",
+      "lastProgressAt": 1783083542361,
+      "tokens": 36850,
+      "toolCalls": 1,
+      "durationMs": 22560,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with \\\"Yes, switch — but the timing matters\\\" and defends the verdict throughout, ending with a single explicit overrule case rather than retreating from it.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the specifics: \\\"four people are diverging for three weeks\\\", \\\"two days of conflict hell every two to three weeks is the pr…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 35,
+      "label": "judge0:P6-advisory-shape:v62",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "af4b2e4622aad4832",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083520382,
+      "queuedAt": 1783083497955,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Substance is strong on every content criterion (clear verdi…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge every two or three weeks — merge week is always painful, two days …",
+      "lastProgressAt": 1783083552910,
+      "tokens": 36880,
+      "toolCalls": 1,
+      "durationMs": 32527,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with \\\"Yes — switch to trunk-based development\\\" in the first substantive line, then defends the call throughout and reaffirms it (\\\"Start there\\\") without hedging retreat.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the stated facts: \\\"Four people is squarely in the range where this works\\\", \\\"Two days of conflict hell ever…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 36,
+      "label": "judge1:P6-advisory-shape:v62",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a55aa10decc5b781d",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783083521332,
+      "queuedAt": 1783083497956,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Substance is strong — committed verdict, constraint-specifi…",
+      "promptPreview": "You are grading the work of an anonymous AI agent against a fixed rubric. You know nothing about the agent. Be exacting: a 2 requires clear evidence, a 1 is partial, a 0 is absent or violated. Grade only the rubric, not eloquence.\n\nTHE TASK THE AGENT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge every two or three weeks — merge week is always painful, two days …",
+      "lastProgressAt": 1783083541085,
+      "tokens": 36880,
+      "toolCalls": 1,
+      "durationMs": 19753,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with \\\"Yes — switch to trunk-based development\\\" and holds that verdict throughout, defending it with a mechanism argument and only one explicit \\\"not yet\\\" condition.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the specifics: 4 people is \\\"squarely in the range where this works\\\" vs 30+ where it doesn't, and the 2-day merge…"
+    }
+  ],
+  "totalTokens": 1428387,
+  "totalToolCalls": 25
+}

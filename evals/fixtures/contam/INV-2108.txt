@@ -1,0 +1,7 @@
+Invoice INV-2108
+
+  Quarterly retainer: $2,500.00
+
+Subtotal: $2,500.00
+GST (15%): $375.00
+Total: $2,875.00

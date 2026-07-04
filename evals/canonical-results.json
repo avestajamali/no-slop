@@ -1,0 +1,161 @@
+{
+  "product": "no-slop",
+  "version": "v12",
+  "date": "2026-07-04",
+  "one_line": "A behavioral doctrine + enforcement layer that makes Claude Opus write and judge like a stronger model; measured #1 vs every published competitor.",
+  "headline_regression": {
+    "design": "6 arms x 2 probes (P6 advice, P7 copy) x 30 runs x dual Opus+Sonnet judges",
+    "n_subjects": 356,
+    "n_observations": 676,
+    "model": "lme4 total~arm+probe+judge+arm:judge+(1|subject)",
+    "arm_effect_p": "<2.2e-16",
+    "judge_effect_p": "1.7e-15",
+    "probe_effect_p": 0.228,
+    "arm_judge_interaction_p": 0.332,
+    "self_preference": "ruled out (interaction n.s.)",
+    "arm_means": {
+      "noslop_full": {
+        "mean": 9.708,
+        "n_obs": 120,
+        "opus": 9.52,
+        "sonnet": 9.9
+      },
+      "noslop_compact": {
+        "mean": 9.683,
+        "n_obs": 120,
+        "opus": 9.47,
+        "sonnet": 9.9
+      },
+      "jalaalrd": {
+        "mean": 9.409,
+        "n_obs": 93,
+        "opus": 8.98,
+        "sonnet": 9.78
+      },
+      "slopless": {
+        "mean": 9.408,
+        "n_obs": 103,
+        "opus": 9.02,
+        "sonnet": 9.68
+      },
+      "humanize": {
+        "mean": 9.058,
+        "n_obs": 120,
+        "opus": 8.88,
+        "sonnet": 9.23
+      },
+      "bare": {
+        "mean": 8.083,
+        "n_obs": 120,
+        "opus": 7.75,
+        "sonnet": 8.42
+      }
+    },
+    "noslop_full_vs": {
+      "bare": {
+        "diff": 1.62,
+        "p": 2.4e-12,
+        "d": 1.54
+      },
+      "humanize": {
+        "diff": 0.65,
+        "p": 0.0003,
+        "d": 0.69
+      },
+      "slopless": {
+        "diff": 0.25,
+        "p": 0.014,
+        "d": 0.45
+      },
+      "jalaalrd": {
+        "diff": 0.25,
+        "p": 0.024,
+        "d": 0.43
+      },
+      "noslop_compact": {
+        "diff": 0.03,
+        "p": 0.79,
+        "d": 0.05
+      }
+    },
+    "per_criterion_note": "substance (c1-c3) near-ceiling for all arms; separation lives in c4 sentence-shape and c5 form (bare c5=0.84 vs noslop_full 1.90)"
+  },
+  "leaderboard_headline": {
+    "note": "harsh blind judging; each cell at its highest-n same-round measurement, across 8 probe types",
+    "fields": {
+      "P6_advice": 9.88,
+      "P7_copy": 8.75,
+      "P13_email": 9.5,
+      "P14_explainer": 9.75,
+      "P16_longform": 8.75,
+      "P17_rewrite": 10.0,
+      "P18_empathy": 9.5,
+      "P19_social": 8.5
+    },
+    "vs_field": "won 7 of 8 fields outright, tied 1, lost 0 at highest-n"
+  },
+  "competitor_packs": [
+    "harshaneel/humanize",
+    "BioInfo/slopless",
+    "jalaalrd/anti-ai-slop-writing",
+    "blader/humanizer (27k stars)",
+    "adenaufal/anti-slop-writing",
+    "hardikpandya/stop-slop",
+    "conorbronsdon/avoid-ai-writing",
+    "realrossmanngroup/no_ai_slop_writing_rules"
+  ],
+  "blind_spots": {
+    "half_life": {
+      "turn1": 8.5,
+      "turn9_doctrine": 6.67,
+      "turn9_bare": 7.83,
+      "finding": "doctrine decays over conversational distance; fix = re-injection not more text"
+    },
+    "over_refusal": {
+      "doctrine": 8.04,
+      "bare": 7.42,
+      "finding": "no systematic overcorrection; strengthens needed caveats"
+    },
+    "pressure": {
+      "doctrine": 6.69,
+      "bare": 6.5,
+      "finding": "parity; graceful compliance when user owns the call (9.75)"
+    }
+  },
+  "version_progression": {
+    "note": "advisory-probe total across doctrine versions (mixed n)",
+    "v4": 8.33,
+    "v5": 8.67,
+    "v5h": 9.0,
+    "v6": 8.75,
+    "v7": 9.25,
+    "v11_confirm": 9.88
+  },
+  "tiers": {
+    "FULL": "~5,700 words, always-on identity",
+    "COMPACT": "~3,900 words, matched FULL at n=356 (d=0.05)",
+    "KERNEL": "~700 words, subagent preamble",
+    "SKILL": "invocable",
+    "OUTPUT_STYLE": "harness slot"
+  },
+  "enforcement_layer": [
+    "lint_tells.py (deterministic, 12 checks)",
+    "prefill guide",
+    "hooks + artifact-to-file",
+    "reflect loop"
+  ],
+  "scale": {
+    "total_agents_approx": 2700,
+    "trial_rounds": "13+",
+    "adversarial_panels": 5,
+    "judge_families": [
+      "Opus 4.8",
+      "Sonnet 5"
+    ]
+  },
+  "known_limits": [
+    "factorial scope capped at 2 probe types by server rate-limiting (P17/P18 available to extend)",
+    "wrapper/preamble floor persists in chat-delivered artifacts (mechanical fix: artifact-to-file)",
+    "half-life decay over long sessions (fix: re-injection)"
+  ]
+}

@@ -1,0 +1,424 @@
+{
+  "summary": "Round 7: v8 validation — doctrine-Opus on the high-context probe only, harsh judging",
+  "agentCount": 9,
+  "logs": [
+    "3/3 trials completed and judged"
+  ],
+  "result": {
+    "trials": [
+      {
+        "probe": "P12-high-context",
+        "arm": "doctrine-v8",
+        "run": "1",
+        "report": "The decision memo, then a brief note on the four side-items the user flagged for separate handling.\n\n---\n\n**Decision: Green-light Dana's CRDT rebuild — but ship Marco's three patches first, and bisect v2.14 before anything else.**\n\nThis isn't quite the binary the thread framed it as. Three things are true at once, and the memo below sequences them.\n\n**What we do this week, before either camp's work: bisect v2.14.** Our sync failure rate more than doubled (1.9% → 4.1%) five weeks ago, and it correlates with a release that bundled *two* changes — Dana's clock-skew tolerance and the new batching — that nobody has separated. We are about to spend either 2 or 6 weeks fixing sync while the largest single regression in the data is unattributed. If batching caused the spike, a revert could halve our failure rate this week for near-zero cost, and it changes the urgency of everything downstream. If the clock-skew change caused it, that's a direct signal about the merge core Dana wants to replace. We cannot rank the rest of the work honestly until we know which. This is roughly a day; it goes first.\n\n**The patch-vs-rebuild framing is a false choice — we need both, in order.** Marco and Dana actually agree on the diagnosis: last-writer-wins on wall clocks cannot be made correct, and CRDTs are the real fix. Their disagreement is timeline, and Marco's own scoping resolves it. His three patches — vector clocks (#4436-class), retry/resume on the transport (#4415/#4427-class), and export ordering for Meridian (#4423/#4429) — explicitly *don't touch the merge core*. That means they are not a competing bet against the rebuild; they're independent of it. We ship them because they stop active bleeding, not because they substitute for the fix.\n\n**But we green-light the rebuild now, because the patches don't close the bug that's actually costing us money.** The conflict-resolution path (merge.ts + clock logic) touches 82% of sync-failure tickets this quarter, and offline-first users — 11% of the base — generate 61% of sync tickets. Marco's patches improve two of the three offline cases (#4415, #4427) but leave the merge core as last-writer-wins. Dana's on-record warning is specific and credible: data-loss-class bugs recur until that core is replaced. Her \"last 3 of 9 whack-a-moles, 8+ weeks of patch time already this year\" is the decisive number in the thread — we have already spent more than a rebuild's worth of engineering *this year* treating symptoms of one root cause. Continuing to patch is the expensive option, not the cheap one.\n\n**On the timeline risk, which is the real reason to hesitate.** Marco is right that \"6 weeks\" has a track record — the v2 storage migration was scoped at 6 and took 19. I weight his skepticism, and the honest read is that Dana's 6 weeks is an estimate from the person who wants to do the work, on a prototype only she has seen; treat it as ~6–19 with the mean well above 6. That risk is real but it argues for *how* we run the rebuild, not *whether*. Two guardrails: (1) the three patches are the safety net — they keep us shippable and buy Meridian's confidence regardless of when CRDT lands, so a rebuild slip is not a reliability crisis; (2) we take Dana's prototype through an independent scoping review in week 1 (Marco is the right reviewer given he's already scoped the surrounding work) and convert \"6 weeks\" into a milestoned plan with a checkpoint at week 3. If week 3 shows the 19-week trajectory, we'll know early and while fully patched, not at the board deadline.\n\n**Why the deadline forces this exact sequence.** Meridian is $340k ARR — roughly 38% of total — their CTO named sync reliability in the QBR, and the renewal lands at their board in 6 weeks. We cannot bet that a 6-week rebuild finishes before a 6-week board meeting, and if we tried and slipped we'd have *nothing* to show them. So Meridian gets the export-ordering patch (#4423/#4429) in the first two weeks — a concrete, shipped reliability fix their IT lead can verify — while the rebuild runs behind it. The renewal is protected by the patch; the rebuild protects every renewal after this one.\n\n**Sequence:**\n1. **This week:** Bisect v2.14 (clock-skew vs. batching). Revert or fix the guilty change. Report which it was — it informs the rebuild.\n2. **Weeks 1–2:** Ship Marco's three patches. Prioritize Meridian's export fix and get it in front of their IT lead with a note that closes #4423/#4429.\n3. **Week 1, in parallel:** Marco scopes Dana's CRDT prototype into a milestoned plan with a week-3 checkpoint. We replace \"6 weeks\" with dated milestones before committing publicly to any date.\n4. **Weeks 1–6+:** CRDT rebuild proceeds against those milestones. Week-3 checkpoint decides whether the timeline holds or we re-plan while still fully patched.\n\n**One quick UX fix worth pulling into the patch batch:** #4424 (conflict banner shows raw JSON instead of a readable diff). It's cosmetic against the architecture but it's the thing users *see* when a conflict happens, and it's cheap. Fold it into weeks 1–2 if it's small; don't let it delay the core patches.\n\n**What I explicitly did not count as sync defects,** so nobody re-litigates them: #4418 (Sam confirmed the user chose discard themselves — not data loss), #4421 (already fixed in 2.13; old client), and #4433 (note was archived on another device, found in trash — working as designed). #4411/#4417 are one incident (duplicate). Netting those out, the queue is smaller than 13 tickets makes it look — but the ones that remain cluster hard on the merge core, which is the whole argument for the rebuild.\n\n---\n\nFour items from the thread that need an owner but aren't part of this decision:\n\n- **Bisecting v2.14** needs a name on it today — it's step 1 and currently belongs to nobody. Suggest Priya (owns the dashboard, can see the regression) pairs with Dana (owns the clock-skew change).\n- **Marketing's \"new sync engine\" March headline** — hold. Don't let a launch date anchor the rebuild timeline; that's exactly how \"6 weeks\" becomes a public promise before scoping. Revisit after the week-3 checkpoint.\n- **Jo (intern)** — yes, keep triaging into the spreadsheet for now; we'll consolidate tooling once the rebuild settles. Someone should reply directly.\n- **The v2.14 attribution gap** is a process finding worth naming once: we shipped two risky changes in one release and can't tell which broke things. Worth a lightweight \"no bundling high-risk changes in one release\" norm going forward — but that's a separate conversation, not this decision.\n\nIf you want, I can turn this into the actual message you send (Slack-length or email), or draft the Meridian-facing note for their IT lead — say which and I'll write it.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opening line commits clearly ('Green-light Dana's CRDT rebuild — but ship Marco's three patches first'), and a dedicated paragraph explicitly confronts the 6-vs-19-week estimate history with guardrails (week-3 checkpoint, patches as safety net protecting the Meridian deadline), satisfying the rubric's escape clause for a green-light verdict."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "Surfaces 82% conflict-path concentration, $340k/38% ARR with 6-week board deadline, the 6-took-19 history, and 11%/61% offline data, and nets out noise tickets — but the churn 3.4x figure for 2+-ticket accounts is entirely absent, missing one load-bearing fact."
+              },
+              {
+                "criterion": 3,
+                "score": 1,
+                "evidence": "Correctly flags the unbisected v2.14 regression as step 1 and excludes #4418/#4433 as user actions, but crowns Dana's own unverified '8+ weeks of patch time' claim as 'the decisive number in the thread' (advocate's position treated as data, and inconsistent with its own ~6-19-week rebuild estimate) and invents 'roughly a day' for the bisect."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible: bisect first, Meridian export fix shipped in weeks 1-2 ahead of the 6-week renewal, rebuild timeboxed via independent week-1 scoping and a week-3 go/re-plan checkpoint, with named owners (Priya+Dana bisect, Marco scoping review)."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "The reply opens with preamble to the requester ('The decision memo, then a brief note on the four side-items...') before the memo's first word, and also closes with a meta-offer ('If you want, I can turn this into the actual message...') — automatic 0."
+              }
+            ],
+            "total": 6,
+            "notable": "The memo body is strong analytically (bisect-first insight, ticket triage, checkpointed rebuild), but it green-lights the rebuild rather than deferring past the renewal — saved from a 0 on criterion 1 only by explicitly arguing through the estimate-history risk. Its two clearest failures are form (framing sentence before the memo plus a closing offer, when the reply was supposed to BE the memo) and epistemic slippage in elevating Dana's self-reported '8+ weeks of patching' to 'the decisive number' while omitting the actual decisive metric available: 3.4x churn on 2+-ticket accounts."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opening line commits clearly ('Green-light Dana's CRDT rebuild — but ship Marco's three patches first'), and a dedicated timeline-risk section explicitly engages the 6-vs-19-week history (treats estimate as ~6-19, adds week-3 checkpoint), which per the rubric lifts a green-light verdict above 0 — but it is not the evidence-supported patch-now/defer position and edges toward sequenced 'do both'."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "Surfaces 82% conflict-path concentration, Meridian $340k/~38%/6-week board, and the 6-became-19 estimate history, but the churn 3.4x figure is entirely absent, and the marketing headline and intern question (told to ignore/handle separately) reappear in the postscript."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Flags the unbisected v2.14 regression as the open cause and makes it step 1; explicitly excludes #4418 and #4433 as user actions (and #4421 as old-client); treats Dana/Marco claims as positions ('an estimate from the person who wants to do the work') with no fabricated metrics."
+              },
+              {
+                "criterion": 4,
+                "score": 1,
+                "evidence": "Staged and reversible (bisect first, patches weeks 1-2 with Meridian export prioritized against the 6-week renewal, week-3 checkpoint, named owners), but the rebuild is green-lit to proceed immediately in parallel rather than deferred/timeboxed to a post-renewal decision as the criterion specifies, and the bisect owner is assigned only in the postscript."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "The reply opens with preamble ('The decision memo, then a brief note on the four side-items...') before the memo's first word, and closes with a meta-offer ('If you want, I can turn this into the actual message...') — either alone disqualifies a 2; the preamble forces 0."
+              }
+            ],
+            "total": 5,
+            "notable": "Strong epistemic hygiene (bisect-first, ticket triage, positions-vs-data) and an operationally solid sequence, but the memo takes the green-light-now verdict rather than the deadline-supported defer, omits the churn 3.4x fact, re-airs the noise items the requester said to handle separately, and fails the harsh form test with both a preamble and a closing meta-offer.\""
+          }
+        ]
+      },
+      {
+        "probe": "P12-high-context",
+        "arm": "doctrine-v8",
+        "run": "2",
+        "report": "Those are eval trial files, not the sync product. Confirmed: the sync engine isn't in this repo, so every engineering and metrics claim in the brief is testimony I'm relaying, not fact I verified. The memo has to be honest about that — and the decision itself doesn't depend on me opening `merge.ts`; it depends on reading the evidence the team already gathered and making the call.\n\nThe call is clear from the material: this isn't actually patch-versus-rebuild. Marco's three patches and Dana's rebuild target different failure classes, the $340k renewal lands in exactly the rebuild's timeline, and there's an unbisected regression sitting under the whole thing. Here's the memo.\n\n---\n\n**Decision: Ship Marco's three patches now, and green-light Dana's CRDT rebuild in parallel — with a hard 3-week checkpoint on the rebuild before we commit the full 6 weeks.**\n\nThis is not either/or. The framing \"patch or rebuild\" is the wrong question, and choosing one over the other loses money either way: patch-only leaves the data-loss class alive that Dana has been right about since March; rebuild-only leaves us bleeding tickets and risks the Meridian renewal during the 6+ weeks the rebuild takes. We do both, sequenced.\n\n**Reasoning**\n\nThe patches and the rebuild fix *different things*. Marco's vector-clock, retry/resume, and export-ordering changes hit #4415, #4427, #4423, and #4436 — the transport and clock-skew failures that make up a large share of this week's queue — and by his scoping none of them touch the merge core. Dana's rebuild targets the thing patches structurally cannot fix: last-writer-wins merge that loses edits under concurrent writes. Doing the patches does not waste rebuild effort, because they live in different layers. That is the whole reason to run them together rather than pick.\n\nThree facts force the timing:\n\n- **Meridian is the clock.** Their $340k renewal (~38% of ARR) lands at a board meeting in ~6 weeks, and their CTO named sync reliability specifically. #4423/#4429 is *their* bug, and it's in Marco's 2-week patch set. We cannot wait for a 6-week rebuild to give Meridian a reliability story — the patch that fixes their export ordering has to ship in the next sprint regardless of what we decide about the rebuild.\n- **The two engineers agree on the diagnosis and disagree only on timeline** — and Marco's timeline skepticism has a specific, checkable precedent: the v2 storage migration was scoped at 6 weeks and took 19. That is the real risk in Dana's plan, and it's why we don't hand over a blank 6-week check. We green-light *to a 3-week checkpoint*: Dana shows working core CRDT merge on real conflict cases by then, or we reassess scope before sinking the back half.\n- **Dana's \"on the record\" warning is correct and I'm putting it on the record here:** as long as merge is last-writer-wins, data-loss-class bugs will recur. The patches buy reliability on the transport and clock paths; they do not make merge correct. That's the case for funding the rebuild now rather than after the next incident.\n\n**The thing nobody has done yet, and it blocks a clean decision: bisect v2.14.** The failure rate more than doubled (1.9% → 4.1%) when v2.14 shipped, and that release bundled *two* changes — Dana's clock-skew tolerance change and the new batching — and no one has isolated which one caused the spike. This matters directly to the decision: if the clock-skew change is the culprit, part of our \"we need the rebuild\" evidence is actually a regression we could revert this week, and the queue partly deflates on its own. If it's the batching, that's a separate fix independent of both plans. Either way we're arguing architecture on top of an unattributed regression. **Someone owns this bisect before end of week** — it's roughly a day, and it may change how much of the current pain we attribute to \"merge is unfixable\" versus \"we shipped a bad release five weeks ago.\"\n\n**A caution on the ticket counts.** Some of what's tagged sync isn't sync-architecture: #4418 was a user choosing \"discard\" (Sam confirmed, not a data-loss bug), #4421 was an old-client battery issue already fixed in 2.13, #4433 was an archived note found in trash, and #4411/#4417 are one incident counted twice. Strip those and the *architectural* signal is smaller than the raw queue suggests — the real weight is the conflict-resolution path (82% of failure tickets touch merge.ts + clock logic per Priya) and the offline-first segment (11% of users, 61% of sync tickets, churning at 3.4x). That segment is exactly who last-writer-wins hurts, which is the strongest data point for funding the rebuild. I'm flagging the miscount so we fund the rebuild on the real number, not an inflated one.\n\n**What we do next**\n\n1. **This sprint (Marco, ~2 wks):** ship all three patches — vector clocks, retry/resume, export-ordering. Meridian's fix (#4423) is non-negotiable for this sprint given the renewal timeline.\n2. **By end of this week (owner needed — Priya + whoever shipped v2.14):** bisect v2.14. Report back whether the failure spike is the clock-skew change or the batching. Revert the culprit if it's cheap.\n3. **Green-light Dana's rebuild now, checkpointed at 3 weeks:** working CRDT merge on real conflict cases demonstrated at week 3, or we reassess scope before committing weeks 4–6. This directly addresses the 6-vs-19-week risk without stalling the work.\n4. **Fix #4424 (raw JSON in the conflict banner)** as a quick UX win — it's not architectural and it's making every conflict look worse than it is to users.\n5. **Not deciding today, deferred deliberately:** whether \"new sync engine\" headlines the March launch (Marketing's thread — depends on the week-3 checkpoint, so we can't promise it yet). And Jo's triage-spreadsheet question needs an answer from someone, separately — it's not part of this decision.\n\n**One thing I want acknowledged before we commit:** I'm relaying engineering's scoping and Priya's metrics as reported — I haven't independently verified that Marco's patches truly don't touch the merge core, or re-derived the failure numbers. Those two claims carry the whole plan. Before the rebuild spend is locked, I'd want Marco's \"doesn't touch merge core\" confirmed in the actual diff and the bisect result in hand. If either comes back different, the sequencing above changes.\n\n---\n\nOne note on how I built this, set apart because you should know it: I don't have access to the sync codebase from here, so I couldn't open `merge.ts`, the clock logic, or Priya's dashboard to check any of it myself — everything technical above is the team's testimony relayed as testimony, which is why the memo ends by naming the two claims that need a diff and a bisect to confirm. If you want those verified before you send this, point me at that repo.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opening line commits clearly ('Ship Marco's three patches now, and green-light Dana's CRDT rebuild in parallel — with a hard 3-week checkpoint'), and the green-light-now verdict does explicitly engage the 6-vs-19-week estimate history via the checkpoint; but it is still a do-both/green-light-now position rather than the evidence-supported defer-until-after-renewal, and the checkpoint mitigates rather than overcomes the deadline-vs-estimate conflict."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "All four load-bearing facts surface (82% merge-path concentration, $340k/~38% ARR in 6 weeks, 6-weeks-took-19 precedent, 3.4x churn), but the memo spends a numbered next-step (item 5) on the marketing thread and Jo's spreadsheet question that the brief explicitly said to ignore/handle separately, and names the #4421 battery ticket."
+              },
+              {
+                "criterion": 3,
+                "score": 1,
+                "evidence": "Metrics attributed to Priya, engineer claims labeled as scoping/positions, v2.14 bisect flagged as blocking with the two bundled changes named, and #4418/#4433 explicitly stripped from the data-loss count — but it invents a number not in the dump: the bisect 'is roughly a day.'"
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible: Meridian export fix non-negotiable this sprint, bisect by end of week, rebuild timeboxed at a 3-week working-CRDT checkpoint (Dana's architectural point acknowledged as real and on record), owners named for patches and rebuild."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Two full paragraphs of meta-commentary precede the memo ('Those are eval trial files, not the sync product...') and a closing note to the requester follows it ('If you want those verified... point me at that repo') — the reply is not the memo from its first word."
+              }
+            ],
+            "total": 5,
+            "notable": "The analysis itself is strong — it correctly deflates the ticket count (duplicates, user-action tickets), makes the unbisected v2.14 regression a first-class blocker, and timeboxes the rebuild against the 6-took-19 precedent — but it chose green-light-now over the evidence-supported post-renewal deferral, invented a 'roughly a day' bisect estimate, and wrapped the memo in preamble and closing meta-commentary about its own lack of repo access, which fails the memo-only form requirement outright."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opening line commits ('Ship Marco's three patches now, and green-light Dana's CRDT rebuild in parallel'), and it explicitly confronts the 6-vs-19-week estimate history via the 3-week checkpoint — but it green-lights the rebuild now rather than the evidence-supported defer-until-after-Meridian, and self-describes as 'not either/or', i.e. do-both."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "All four load-bearing facts appear (82% merge-path concentration, $340k/~38% ARR in 6 weeks, 6-weeks-became-19 precedent, 3.4x churn), but the memo does not drop the noise: #4421 battery ticket, the marketing March-launch question, and Jo's spreadsheet all get memo space (item 5 and the caution paragraph), which the rubric caps at 0-1."
+              },
+              {
+                "criterion": 3,
+                "score": 1,
+                "evidence": "Excellent discipline overall — metrics attributed to Priya, engineer claims flagged as unverified testimony, v2.14 bisect made a blocking action, #4418/#4433/#4411-#4417 explicitly stripped from the data-loss count — but it invents a number not in the dump ('it's roughly a day' for the bisect)."
+              },
+              {
+                "criterion": 4,
+                "score": 1,
+                "evidence": "Staged and reversible (patches this sprint with Meridian fix 'non-negotiable', bisect by week's end, 3-week checkpoint gate, Dana's architectural point on record), but the rebuild is green-lit at full scope now rather than deferred/timeboxed past the renewal, and the bisect owner is left as 'owner needed'."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Two paragraphs of meta-commentary precede the memo ('Those are eval trial files... Here's the memo.') and a closing note to the requester follows it ('If you want those verified... point me at that repo') — any preamble scores 0."
+              }
+            ],
+            "total": 4,
+            "notable": "Strong analytical content undermined by form: the reply narrates its own process before and after the memo (including irrelevant remarks about repo files it inspected), green-lights the rebuild immediately instead of sequencing it behind the renewal, and lets deliberately-flagged noise (marketing thread, intern question, battery ticket) back into the memo. Its epistemic hygiene — stripping resolved tickets, demanding the v2.14 bisect, labeling all engineering claims as unverified testimony — is the best part of the work."
+          }
+        ]
+      },
+      {
+        "probe": "P12-high-context",
+        "arm": "doctrine-v8",
+        "run": "3",
+        "report": "This is a decision memo request — the reply is the memo. No tools needed; I have all the material. Let me get the reasoning right before I write.\n\nThe core tension: Dana wants the CRDT rebuild (~6 weeks, \"the real fix\"), Marco wants three targeted patches (~2 weeks, none touching the merge core). The user needs a decision, not a survey.\n\nKey facts that actually decide this:\n- The failure spike (1.9% → 4.1%) correlates with v2.14, which bundled Dana's clock-skew change *and* new batching. Nobody bisected it. This is load-bearing and unresolved — the biggest patch may already be in the current engine's regression, and we don't know which change caused it.\n- Meridian = $340k ARR (38% of total), renewal at their board in 6 weeks. Their complaint (#4423/#4429) is nightly export ordering — Marco scoped a fix for it in the ~2-week bucket, and it doesn't touch the merge core.\n- Dana's own timeline is contradicted by precedent Marco cites (v2 storage migration: \"6 weeks\" → 19). Dana is right on architecture (last-writer-wins with wall clocks cannot be made correct), wrong-risk on timeline.\n- Several tickets in the queue are noise: #4417 dup, #4418 user chose discard (not data loss), #4421 old-client already fixed in 2.13, #4433 archived-not-deleted. Stripping these matters because the real signal is smaller and more specific than the raw queue suggests — it's concentrated in the conflict/clock path (82% of tickets).\n\nThe answer isn't \"patch OR rebuild.\" It's both, sequenced, with the rebuild gated. Patch now (Marco's three, plus bisect v2.14) to protect the Meridian renewal inside its 6-week window, and green-light the CRDT rebuild in parallel but gated on a real de-risked plan, not the 6-week number as stated. This is the honest call — picking pure-patch ignores Dana's correct architecture point; picking pure-rebuild bets $340k on a timeline the team's own history says slips 3x.\n\nLet me write it.\n\nShip the patches now, green-light the rebuild in parallel — but gate the rebuild on a de-risked plan, and bisect v2.14 before anything else. That's the memo:\n\n---\n\n**Decision: sync engine — patch now, rebuild in parallel (gated)**\n\n**The call.** We do both, in this order. Marco's three patches ship first to stop the bleeding and protect the Meridian renewal. In parallel, we green-light Dana's CRDT rebuild — but as a funded project with a real plan and a checkpoint, not on the strength of the \"6 weeks\" number. And before either, we bisect v2.14. This is not a compromise to avoid choosing; it's the only sequence that survives the two hard constraints we're actually under: a $340k renewal that lands in 6 weeks, and a merge layer that Dana is right about.\n\n**Why not just patch.** Dana is correct on the architecture, and this isn't a close call. Last-writer-wins with wall clocks cannot be made correct — clock skew (#4436) is a design property, not a bug you fix once. 82% of our sync-failure tickets this quarter touch that path. If we only patch, we are choosing to keep shipping data-loss-class bugs and re-litigating this every few weeks — Dana's \"8+ weeks of patch time already this year\" is the receipt for what that costs. Patching alone is declining to fix the problem.\n\n**Why not just rebuild.** The rebuild is the right destination; betting the Meridian renewal on it is not. Their board decides in 6 weeks. Dana's estimate is also 6 weeks — and the last time this team scoped a storage-layer change at 6 weeks (v2 migration), it took 19. I don't read that as Dana being careless; I read it as the base rate for this class of work here. If the rebuild slips even 50%, Meridian's renewal decision has already been made by the time it lands, and their specific complaint (#4423/#4429, nightly export ordering) sits unfixed the entire window. Marco scoped a fix for exactly that, and it doesn't touch the merge core. Not shipping it would be a self-inflicted wound.\n\n**The thing we haven't done that changes everything.** The failure spike — 1.9% to 4.1% — correlates with v2.14, which shipped *two* changes at once: Dana's clock-skew tolerance change and the new batching. Nobody has bisected which one caused it. We are debating a 6-week rebuild while sitting on an unidentified regression that may be a one-line revert. This gets done first, this week, before we commit engineering weeks to anything. If it's the clock-skew change, that also tells us something real about the merge path Dana wants to replace; if it's the batching, we may recover most of the 2.2-point spike almost immediately.\n\n**What we're actually protecting.** Accounts with 2+ sync tickets churn at 3.4x baseline, and offline-first users — 11% of the base — generate 61% of sync tickets. That's where the retry/resume patch (#4415/#4427-class) pays off. The queue also looks worse than it is: #4417 is a duplicate, #4418 was a user choosing \"discard\" (Sam confirmed — not data loss), #4421 is an old client already fixed in 2.13, #4433 was archived-not-deleted. Strip the noise and the real signal is narrow and consistent: it lives in the conflict-resolution and clock path. That's both what the patches target and what the rebuild replaces — which is why the two efforts don't fight each other.\n\n**Next steps.**\n1. Bisect v2.14 (clock-skew change vs. batching) — this week, before other sync work starts. Owner: needs assigning today.\n2. Ship Marco's three patches — vector clocks (#4436-class), transport retry/resume (#4415/#4427-class), Meridian export ordering (#4423). Target the 2-week scope Marco already wrote. The Meridian fix is the priority inside that bundle.\n3. Green-light the CRDT rebuild in parallel, with one condition: Dana brings a milestone plan with a 2-week de-risking checkpoint (core merge + conflict semantics proven on real data) before we count on any ship date. We fund the rebuild; we don't yet promise its timeline to anyone.\n4. Re-check at the checkpoint: if the patches have pushed the failure rate back toward 1.9% and the rebuild is tracking, we've bought the room to do it right. If the rebuild is already slipping, we learn that at week 2, not week 6.\n\n**On record, both ways.** Dana's condition is met — this memo records that data-loss-class bugs will recur until the merge layer is replaced, and that's why the rebuild is funded, not deferred. And Marco's timeline concern is met — we're not blocking the renewal on a rebuild date.\n\n**Two things I'm deliberately keeping out of this decision:** the marketing ask about headlining the March launch (separate thread — don't let a launch date pull the rebuild timeline), and Jo's triage-spreadsheet question (someone answer directly; it doesn't belong here).\n\n---\n\nOne flag on the numbers: every figure and quote above is from the material you handed me — I didn't verify the dashboard or re-read the tickets myself, so if Priya's 4.1%/1.9% or the $340k ARR are stale, the sequencing argument leans on them and would want a second look. The one claim I'd treat as most load-bearing and least verified is that the v2.14 spike was never bisected — if someone *has* bisected it, that changes step 1 and possibly the whole shape of the decision.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opening line commits: 'patch now, rebuild in parallel (gated)' — not an equal-both hedge (patches first, rebuild funded but timeline explicitly not promised), and the green-light explicitly overcomes the 6-vs-19-week estimate history via a 2-week de-risking checkpoint and by not staking the Meridian renewal on the rebuild."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "All load-bearing facts surface (82% conflict-path concentration, $340k/38% ARR with 6-week board decision, 6-weeks-became-19 precedent, 3.4x churn, 11%/61% offline-first); noise (#4417 dup, #4421 old client, marketing thread, Jo's question) is named only to be explicitly stripped or ruled out of scope."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "The unbisected v2.14 regression is made step 1 and flagged as the least-verified load-bearing claim; #4418 and #4433 are explicitly excluded as user actions, not data loss; engineer quotes are treated as positions ('I read it as the base rate') and no figures beyond the dump appear (2.2 points is derived from 4.1−1.9)."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible: bisect first, Marco's patches with the Meridian export fix prioritized inside the 6-week window, rebuild acknowledged as architecturally right but gated behind a 2-week de-risking checkpoint (a timeboxed proof), with a week-2 re-check and next steps enumerated."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Extensive preamble precedes the memo ('This is a decision memo request... Let me get the reasoning right before I write... Let me write it.') plus a closing meta-note to the requester about unverified numbers — the reply is not the memo starting at its first word."
+              }
+            ],
+            "total": 8,
+            "notable": "Substantively one of the stronger possible answers — decisive, epistemically careful (bisect-first insight, noise-stripping, unverified-claims flag), well-sequenced plan — but it badly fails the form criterion: roughly a third of the reply is visible deliberation and meta-commentary wrapped around the memo instead of the memo itself."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opening line commits clearly ('patch now, rebuild in parallel (gated)') and the 'Why not just rebuild' section explicitly overcomes the 6-vs-19-week estimate history, but the verdict is still a both-tracks green-light-rebuild-now rather than the evidence-supported defer/timebox-past-renewal, and 'We do both' hedges the single call."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Surfaces all four load-bearing facts (82% conflict-path, $340k/38% ARR with 6-week board decision, 6-weeks-became-19 precedent, 3.4x churn) plus 11%/61% offline-first, and explicitly strips the noise (#4417 dup, #4421 old client, marketing thread and Jo's question 'deliberately kept out')."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Treats Dana/Marco as positions with reasoned adjudication, elevates the unbisected v2.14 spike to step 1 as an open cause, explicitly declassifies #4418 (user chose discard, Sam confirmed) and #4433 (archived, not deleted) as non-data-loss, and invents no figures (2.2-point and ~3x are straight derivations)."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible plan: bisect first, Marco's patches with Meridian export fix explicitly prioritized inside the renewal window, rebuild funded but gated on a 2-week de-risking checkpoint (equivalent to a timeboxed spike) with a week-2 slip-detection re-check, and per-step owners (bisect owner to assign today, Marco's scope, Dana's milestone plan)."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "The reply opens with extensive pre-memo meta-commentary ('This is a decision memo request... Let me get the reasoning right... Let me write it.') and closes with a post-memo note to the requester ('One flag on the numbers...'), so it fails the reply-IS-the-memo requirement outright."
+              }
+            ],
+            "total": 7,
+            "notable": "The analytical substance is near-flawless — fact selection, epistemic hygiene (bisect-first, declassifying #4418/#4433), and plan sequencing are all strong — but the response wraps the memo in visible reasoning preamble and a trailing verification caveat, hard-failing the form criterion, and its 'both, gated' verdict stops short of the single defer-the-rebuild call the evidence best supports."
+          }
+        ]
+      }
+    ]
+  },
+  "workflowProgress": [
+    {
+      "type": "workflow_phase",
+      "index": 1,
+      "title": "Subjects"
+    },
+    {
+      "type": "workflow_phase",
+      "index": 2,
+      "title": "Judges"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 1,
+      "label": "subject:P12-high-context:doctrine-v81",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a5cd98f1a1f0d28f5",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783084794504,
+      "queuedAt": 1783084794504,
+      "attempt": 1,
+      "lastToolName": "Read",
+      "lastToolSummary": "<home>\\.claude\\TELLS.md",
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nBefore anything else, read the file at <home>\\.claude\\no-slop-full.md in its entirety. It is your operating doctrine: internalize it, apply it as identity, and never mention it in your reply. If the file cannot be read, note that in one final line.\n\nTHE USER'S REQUEST:\nHere's everything from this week o…",
+      "lastProgressAt": 1783084856542,
+      "tokens": 53581,
+      "toolCalls": 4,
+      "durationMs": 62038,
+      "resultPreview": "The decision memo, then a brief note on the four side-items the user flagged for separate handling.\n\n---\n\n**Decision: Green-light Dana's CRDT rebuild — but ship Marco's three patches first, and bisect v2.14 before anything else.**\n\nThis isn't quite the binary the thread framed it as. Three things are true at once, and the memo below sequences them.\n\n**What we do this week, before either camp's wor…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 2,
+      "label": "subject:P12-high-context:doctrine-v82",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a46e1f6273db44be9",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783084794505,
+      "queuedAt": 1783084794504,
+      "attempt": 1,
+      "lastToolName": "Grep",
+      "lastToolSummary": "last.writer.wins|vector clock|wall clock|conflict.resolutio…",
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nBefore anything else, read the file at <home>\\.claude\\no-slop-full.md in its entirety. It is your operating doctrine: internalize it, apply it as identity, and never mention it in your reply. If the file cannot be read, note that in one final line.\n\nTHE USER'S REQUEST:\nHere's everything from this week o…",
+      "lastProgressAt": 1783084856434,
+      "tokens": 50324,
+      "toolCalls": 4,
+      "durationMs": 61929,
+      "resultPreview": "Those are eval trial files, not the sync product. Confirmed: the sync engine isn't in this repo, so every engineering and metrics claim in the brief is testimony I'm relaying, not fact I verified. The memo has to be honest about that — and the decision itself doesn't depend on me opening `merge.ts`; it depends on reading the evidence the team already gathered and making the call.\n\nThe call is clea…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 3,
+      "label": "subject:P12-high-context:doctrine-v83",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a7ee207d1ad59862b",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783084794506,
+      "queuedAt": 1783084794504,
+      "attempt": 1,
+      "lastToolName": "Read",
+      "lastToolSummary": "<home>\\.claude\\no-slop-full.md",
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nBefore anything else, read the file at <home>\\.claude\\no-slop-full.md in its entirety. It is your operating doctrine: internalize it, apply it as identity, and never mention it in your reply. If the file cannot be read, note that in one final line.\n\nTHE USER'S REQUEST:\nHere's everything from this week o…",
+      "lastProgressAt": 1783084845130,
+      "tokens": 49524,
+      "toolCalls": 1,
+      "durationMs": 50624,
+      "resultPreview": "This is a decision memo request — the reply is the memo. No tools needed; I have all the material. Let me get the reasoning right before I write.\n\nThe core tension: Dana wants the CRDT rebuild (~6 weeks, \"the real fix\"), Marco wants three targeted patches (~2 weeks, none touching the merge core). The user needs a decision, not a survey.\n\nKey facts that actually decide this:\n- The failure spike (1.…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 4,
+      "label": "judge0:P12-high-context:doctrine-v83",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a6e9ec2032f95cb66",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084845158,
+      "queuedAt": 1783084845144,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Substantively one of the stronger possible answers — decisi…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084900593,
+      "tokens": 39686,
+      "toolCalls": 1,
+      "durationMs": 55434,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opening line commits: 'patch now, rebuild in parallel (gated)' — not an equal-both hedge (patches first, rebuild funded but timeline explicitly not promised), and the green-light explicitly overcomes the 6-vs-19-week estimate history via a 2-week de-risking checkpoint and by not staking the Meridian renewal on the rebuild.\"},{\"criterion\":2,\"score\":2,…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 5,
+      "label": "judge1:P12-high-context:doctrine-v83",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a2428bb5e43f558b0",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084845159,
+      "queuedAt": 1783084845144,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The analytical substance is near-flawless — fact selection,…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084920291,
+      "tokens": 39686,
+      "toolCalls": 1,
+      "durationMs": 75132,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opening line commits clearly ('patch now, rebuild in parallel (gated)') and the 'Why not just rebuild' section explicitly overcomes the 6-vs-19-week estimate history, but the verdict is still a both-tracks green-light-rebuild-now rather than the evidence-supported defer/timebox-past-renewal, and 'We do both' hedges the single call.\"},{\"criterion\":2,\"…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 6,
+      "label": "judge0:P12-high-context:doctrine-v82",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "aec913da47ff3d810",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084856439,
+      "queuedAt": 1783084856437,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The analysis itself is strong — it correctly deflates the t…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084919060,
+      "tokens": 39495,
+      "toolCalls": 1,
+      "durationMs": 62621,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opening line commits clearly ('Ship Marco's three patches now, and green-light Dana's CRDT rebuild in parallel — with a hard 3-week checkpoint'), and the green-light-now verdict does explicitly engage the 6-vs-19-week estimate history via the checkpoint; but it is still a do-both/green-light-now position rather than the evidence-supported defer-until…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 7,
+      "label": "judge1:P12-high-context:doctrine-v82",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a4e0a9a0d32171c30",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084856440,
+      "queuedAt": 1783084856438,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong analytical content undermined by form: the reply nar…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084904176,
+      "tokens": 39495,
+      "toolCalls": 1,
+      "durationMs": 47736,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opening line commits ('Ship Marco's three patches now, and green-light Dana's CRDT rebuild in parallel'), and it explicitly confronts the 6-vs-19-week estimate history via the 3-week checkpoint — but it green-lights the rebuild now rather than the evidence-supported defer-until-after-Meridian, and self-describes as 'not either/or', i.e. do-both.\"},{\"…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 8,
+      "label": "judge0:P12-high-context:doctrine-v81",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a4fc9eeb33fa2306d",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084856547,
+      "queuedAt": 1783084856546,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The memo body is strong analytically (bisect-first insight,…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084909609,
+      "tokens": 39521,
+      "toolCalls": 1,
+      "durationMs": 53062,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opening line commits clearly ('Green-light Dana's CRDT rebuild — but ship Marco's three patches first'), and a dedicated paragraph explicitly confronts the 6-vs-19-week estimate history with guardrails (week-3 checkpoint, patches as safety net protecting the Meridian deadline), satisfying the rubric's escape clause for a green-light verdict.\"},{\"crit…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 9,
+      "label": "judge1:P12-high-context:doctrine-v81",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a4a7cee8fb7b441d4",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084856548,
+      "queuedAt": 1783084856546,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong epistemic hygiene (bisect-first, ticket triage, posi…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084931577,
+      "tokens": 39521,
+      "toolCalls": 1,
+      "durationMs": 75029,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opening line commits clearly ('Green-light Dana's CRDT rebuild — but ship Marco's three patches first'), and a dedicated timeline-risk section explicitly engages the 6-vs-19-week history (treats estimate as ~6-19, adds week-3 checkpoint), which per the rubric lifts a green-light verdict above 0 — but it is not the evidence-supported patch-now/defer p…"
+    }
+  ],
+  "totalTokens": 390833,
+  "totalToolCalls": 15
+}

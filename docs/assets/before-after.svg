@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 680 260" role="img" font-family="'Segoe UI',system-ui,-apple-system,sans-serif">
+<title>no-slop rewrites machine tells into plain language</title>
+<desc>Animated demo cycling four documented substitutions: delve into becomes look at, leverage synergies becomes work together, not just fast but reliable becomes fast and reliable, in order to becomes to.</desc>
+<rect x="0" y="0" width="680" height="260" rx="16" fill="#14161f"/>
+<text x="36" y="46" fill="#f0f2f6" font-size="20" font-weight="600">The same idea, without the tells</text>
+<text x="36" y="68" fill="#8b93a4" font-size="13">Counted, not felt — the prose protocol rewrites each tell before it ships</text>
+<text x="54" y="118" fill="#7f8698" font-size="12" font-weight="600">MACHINE TELL</text>
+<text x="392" y="118" fill="#4f9a7f" font-size="12" font-weight="600">NO-SLOP</text>
+<line x1="330" y1="98" x2="330" y2="204" stroke="#262a37" stroke-width="1"/>
+<text x="354" y="167" fill="#8b93a4" font-size="22" text-anchor="middle">→</text>
+<g font-size="22" font-weight="500">
+  <g>
+    <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.03;0.22;0.25;1" dur="9s" repeatCount="indefinite"/>
+    <text x="54" y="168" fill="#e5695f">delve into</text>
+    <line x1="52" y1="161" x2="172" y2="161" stroke="#e5695f" stroke-width="2"/>
+    <text x="392" y="168" fill="#5dcaa5">look at</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.25;0.28;0.47;0.5;1" dur="9s" repeatCount="indefinite"/>
+    <text x="54" y="168" fill="#e5695f" font-size="20">leverage synergies</text>
+    <line x1="52" y1="161" x2="270" y2="161" stroke="#e5695f" stroke-width="2"/>
+    <text x="392" y="168" fill="#5dcaa5" font-size="20">work together</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.5;0.53;0.72;0.75;1" dur="9s" repeatCount="indefinite"/>
+    <text x="54" y="160" fill="#e5695f" font-size="19">not just fast,</text>
+    <text x="54" y="186" fill="#e5695f" font-size="19">but reliable</text>
+    <line x1="52" y1="153" x2="176" y2="153" stroke="#e5695f" stroke-width="2"/>
+    <text x="392" y="173" fill="#5dcaa5" font-size="19">fast and reliable</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.75;0.78;0.97;1" dur="9s" repeatCount="indefinite"/>
+    <text x="54" y="168" fill="#e5695f">in order to</text>
+    <line x1="52" y1="161" x2="182" y2="161" stroke="#e5695f" stroke-width="2"/>
+    <text x="392" y="168" fill="#5dcaa5">to</text>
+  </g>
+</g>
+<text x="36" y="236" fill="#697082" font-size="12">On a de-slop rewrite, no-slop scored 10.0 / 10 — the task the humanizer packs were built for</text>
+</svg>

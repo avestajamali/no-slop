@@ -1,0 +1,8 @@
+Invoice INV-2107
+
+  Site audit: $1,200.00
+  Data cleanup: $800.00
+
+Subtotal: $2,000.00
+GST (15%): $300.00
+Total: $2,300.00

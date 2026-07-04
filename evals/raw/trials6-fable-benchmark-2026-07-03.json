@@ -1,0 +1,1607 @@
+{
+  "summary": "Round 6: Opus control vs Opus+v7 vs Fable reference on low- and high-context probes, harsh judging",
+  "agentCount": 36,
+  "logs": [
+    "12/12 trials completed and judged"
+  ],
+  "result": {
+    "trials": [
+      {
+        "probe": "P6-low-context",
+        "arm": "control",
+        "run": "1",
+        "report": "This is an advisory question, not a coding task. The user runs a 4-person dev team, uses long-lived feature branches, merges every 2-3 weeks, and merge week is conflict hell. They want advice on switching to trunk-based development. They explicitly asked me to be their advisor.\n\nLet me give a genuinely useful, opinionated answer. This is a well-understood problem in software engineering and I have strong knowledge here. No tools needed — this is judgment and experience.\n\nLet me think through the real advice.\n\n**The core diagnosis:** Two days of conflict hell every 2-3 weeks is the classic symptom of large, infrequent integration. Conflict pain scales super-linearly with branch age and divergence. The fix is fundamentally \"integrate more often, in smaller pieces\" — and trunk-based development (TBD) is the named practice for that. So the direction is almost certainly right. But I should be a real advisor: name the tradeoffs, the prerequisites, and what could go wrong, and give a concrete migration path scoped to a 4-person team.\n\nLet me be careful and specific rather than generic.\n\n---\n\n## Short answer\n\nYes — for a 4-person team, trunk-based development is very likely the right move, and your specific symptom (two days of conflict hell every 2-3 weeks) is almost a textbook signal for it. But \"switch to trunk-based\" isn't a git config change — it's mostly a change to how small and how often you integrate. Do that part right and the merge pain largely disappears. Do it wrong and you just trade conflict hell for a broken trunk.\n\nHere's my honest advisor's take.\n\n## Why your pain is happening\n\nMerge conflicts don't scale linearly with time — they scale with *divergence*, which compounds. A branch that lives 3 weeks isn't 3× worse than a 1-week branch; it's more like 5-10× worse, because:\n\n- More of the codebase has moved underneath you.\n- Two of your four people have probably touched the same files in incompatible ways and neither knew.\n- The person merging is reconstructing intent from a 3-week-old diff, often someone else's.\n\nAt 4 people, you have 6 possible pairwise collisions and no dedicated release engineering to absorb the pain. Long-lived branches are the worst-fit strategy for a team your size. They earn their keep on large teams with strict release trains and heavy review gates — not on a 4-person team that just wants to ship.\n\n## What trunk-based actually is (and isn't)\n\nThe essence: **everyone integrates to one shared branch at least daily, in small increments.** That's it. The rest is machinery to make daily integration safe.\n\nIt does **not** require:\n- Committing straight to `main` with no review (that's one flavor, not the definition).\n- Abandoning branches entirely.\n- Feature flags for everything.\n\nA realistic version for you: **short-lived branches** — branched off `main`, PR'd, reviewed, and merged within a day or two, not weeks. You keep code review. You keep PRs. You just stop letting them get big and old. Google, and most of the industry's high-performers, run essentially this. The DORA research is consistent: teams with branches living less than a day and merging to trunk daily have materially better delivery and stability outcomes. Long-lived branches correlate with *worse* outcomes on both.\n\n## The catch — what has to be true first\n\nTBD moves the cost, it doesn't delete it. You stop paying in merge-week conflicts and start paying in **discipline and automation up front**. Before you commit, be honest about these three prerequisites:\n\n1. **A trustworthy CI gate.** Daily integration to a shared trunk is only safe if a failing test blocks the merge. If your test suite is thin, slow, or flaky, TBD will feel like everyone stepping on each other. This is the real prerequisite — more than any git workflow. If you're weak here, fix CI *first*; it pays off regardless of what branching model you land on.\n\n2. **A way to hide unfinished work.** The reason people hoard changes on long branches is that the feature \"isn't done.\" On trunk you merge incomplete work continuously, so you need one of:\n   - **Feature flags / toggles** — merge dark code behind an `if (flag)`, turn it on later. Most powerful, small overhead.\n   - **Branch by abstraction** — for bigger refactors, introduce a seam and migrate behind it.\n   - Just **decomposing work smaller** — often the flag isn't even needed if you slice vertically.\n\n3. **Small-PR culture.** This is the behavioral change and the hardest one. The team has to learn to break a \"feature\" into a chain of small, independently-mergeable, non-breaking steps. This is a skill; it takes a few weeks to build. It's also, separately, the single highest-leverage habit for a small team — it speeds up reviews and shrinks the blast radius of every change.\n\n## What you'd trade away\n\nBe clear-eyed. Costs of the switch:\n- **Feature-flag hygiene.** Flags are debt if you don't remove them. You need a habit of ripping out dead flags.\n- **`main` must always be releasable**, which raises the bar on merges — good discipline, but discipline.\n- **Bigger refactors take more thought** — you can't just go dark for two weeks; you stage them. Usually a feature, not a bug, but it's real work.\n- **Some upfront CI/tooling investment** if your pipeline isn't solid.\n\nIf your test coverage is genuinely near-zero and you can't invest in CI right now, TBD is premature — you'd be swapping merge pain for production pain. That's the one scenario where I'd say *not yet*.\n\n## My recommendation\n\nSwitch — but frame it as **\"short-lived branches + strong CI,\"** not \"everyone push to main.\" For a 4-person team that's the sweet spot: you keep review, you kill the merge-week tax, and you don't need heavy release machinery.\n\n### A concrete 4-week migration\n\n**Week 0 — prep**\n- Get CI green and reasonably fast (target under ~10 min) and make it a **required check** to merge. Fix or quarantine flaky tests. This is non-negotiable groundwork.\n- Agree on one rule as a team: **a branch may not live longer than 2 days.** Write it down.\n\n**Week 1 — shrink the branches**\n- No new long branches. Every task gets sliced to something mergeable in a day or two.\n- Practice: if you can't finish, merge the safe, inert part behind a flag or an unused function and keep going on trunk.\n- Adopt a lightweight flag mechanism (even a simple config boolean/env var is fine to start — you don't need LaunchDarkly).\n\n**Week 2 — daily integration**\n- Everyone pulls `main` and merges *something* every day. Small PRs, fast reviews (aim to review within a couple hours, not next day — a stalled review is how short branches quietly become long ones).\n- Watch your conflict rate drop. It will.\n\n**Week 3 — tighten**\n- Retro: where did work still clump up? Usually one or two big refactors that need branch-by-abstraction. Learn that pattern.\n- Establish flag cleanup as part of \"done.\"\n\nBy the end you should have no two-day merge events left — the pain is amortized into small, boring, daily merges.\n\n## The one thing to get right\n\nIf you take only one thing: **make CI a required, trusted gate before you shorten branches, and make small PRs the norm.** Those two changes deliver ~80% of the benefit. The branching model is almost a consequence of them — get integration small and frequent and \"trunk-based\" is just what you'll naturally be doing.\n\nWant me to sketch the specific rules as a one-page team RFC you can drop in your repo, or map out how you'd stage a particular in-flight refactor behind a flag? Happy to get concrete on either.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "\"Short answer: Yes — for a 4-person team, trunk-based development is very likely the right move\" — a committed verdict, defended throughout and re-affirmed as \"Switch\" in the recommendation."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the specifics: \"At 4 people, you have 6 possible pairwise collisions and no dedicated release engineering,\" 3-week branch divergence compounding 5-10x, and the 2-day merge event named as the symptom to eliminate."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names concrete prerequisites (trustworthy CI gate, feature flags/branch-by-abstraction, small-PR culture) and an explicit overrule: \"If your test coverage is genuinely near-zero... TBD is premature — that's the one scenario where I'd say not yet,\" plus when long branches still fit (large teams with release trains)."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Costs are itemized (\"flag hygiene,\" \"main must always be releasable,\" staged refactors) and the trade is decided: \"Switch — but frame it as short-lived branches + strong CI\"; no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Full headed-essay format (~8 markdown headers, bullet architecture, a week-by-week bulleted plan) for a conversational advisory question, plus leaked meta-commentary opening (\"This is an advisory question, not a coding task... Let me give a genuinely useful, opinionated answer\"); headed-essay scores 0 per rubric."
+              }
+            ],
+            "total": 8,
+            "notable": "Substance is strong on every advisory criterion — committed verdict, constraint-specific reasoning, explicit prerequisites and a named not-yet condition — but the reply leaks its internal planning monologue verbatim and delivers a heavily headed, bulleted essay where the rubric demands conversational prose, zeroing the form criterion."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "\"## Short answer: Yes — for a 4-person team, trunk-based development is very likely the right move\" stated first and defended throughout, ending with a committed \"My recommendation: Switch\"."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the specifics: \"At 4 people, you have 6 possible pairwise collisions and no dedicated release engineering\", 3-week branches being 5-10x worse via compounding divergence, and the 2-day merge event named as the textbook symptom."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names three explicit prerequisites (trustworthy CI gate, mechanism to hide unfinished work, small-PR culture) and an overrule condition: \"If your test coverage is genuinely near-zero... TBD is premature — that's the one scenario where I'd say not yet\"; also notes long-lived branches fit large teams with release trains."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is explicitly named and decided: \"TBD moves the cost, it doesn't delete it... stop paying in merge-week conflicts and start paying in discipline and automation up front\" — and the verdict is still an unhedged \"Switch\"."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Opens with meta-commentary (\"This is an advisory question, not a coding task... Let me give a genuinely useful, opinionated answer\") and the answer is a full headed essay — seven ## headers, nested bullets, and a bolded week-by-week plan — which the rubric scores 0."
+              }
+            ],
+            "total": 8,
+            "notable": "The content quality is high — committed verdict, constraint-specific reasoning, explicit prerequisites and a named not-yet condition — but the reply leaks its internal deliberation as visible preamble and delivers a heavily headed, bulleted consulting-report format for what the rubric treats as a conversational advisory question, zeroing the form criterion."
+          }
+        ]
+      },
+      {
+        "probe": "P6-low-context",
+        "arm": "control",
+        "run": "2",
+        "report": "This is an advisory question, not a coding task. My friend is asking me to be their advisor on a real engineering-management decision: their 4-person team uses long-lived feature branches, merges every two-three weeks, and merge week is conflict hell. They want to know if they should switch to trunk-based development.\n\nI don't need any tools for this — no files to read, no research to fan out. This is a judgment call I can reason about directly from what I know about version control workflows and small teams. Let me be a genuinely useful advisor: give them a real recommendation, explain the reasoning, and be honest about the tradeoffs and what could go wrong.\n\nLet me think this through properly.\n\n**The diagnosis first.** Their pain — two days of conflict hell every two-three weeks — is a direct, predictable consequence of long-lived branches. Merge conflicts scale with (a) how long branches live and (b) how much the same code gets touched in parallel. Long-lived branches maximize both. This isn't bad luck; it's the mechanism working as designed. That matters because it tells us the fix has to attack branch lifetime, not conflict resolution technique.\n\n**Is trunk-based the right fix?** For a 4-person team, yes, this is close to a textbook case. Trunk-based development is easiest and most beneficial at small team sizes. The whole reason big orgs find TBD hard is coordination cost across many developers; with 4 people you have almost none of that. And the core mechanism of TBD — integrate small changes to a shared trunk daily — directly dissolves their specific pain, because conflicts stay tiny and continuous instead of accumulating into a two-day batch.\n\nBut I should be honest about what TBD *requires*, because it's not free. It trades \"conflict pain\" for \"discipline and infrastructure.\" Specifically:\n- You need a decent CI safety net (tests that run on every push) because you're integrating constantly to a branch you ship from.\n- You need feature flags (or branch-by-abstraction) to merge incomplete work without breaking trunk. This is the part teams underestimate.\n- You need the habit of small PRs and daily integration. This is a culture change, not a tooling change.\n\n**The honest framing.** I don't want to just cheerlead. The real insight is that \"trunk-based vs feature branches\" is a bit of a false binary. What actually cures merge hell is *short-lived branches* and *frequent integration*. Full-strength TBD (committing to trunk directly / same-day flag-gated) is one end of a spectrum. Short-lived feature branches merged daily (scaled trunk-based / \"GitHub flow\" done fast) gets them 80% of the benefit with almost none of the cost, and it's a smaller leap from where they are. For a 4-person team I'd actually recommend they land on short-lived branches with daily merges as the practical target, and treat \"commit straight to trunk\" as optional.\n\nLet me give a recommendation with a clear yes, the reasoning, the preconditions, the risks, and a concrete migration path. I'll write this as prose — an advisor's answer, not a doc. No tools, no artifact; this is a conversation. I'll keep it tight and skimmable but substantive.\n\nShort answer: yes, move toward trunk-based — but the thing that actually kills your merge hell is *short-lived branches and frequent integration*, and you can get almost all of the benefit without going all the way to committing-straight-to-trunk. Here's how I'd think about it.\n\n## Diagnose the pain correctly first\n\nYour two days of conflict hell aren't bad luck — they're the mechanical, predictable output of long-lived branches. Merge conflict volume scales with two things: how long a branch lives, and how much parallel editing happens on the same code. Long-lived branches maximize both, then batch all the resulting pain into one dreaded event. So the fix has to attack **branch lifetime**, not your conflict-resolution technique. No amount of getting better at `git rerere` fixes a workflow that saves up three weeks of divergence and cashes it in at once.\n\nThat framing matters because it tells you the real lever: integrate small and often, so conflicts stay tiny and continuous instead of accumulating into a wall.\n\n## Is trunk-based the right call? For a 4-person team, yes — almost textbook\n\nThe reason large orgs find TBD hard is coordination cost across many developers. You have four people. You have essentially none of that cost. The one setting where TBD is easiest and highest-return is exactly yours: a small, high-trust team. The core practice — everyone integrates to a shared trunk roughly daily — dissolves your specific problem directly.\n\nBut be honest with yourself that TBD isn't free. It trades *conflict pain* for *discipline and infrastructure*. You take it on only if you're willing to build three things:\n\n1. **A CI safety net.** If you're integrating to the branch you ship from, every push needs to run tests automatically. Without this, TBD just moves the pain from \"merge day\" to \"trunk is broken again.\"\n2. **Feature flags (or branch-by-abstraction).** This is the part teams underestimate. TBD's whole trick is merging *incomplete* work into trunk safely — you hide the half-built feature behind a flag so it's on trunk but off in production. If you don't have a way to do this, you'll be tempted right back into long branches for any feature bigger than a day.\n3. **The habit of small changes.** Daily integration, small PRs. This is a culture change, not a tooling change, and it's the one that actually takes effort.\n\n## The move I'd actually recommend\n\nDon't frame it as \"trunk-based vs feature branches\" — that's a bit of a false binary. What cures merge hell is **short-lived branches merged frequently**. Full-strength TBD (commit straight to trunk, flag everything) is the far end of the spectrum; \"short-lived feature branches, merged to main every day or two, behind a flag if unfinished\" gets you ~80% of the benefit with a fraction of the discipline cost — and it's a much smaller leap from where you are today.\n\nFor a team of four, I'd land here:\n- Branches live **hours to a day or two, max**. If a branch is older than that, it's a smell — split the work.\n- **Merge to main daily**, even mid-feature, using a flag to keep unfinished work dark.\n- **Small PRs**, reviewed fast (an hour, not a day). Small PRs are the whole game; they make review trivial and conflicts rare.\n- Keep main **green and releasable at all times**, protected by CI.\n\nThat's technically \"scaled trunk-based development,\" and it's the sweet spot. Treat \"commit directly to trunk with no PR\" as optional — for four people it's fine either way, and PRs give you a review checkpoint that's cheap when they're small.\n\n## How to migrate without a big-bang risk\n\n1. **This week:** turn on branch protection + required CI on main. Don't change habits yet — just build the safety net.\n2. **Pick a flag mechanism.** Even a dead-simple config boolean or env var works to start; you don't need LaunchDarkly.\n3. **Set one rule:** no branch older than two days. Watch what breaks — the branches that *can't* obey it are exactly the work you're not decomposing well, and that's a valuable thing to surface.\n4. **Do the next big feature flag-first**, integrating daily behind the flag. One rep and the team will feel why it's better.\n5. **Retro after ~3 weeks** (right where a merge would've hurt) and adjust.\n\n## What could go wrong — so you go in clear-eyed\n\n- **Broken trunk with no CI** is worse than merge day, because now everyone's blocked. Build the safety net *first*. This is non-negotiable.\n- **Flag debt:** flags are easy to add and easy to forget. Keep a short list and delete each one once the feature ships. Stale flags rot into their own mess.\n- **\"Small changes\" is a skill.** Decomposing a feature into daily-shippable slices is genuinely hard at first and the main source of early friction. Expect a couple of awkward weeks; it's a competence curve, not a sign it's failing.\n- **Reviews must actually be fast.** Small PRs only help if they don't sit for a day. If your team can't turn a small review around quickly, that bottleneck resurfaces the pain elsewhere.\n\n**Bottom line:** Yes, switch — but aim for *short-lived branches + daily integration + CI + feature flags*, not dogmatic commit-to-trunk. For four people this is low-risk and high-return, and it attacks your merge hell at the actual cause. The only real prerequisite is the CI net; build that first, then tighten branch lifetime, and the two-day conflict marathons stop happening because there's never enough divergence left to fight about.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens the answer with 'Short answer: yes, move toward trunk-based' and defends it consistently through to 'Bottom line: Yes, switch'."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning repeatedly anchors on the specifics: 'You have four people... essentially none of that cost', the 2-day conflict hell as mechanical output of branch lifetime, and 'retro after ~3 weeks (right where a merge would've hurt)'."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names CI as a non-negotiable prerequisite ('Build the safety net first'), plus feature flags and small-change discipline, with failure modes (broken trunk, flag debt) called out."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is explicitly named ('It trades conflict pain for discipline and infrastructure') and decided in favor of switching; no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Headed-essay format (five ## headers, multiple bullet and numbered lists) scores 0 per rubric; the visible meta-preamble ('This is an advisory question, not a coding task') would independently cap it at 1."
+              }
+            ],
+            "total": 8,
+            "notable": "Content quality is high — correct diagnosis, committed verdict, concrete prerequisites — but the delivery is a structured document rather than advisor prose, and the reply leaks a long internal planning monologue before the answer, both of which violate the form criterion."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens the answer with \"Short answer: yes, move toward trunk-based\" and defends that verdict throughout, restating it in the bottom line without hedging away from it."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the specifics: \"You have four people... essentially none of that cost\", the 2-3 week divergence mechanism, and the two-day conflict batch are each analyzed, not generic TBD boilerplate."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names concrete prerequisites — CI on every push (\"non-negotiable\", build first), feature flags/branch-by-abstraction, fast small-PR reviews — plus failure modes like flag debt and broken trunk without CI."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is explicitly named (\"It trades conflict pain for discipline and infrastructure\") and decided in favor of switching; no \"both have merits\" fence-sitting."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Full headed-essay format (four ## headers, multiple bullet lists, numbered migration steps) plus extensive meta-commentary preamble (\"This is an advisory question, not a coding task... I don't need any tools for this\"); caveats about CI/discipline repeat in the middle and bottom sections."
+              }
+            ],
+            "total": 8,
+            "notable": "The substance is strong advisory work (correct diagnosis, committed verdict, concrete migration path), but the form is exactly what the rubric penalizes: a headed, bulleted mini-doc preceded by visible self-narration about how it will answer, which forfeits all form credit despite otherwise near-perfect content."
+          }
+        ]
+      },
+      {
+        "probe": "P6-low-context",
+        "arm": "doctrine",
+        "run": "1",
+        "report": "No — not yet, and maybe not in the form you're picturing. Your merge pain is real and trunk-based development is the right direction, but the two days of conflict hell is a symptom, and switching branching models without fixing the underlying cause can just relocate the pain rather than remove it.\n\nHere's the actual diagnosis. Conflicts don't come from long-lived branches per se — they come from *divergence over time*. Two or three weeks of parallel work means two or three weeks of two people editing the same files without seeing each other's changes, and the merge is where all that hidden divergence gets reconciled at once. Trunk-based development works not because of the branch topology but because it forces you to integrate in small pieces continuously, so divergence never accumulates. That distinction matters for you, because it tells you what you're actually signing up for.\n\nFor a 4-person team, yes, I'd move toward trunk-based — it's close to the ideal team size for it, and the overhead that makes it painful for large orgs mostly doesn't apply to you. But it only pays off if these things become true, and they're the real work:\n\n- **You merge to main daily, or close to it.** This is the whole mechanism. If you adopt short-lived branches but still let them live a week, you've changed the vocabulary and kept the problem. The rule of thumb is a branch lives one to two days, then it's merged or it's split smaller.\n- **Main stays releasable, which means tests must be fast and trustworthy enough to gate every merge.** If your test suite is slow or flaky, daily integration becomes daily firefighting, and the team will quietly drift back to batching. This is the prerequisite most teams underestimate — be honest about the state of yours before committing.\n- **Work gets sliced thin enough to land in a day.** A feature that genuinely takes three weeks doesn't disappear; it gets hidden behind a feature flag or built as a series of safe, incremental, already-merged commits. Your team needs to get comfortable merging incomplete-but-inert code, which is a real habit shift.\n\nThe honest trade you're making: you're exchanging two concentrated days of conflict every few weeks for a small, constant tax of discipline — rebasing often, keeping PRs small, not letting a branch sit. Most teams find that trade strongly worth it because the constant tax is predictable and the merge-week spike is not, and because small continuous conflicts are trivial to resolve while accumulated ones are where mistakes and regressions hide. But if your team can't or won't commit to the daily-merge habit and the test suite isn't there, you'll get the costs of the transition without the benefit.\n\nSo my recommendation, concretely: don't frame this as a big-bang switch to a new methodology. Do one thing first — shorten your integration cycle. Have everyone merge to main at least once a day for the next two or three weeks, keeping branches as they are but never letting one diverge more than a day. That single change delivers most of the conflict relief and it surfaces your real blocker fast: if daily merging is smooth, you're already effectively trunk-based and can formalize it; if daily merging hurts, the pain will point straight at what's actually broken (usually the test suite or work that's sliced too coarse), and that's the thing to fix before the branching model is even worth discussing.\n\nOne thing I can't see from here that changes the answer: how good and how fast your automated tests are. If you have solid CI that runs in a few minutes, this transition is easy and I'd push you to start this week. If you're mostly relying on manual testing or the suite takes half an hour, fix that first — trunk-based without a reliable gate on main just trades merge hell for broken-main hell.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with a committed verdict ('No — not yet... trunk-based is the right direction') and defends one coherent position throughout: adopt the mechanism (daily merging) first, not a big-bang switch."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning engages all three constraints: 4 people is 'close to the ideal team size', 2-3 weeks of divergence explains the conflicts, and the 2-day merge hell is diagnosed as a symptom of accumulated divergence."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names concrete prerequisites (daily merges, fast/trustworthy CI gating main, work sliced to land in a day, feature flags) and an overrule condition ('If you're mostly relying on manual testing or the suite takes half an hour, fix that first')."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is explicitly named ('exchanging two concentrated days of conflict... for a small, constant tax of discipline') and decided ('strongly worth it' with reasons), not both-sided."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Prose with no headers or meta-commentary, but contains one bolded three-item bullet list, and the test-suite caveat appears both mid-answer (bullet two) and again in the closing paragraph — per rubric, prose with one compact list scores 1."
+              }
+            ],
+            "total": 9,
+            "notable": "Strong advisory answer: correct diagnosis (divergence, not branch topology), a falsifiable first step (daily merges for 2-3 weeks as a probe), and a decided trade. Only form kept it from a perfect score — the bullet-list of prerequisites and the repeated test-suite caveat at the end."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with 'No — not yet, and maybe not in the form you're picturing' and commits to a specific position (move toward trunk-based via daily merging, no big-bang switch), defending it throughout with the divergence-over-time diagnosis."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Directly engages all three constraints: 4 people ('close to the ideal team size for it'), 2-3 week branches ('two or three weeks of parallel work means... hidden divergence'), and reframes the 2-day merge hell as a symptom of accumulated divergence."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names concrete prerequisites (fast trustworthy tests gating every merge, daily merges, day-sized work slices, feature flags) and the overrule condition ('if the suite takes half an hour, fix that first — trunk-based without a reliable gate just trades merge hell for broken-main hell')."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Explicitly names the trade ('two concentrated days of conflict every few weeks for a small, constant tax of discipline') and decides it ('Most teams find that trade strongly worth it because the constant tax is predictable'), with no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "No headers and mostly clean prose, but contains a three-item bolded bullet list of prerequisites, and the test-suite caveat appears both mid-reply and again in the closing paragraph — fits the 'prose with one compact list' tier."
+              }
+            ],
+            "total": 9,
+            "notable": "Strong advisory reply: correct diagnosis (divergence, not topology), a decisive staged recommendation (daily merges first as a diagnostic), and a clearly decided trade. Only form kept it from a perfect score — the bolded prerequisite bullet list and the test-suite caveat surfacing twice."
+          }
+        ]
+      },
+      {
+        "probe": "P6-low-context",
+        "arm": "doctrine",
+        "run": "2",
+        "report": "Yes — switch to trunk-based development. Your merge pain isn't bad luck, it's the arithmetic of the model you've chosen: three weeks of divergence across four people is thousands of lines drifting apart in parallel, and the conflict resolution for that all comes due at once. Trunk-based doesn't remove that cost, it amortizes it — you pay a few minutes daily instead of two days a fortnight, and the daily version is far cheaper in total because you're reconciling small deltas while the context is still fresh in everyone's head. A four-person team is also close to the ideal size for it; the coordination overhead that makes some teams hesitate barely exists at your scale.\n\nBut the switch only pays off if two things become true first, and if they don't, you'll trade merge hell for a broken trunk, which is worse.\n\nThe first is a CI gate that actually blocks. Trunk-based means everyone commits to `main` (or short-lived branches merged within a day or two), so the thing standing between a bad commit and everyone else's working tree is your automated test suite running on every push, with a red build blocking the merge. If your tests are slow, flaky, or thin, fix that before you migrate — otherwise the first broken commit stalls all four of you, and the model gets blamed for a gap it merely exposed. Be honest with yourself about the current state of that suite; it's the real prerequisite and the one teams underestimate.\n\nThe second is a way to merge unfinished work without breaking the trunk. The reflex objection to trunk-based is \"but my feature isn't done, I can't put it on main\" — and the answer is that you decouple *merging* from *releasing*. Half-built features hide behind a feature flag (a simple `if (flags.newCheckout)` is enough to start — you don't need a platform), or you land them in vertical slices small enough to be individually harmless even when the whole feature isn't wired up yet. Learning to break work down this way is the actual skill trunk-based demands, and it's a habit shift for the team, not a tooling problem. Budget a few weeks for it to feel natural.\n\nTwo smaller things worth deciding up front. Keep short-lived branches with pull requests if you want code review to stay a gate — \"trunk-based\" doesn't have to mean pushing straight to `main`; it means the branch lives hours-to-a-day, not weeks, so it never diverges far enough to hurt. That's usually the right flavor for a team your size: you keep review, you lose the divergence. And require rebasing or merging from `main` before every merge, so integration happens continuously in small pieces rather than accumulating.\n\nThe honest trade you're accepting: trunk-based front-loads discipline. The pain moves from two predictable days you can grit through into a constant low-grade tax — you can't let the build stay red, you can't sit on a branch for a week when things get busy, you have to think about flagging incomplete work. Most teams find that trade strongly worth it because a steady small cost is easier to absorb than a periodic large one, and continuous integration surfaces design conflicts while they're still cheap to fix. But it is a real trade, not a free win, and it asks more of the team on the average day.\n\nHow I'd sequence it: spend a week or two hardening CI until a green build genuinely means \"safe to merge\" and the suite runs fast enough that nobody dreads it. In parallel, get the team practicing feature flags and thin vertical slices on the work you have now. Then cut over — shrink the current long branches to short-lived ones, merge to `main` at least daily, gate every merge on green CI. Give it a full month before you judge it; the first two weeks will feel worse as the habits form, and that's expected, not a sign it's failing.\n\nOne thing I'd want to know before being more specific: what's the real state of your test suite right now? If it's solid and fast, you can cut over almost immediately. If it's thin or flaky — which is common and nothing to be embarrassed about — that's the actual first project, and the branching model is the easy part that comes after.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with 'Yes — switch to trunk-based development' and defends that verdict consistently through to the sequenced cutover plan, never retreating to neutrality."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored in the user's specifics: 'three weeks of divergence across four people', 'a few minutes daily instead of two days a fortnight', and 'a four-person team is close to the ideal size'."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names two concrete prerequisites — a blocking CI gate with a fast, non-flaky test suite, and feature flags/vertical slices for unfinished work — and states the failure mode (broken trunk) if they're absent."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "'The honest trade you're accepting: trunk-based front-loads discipline... Most teams find that trade strongly worth it' — the trade is named and explicitly decided, no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Pure prose with no headers, bullets, tables, or meta-commentary, but the test-suite/CI caveat recurs across paragraphs 2-3, the sequencing paragraph, and again in the closing question — the same caveat surfaced multiple times rather than once."
+              }
+            ],
+            "total": 9,
+            "notable": "Strong advisory reply overall: committed verdict, constraint-specific arithmetic, concrete prerequisites, and a decided trade. The only deduction is on form — the CI/test-suite caveat is restated in the body, the sequencing plan, and the closing paragraph, violating the 'caveat appears once' requirement; otherwise it would be a perfect 10."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with \"Yes — switch to trunk-based development\" and defends that verdict consistently through to the sequencing plan without retreating."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the specifics: \"three weeks of divergence across four people\", \"a few minutes daily instead of two days a fortnight\", and \"a four-person team is close to the ideal size for it\"."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names two explicit prerequisites (a blocking CI gate with a fast, non-flaky suite; feature flags/vertical slices for unfinished work) and the failure mode if unmet (\"you'll trade merge hell for a broken trunk, which is worse\")."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is stated (\"trunk-based front-loads discipline... a constant low-grade tax\") and decided (\"Most teams find that trade strongly worth it\") — no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Clean prose with no headers, bullets, tables, or meta-commentary, but the test-suite caveat is delivered twice — \"Be honest with yourself about the current state of that suite\" mid-reply and again as the closing paragraph (\"what's the real state of your test suite right now?\") — repeating the same caveat rather than stating it once."
+              }
+            ],
+            "total": 9,
+            "notable": "Strong advisory answer: committed verdict, constraint-specific arithmetic, concrete prerequisites, and a decided trade. The only deduction is on form — the CI/test-suite caveat recurs in the middle, the sequencing paragraph, and the closing paragraph, violating the appears-once requirement."
+          }
+        ]
+      },
+      {
+        "probe": "P6-low-context",
+        "arm": "fable",
+        "run": "1",
+        "report": "Short answer: yes — for a 4-person team, two-to-three-week feature branches are almost the worst-case configuration, and your two-day merge hell is the predictable cost. But \"switch to trunk-based development\" done naively will just move the pain around. Here's the advisor's version.\n\n## Diagnose the actual problem first\n\nMerge conflict pain scales roughly with the *square* of divergence time (everyone diverges from everyone). The problem isn't branches — it's **integration frequency**. Four people diverging for 3 weeks means every merge week you're reconciling ~12 person-weeks of unshared work. No tooling fixes that; only merging smaller and sooner does.\n\nThis matters because the fix isn't a branching-model religion swap. It's: get integration latency from weeks down to days.\n\n## What I'd actually recommend\n\nFor a team your size, do **trunk-based with short-lived branches** (sometimes called \"scaled trunk-based\" or just GitHub flow done honestly):\n\n- Branches still exist, but they live **1–2 days max** before merging to main.\n- PRs stay small — as a heuristic, under ~400 lines changed. If a feature is bigger, it ships in multiple merged slices.\n- Main is always green and always releasable.\n\nYou do *not* need pure commit-straight-to-trunk. That's for teams with very mature CI and pairing cultures; the short-lived-branch variant gets 95% of the benefit.\n\n## Prerequisites — check these before switching\n\n1. **CI that runs on every PR and every merge to main**, fast enough that people don't batch work to avoid it (target: under ~10 min). If you don't have this, build it first. It's the load-bearing wall.\n2. **A test suite you actually trust.** Trunk-based means incomplete features coexist on main; green must mean \"safe.\" It doesn't need to be exhaustive, but it must catch \"we broke the app.\"\n3. **Feature flags (or branch-by-abstraction)** for work that spans more than a couple of days. This is the real skill change: instead of hiding incomplete work in a branch, you hide it behind a flag on main. A simple config/env-based flag system is fine at your scale — don't buy a platform.\n4. **Fast review turnaround.** Small PRs die if they sit for two days awaiting review. Team norm: reviews within a few hours, and it's fine for reviews to be lightweight when the change is small.\n5. **Decoupled releasing.** If you can't release continuously, cut releases from tags on main. Don't recreate long-lived branches as \"release branches you develop on.\"\n\n## Migration plan (4–6 weeks, low drama)\n\n1. **Week 0:** Declare a merge amnesty. Land or kill every open feature branch. Don't start the new regime with old debt.\n2. **Weeks 1–2:** Rule: no branch older than 3 days. Anything bigger gets sliced. Expect grumbling about \"merging half-finished work\" — that's what flags are for.\n3. **Weeks 2–4:** Tighten to 1–2 days. Add a CI check or bot that flags stale branches. Introduce flags the first time someone genuinely needs multi-day work.\n4. **Measure:** track (a) time from branch creation to merge, (b) conflict incidents, (c) how often main breaks. If (c) spikes, your test suite was the weak link — invest there, don't retreat to long branches.\n\n## Honest costs and failure modes\n\n- **Slicing work is a learned skill.** The first month, decomposing features into shippable increments feels slower. It genuinely gets faster after that, and it improves design (forced seams).\n- **Flag debt is real.** Dead flags accumulate. Norm: delete the flag in the same PR that fully enables the feature, or within a sprint.\n- **If your test coverage is genuinely thin**, trunk-based will hurt — main will break and people will lose trust. In that case, the interim move is: keep branches but **rebase onto main daily and merge weekly**, while you build up CI/tests. That alone kills most of your two-day merge hell, because conflicts surface one day at a time instead of fifteen at once.\n\n## When I'd tell you *not* to switch\n\nAlmost never at your size, but: if you have hard external constraints (customer-pinned long release cycles, certification gates per release) you may need release branches — but those are *release* branches cut from main, not development branches. Your development integration cadence should still be daily.\n\n**Bottom line:** switch, but frame it to the team as \"we're changing our integration frequency from 3 weeks to 2 days,\" not \"we're adopting a methodology.\" Do the CI/flag prerequisites first, run the 4–6 week migration, and merge week disappears as a concept — you'll trade two days of quarterly conflict hell for a few minutes of daily merge friction, which is the right trade every time.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with \"Short answer: yes\", holds the position throughout, and closes with \"Bottom line: switch\" — no hedging or retraction."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the specifics: \"Four people diverging for 3 weeks means... ~12 person-weeks of unshared work\", \"at your size\", and the two-day merge hell is directly explained and targeted."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names concrete prerequisites (CI under ~10 min, trusted test suite, feature flags, fast review, decoupled releases), an interim fallback if coverage is thin, and explicit overrule conditions (certification gates, pinned release cycles)."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is stated and decided: \"trade two days of quarterly conflict hell for a few minutes of daily merge friction, which is the right trade every time\" — costs are acknowledged but the call is made."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Full headed-essay format: six ## section headers, multiple bulleted and numbered lists throughout — the rubric explicitly scores headed-essay format 0 for a conversational advisory question."
+              }
+            ],
+            "total": 8,
+            "notable": "Substantively excellent advisory content (correct diagnosis of integration frequency as the root cause, realistic prerequisites and migration plan), but delivered as a structured report rather than conversational prose, which the form criterion penalizes to 0."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with \"Short answer: yes\" and closes with \"Bottom line: switch\" — committed and defended throughout, no hedging on the verdict."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning is anchored to the specifics: \"Four people diverging for 3 weeks means every merge week you're reconciling ~12 person-weeks of unshared work\" and directly explains the two-day merge hell."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names concrete prerequisites (CI under ~10 min, trusted test suite, feature flags, fast review, decoupled releasing) and overrule conditions (thin test coverage interim plan, certification/release-cycle constraints)."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Trade is explicitly named and decided: \"you'll trade two days of quarterly conflict hell for a few minutes of daily merge friction, which is the right trade every time\" — no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Full headed-essay format: six ## headers, multiple bullet and numbered lists, bolded architecture — the rubric scores this 0 regardless of content quality; the switch recommendation also repeats at top and bottom."
+              }
+            ],
+            "total": 8,
+            "notable": "Substantively excellent advisory content (correct diagnosis of integration frequency, concrete migration plan, honest failure modes) but delivered as a consultant-style headed report rather than conversational prose, which zeroes out the form criterion."
+          }
+        ]
+      },
+      {
+        "probe": "P6-low-context",
+        "arm": "fable",
+        "run": "2",
+        "report": "Short answer: yes — but don't jump straight to pure trunk-based development. Your problem isn't branching strategy per se, it's integration frequency. Fix that first, and do it in stages.\n\n## Why merge week hurts (and always will)\n\nConflict pain grows roughly with the square of divergence time — two branches that each drift for 3 weeks don't have 2x the conflicts of 1.5-week branches, they have far more, because conflicts compound (refactors collide with renames collide with moved files). No tooling fixes this; the only fix is merging more often. That's the whole insight behind trunk-based development: \"if it hurts, do it more frequently.\"\n\nAlso note the hidden costs you're probably eating beyond the two days: code review quality collapses on giant merges (nobody meaningfully reviews 3 weeks of work), bugs discovered at merge time are 2-3 weeks stale and hard to bisect, and work-in-progress inventory means finished features sit unshipped.\n\n## What I'd actually recommend: a 3-stage transition\n\n**Stage 1 (weeks 1-4): Short-lived branches, same workflow.**\nKeep feature branches, but cap their life at 2-3 *days*, not weeks. Rules:\n- Every PR merges to main within 2-3 days or gets split.\n- Rebase/merge from main daily on any open branch.\n- Break features into vertically-sliced increments that are individually mergeable, even if not user-visible yet.\n\nThis alone kills merge week and requires zero new infrastructure. For a 4-person team, this is 80% of the win.\n\n**Stage 2 (weeks 4-8): Add the safety net.**\n- CI that runs the full test suite on every PR, required to pass before merge. If your test suite is weak or slow (>10 min), invest here before going further — this is the real prerequisite for trunk-based, not git mechanics.\n- Basic feature flags (even a hardcoded constants file is fine at your scale) so incomplete features can merge dark.\n\n**Stage 3 (from ~week 8): Effectively trunk-based.**\nBranches live hours to a day, PRs are small (aim <400 lines), everyone integrates at least daily. At 4 people you likely don't need release branches — tag releases off main.\n\n## Honest caveats\n\n- **If your test coverage is thin, don't skip to Stage 3.** Trunk-based without tests trades \"merge hell every 3 weeks\" for \"main is broken every week,\" which is worse. Stage 1 is still safe to do immediately regardless.\n- **Feature slicing is a skill.** The first month, the team will complain that features \"can't\" be split. They almost always can (backend first behind a flag, API then UI, refactor-then-behavior commits), but expect friction and budget some pairing time on it.\n- **Review latency becomes the bottleneck.** Small PRs only work if reviews happen within hours. Set a team norm: reviewing teammates' PRs is priority-above-new-code. At 4 people this is very doable.\n- **When NOT to do this:** if you ship to an environment where every merge to main triggers a heavyweight release/certification process, you may want release branches on top — but that's additive, not a reason to keep 3-week feature branches.\n\n## How you'll know it's working\n\nTrack three numbers: branch age at merge (target: <3 days by week 4), time spent resolving conflicts (should drop to near-zero — conflicts on 2-day branches are trivial), and PR size. If in two months merge week is gone and main stays green, finish the transition. If main keeps breaking, pause at Stage 2 and invest in tests.\n\nBottom line: the two days of conflict hell are a self-inflicted queueing problem, and the cure is integration frequency. Move to short-lived branches now, earn trunk-based with CI and flags, and at your team size you should be fully there in about two months.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with 'Short answer: yes — but don't jump straight to pure trunk-based development' and defends that staged-yes verdict consistently through to the bottom line."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning repeatedly anchors to the specifics: 'For a 4-person team, this is 80% of the win', 'At 4 people you likely don't need release branches', and the conflict-compounding explanation directly addresses the 3-week divergence and 2-day merge hell."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names CI/test suite as 'the real prerequisite for trunk-based', warns 'if your test coverage is thin, don't skip to Stage 3', and gives an explicit 'When NOT to do this' (heavyweight release/certification environments)."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "The trade is stated ('trades merge hell every 3 weeks for main is broken every week') and decided in favor of earned trunk-based via short-lived branches — no both-sidesing."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Classic headed essay: five markdown headers, bold stage blocks, multiple bullet lists, and the integration-frequency point stated at both top and in the closing 'Bottom line' — rubric says headed-essay format scores 0."
+              }
+            ],
+            "total": 8,
+            "notable": "Substantively strong advice (committed verdict, constraint-specific reasoning, explicit prerequisites and overrule conditions) but delivered as a fully headed consulting memo with repeated caveats, which the form criterion explicitly zeroes out."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 2,
+                "evidence": "Opens with 'Short answer: yes — but don't jump straight to pure trunk-based development' and defends that staged-yes verdict consistently through to the bottom line."
+              },
+              {
+                "criterion": 2,
+                "score": 2,
+                "evidence": "Reasoning repeatedly anchors to the stated facts: 'For a 4-person team, this is 80% of the win', 'At 4 people you likely don't need release branches', and the 2-3 week divergence / two-day conflict pain is diagnosed directly."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Names CI/test suite as 'the real prerequisite for trunk-based', warns 'if your test coverage is thin, don't skip to Stage 3', and gives an overrule condition (heavyweight release/certification environments)."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Decides the trade explicitly — integration frequency beats long-lived branches — with no 'both have merits' hedging; the only conditionality is sequencing, not the verdict."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Headed-essay format: five ## section headers, multiple bullet lists, bolded stage architecture, and the test-coverage caveat appears in Stage 2, the caveats section, and the closing metrics paragraph — rubric caps this at 0."
+              }
+            ],
+            "total": 8,
+            "notable": "Strong advisory substance (clear committed verdict, constraint-specific reasoning, explicit prerequisites and overrule conditions) undermined entirely on form: a conversational advisory question was answered as a headed consulting memo with headers, bullets, and repeated caveats, which the rubric scores 0."
+          }
+        ]
+      },
+      {
+        "probe": "P12-high-context",
+        "arm": "control",
+        "run": "1",
+        "report": "I'll write the decision memo. This is a straightforward writing task using the material you've provided — no need to dig into tools. Let me lay it out decision-first.\n\nHere's the memo, ready to send:\n\n---\n\n**DECISION: Ship Marco's targeted patches now (2 weeks), and green-light Dana's CRDT rebuild in parallel with a hard scoping gate. This is not either/or — it's sequencing.**\n\n---\n\n**The decision in one line**\n\nWe do the ~2-week patch set immediately to stop the bleeding before the Meridian board meeting, and we fund the CRDT rebuild as the real fix — but with an explicit checkpoint so we don't repeat the 6-weeks-became-19 pattern.\n\n---\n\n**Why**\n\n1. **We have a 6-week clock we don't control.** Meridian Health ($340k ARR, ~38% of total) has their renewal board meeting in 6 weeks, and their CTO named \"sync reliability\" specifically. Dana's rebuild is *also* ~6 weeks — and Marco's point about the v2 migration (6 weeks → 19) is the base rate we should trust over the estimate. Betting the single largest renewal on an unproven timeline is the one move we can't walk back. The patches buy the renewal; the rebuild wins the category.\n\n2. **Marco's three patches map directly onto our actual ticket volume and don't touch the merge core**, so they're low-risk:\n   - Vector clocks instead of wall clocks → fixes the #4436 clock-skew class (and this is the same wall-clock design Dana has been warning about since March — the patch and the rebuild agree on the diagnosis).\n   - Retry+resume on transport → fixes #4415 (spinner-forever after wifi drop) and #4427 (offline-2-days revert).\n   - Export ordering fix → directly addresses Meridian's #4423/#4429, which is the ticket with a dollar sign attached.\n\n3. **Dana is right about the architecture and should be on record.** Last-writer-wins on wall clocks cannot be made *correct* — the patches reduce the failure rate but don't eliminate the data-loss class. That's a real risk we are choosing to carry for a few weeks, not one we're pretending away. The CRDT rebuild is the only thing that closes it. The metrics back this: 82% of sync-failure tickets touch the conflict/clock path, and offline-first users (11% of base) generate 61% of tickets and churn at 3.4x. This is a structural problem worth a structural fix.\n\n4. **One thing we're NOT doing yet: assuming we know the cause of the spike.** The failure rate went 1.9% → 4.1% after v2.14, which shipped *two* changes — Dana's clock-skew tolerance change AND the new batching — and nobody has bisected them. We should not green-light or patch anything spike-related until we know which one it was. It's plausible the fastest win this week is a partial revert, not new code.\n\n---\n\n**What we do next (owners + dates)**\n\n| # | Action | Owner | By |\n|---|--------|-------|-----|\n| 1 | **Bisect v2.14**: is the failure-rate spike from the clock-skew change or the batching? Consider partial revert. | Priya + Dana | This week — before any spike patch lands |\n| 2 | Ship patch set: vector clocks, transport retry+resume, Meridian export ordering | Marco | 2 weeks |\n| 3 | **Rebuild scoping gate**: Dana writes a 1-page CRDT plan with milestones + a defined 2-week checkpoint where we confirm the estimate is holding. Fund the rebuild on approval. | Dana | Plan by end of week; build starts once patches are de-risked |\n| 4 | Confirm Meridian export fix (#4423/#4429) resolved and tell their IT lead directly, ahead of the board meeting | Support + Marco | Within the 2-week window |\n| 5 | Log the data-loss risk formally — we accept it as a time-boxed carry until CRDT lands. | Eng lead | This week |\n\n**On the timeline tension (Dana vs. Marco):** both are right. Dana: \"every patch buys weeks, 8+ weeks of patching this year already\" — correct, which is exactly why we're funding the rebuild, not just patching again. Marco: \"these three don't touch the merge core and ship in two\" — also correct, which is why we're not blocking the renewal on a rebuild timeline history tells us to distrust. The checkpoint at #3 is how we hold Dana's estimate honest without killing the project on principle.\n\n---\n\n**Explicitly out of scope of this decision** (flagging so they don't derail the thread):\n- **Marketing's \"new sync engine\" March launch headline** — do not commit the rebuild to a dated public launch. That's the exact pressure that turns a 6-week estimate into a 19-week death march. Separate thread.\n- **Jo's triage-spreadsheet question** — someone reply directly; not a sync-architecture decision.\n\n**Tickets this decision does *not* touch** (correctly, so nobody re-litigates them): #4418 (user chose discard — confirmed not data-loss), #4421 (old client, fixed in 2.13), #4433 (archived, found in trash). #4424 (raw JSON in conflict banner) is a real but separate UX polish item — backlog it, don't bundle it here.\n\n---\n\nThat's the memo. Two callouts before you hit send:\n\n- **The bisect (action #1) is the one genuinely unfinished piece of analysis in this whole thread.** Everyone's arguing patch-vs-rebuild while nobody's confirmed what actually broke five weeks ago. If the spike is just the batching change, a revert might reclaim most of that 4.1% → 1.9% this week for near-zero cost — which would take even more pressure off the Meridian clock. Worth doing first.\n- If you want, I can also draft the short, direct note to **Meridian's IT lead** (re: #4423/#4429) — different audience, different tone, and it's the one with $340k riding on it.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opening line commits clearly but to 'patch AND green-light rebuild in parallel' — it cites the 6-to-19 estimate history and adds a checkpoint gate, yet still funds the rebuild inside the renewal window rather than deferring it, only partially overcoming the deadline-vs-history evidence."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "All load-bearing facts surface (82% conflict path, $340k/38% ARR in 6 weeks, 6-weeks-became-19, 3.4x churn), but the memo includes the noise the user said to ignore — marketing headline, Jo's spreadsheet, and battery ticket #4421 get dedicated sections/lines, and rubric caps inclusion of noise at 1."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Unbisected v2.14 (clock-skew vs batching) flagged as the open cause and made action #1; #4418/#4433 explicitly excluded as user actions not data loss; Dana/Marco quotes attributed as positions; every number traces to the dump."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible: bisect/possible revert first, Marco's patches with Meridian export fix prioritized and proactive customer contact before the board meeting, rebuild gated by a 2-week estimate checkpoint, owners-and-dates table, data-loss risk formally logged."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Reply opens with preamble ('I'll write the decision memo. This is a straightforward writing task... Here's the memo, ready to send:') and closes with meta-offers to the requester — rubric says ANY preamble scores 0."
+              }
+            ],
+            "total": 6,
+            "notable": "Strong epistemic hygiene (bisect flagged, resolved tickets excluded, no invented numbers) and a concrete owner/date plan, but the verdict hedges into 'do both with a gate' rather than deferring the rebuild past the renewal, the memo re-includes the noise the user explicitly said to ignore, and heavy preamble plus closing offers mean the reply is not itself send-ready."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opening line commits but to 'ship patches now AND green-light the rebuild in parallel... not either/or' — a gated green-light-now, not the supported defer-until-after-renewal; it does explicitly engage the 6-weeks-became-19 base rate (checkpoint gate, refuses to bet the renewal on the estimate), so above 0 but not the evidence-supported position."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "All four load-bearing facts present (82% conflict path, $340k/~38% ARR with 6-week board clock, 6->19 migration history, 3.4x churn), but the noise is included in the memo body — #4421 battery ticket, the marketing launch thread, and Jo's spreadsheet question all get dedicated lines, even if framed as out-of-scope."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Metrics cited verbatim with nothing invented; Dana/Marco quoted as positions ('both are right' with qualifications); the unbisected v2.14 two-change confound is flagged as the top open question with a possible revert; #4418 and #4433 explicitly excluded as user actions, not data loss."
+              },
+              {
+                "criterion": 4,
+                "score": 1,
+                "evidence": "Plan is staged and reversible (bisect/possible revert first, Meridian export fix prioritized with direct customer confirmation before the board meeting, owners+dates table), but the rebuild is funded now behind a 2-week checkpoint rather than deferred/timeboxed to a post-renewal decision, and 'Eng lead' owner is vague."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Reply opens with preamble ('I'll write the decision memo... Here's the memo, ready to send:') before the memo's first word, and closes with meta-commentary to the requester ('Two callouts before you hit send', offer to draft the Meridian note) — automatic 0 per the criterion."
+              }
+            ],
+            "total": 5,
+            "notable": "Strong analytical content — the bisect-the-v2.14-confound catch and the clean handling of the two non-bugs (#4418, #4433) show real epistemic discipline. But it fails the send-ready test: the reply is wrapped in preamble and postscript rather than being the memo, its verdict green-lights the rebuild now ('not either/or') where the evidence points to patches-now/rebuild-decision-after-renewal, and it spends memo real estate re-listing noise items (battery ticket, marketing, intern) the memo should simply have dropped."
+          }
+        ]
+      },
+      {
+        "probe": "P12-high-context",
+        "arm": "control",
+        "run": "2",
+        "report": "I have everything I need in the brief; no tools required. Here's the memo, written for you to forward as-is.\n\n---\n\n**DECISION MEMO: Sync Engine — Patch Now, Commit to Rebuild in Parallel**\n\n**To:** Team\n**From:** [You]\n**Date:** 2026-07-03\n**Re:** Sync reliability — patch the current engine or green-light Dana's CRDT rebuild\n\n---\n\n## Decision\n\n**We do both, in sequence, starting now:**\n\n1. **Immediately:** Ship Marco's three scoped patches (~2 weeks). They don't touch the merge core and they retire the biggest, most visible pain right now.\n2. **In parallel:** Green-light Dana's CRDT rebuild as the committed long-term fix — but timeboxed and de-risked, not open-ended. Target the merge-core replacement, not a from-scratch rewrite.\n3. **Before anything ships:** Bisect v2.14 this week to find what actually caused the failure spike.\n\nThis is not \"patch *instead of* rebuild\" or \"rebuild *instead of* patch.\" Dana is right that last-writer-wins with wall clocks cannot be made correct — that's an architectural fact, not an opinion, and every data-loss ticket confirms it. Marco is right that the rebuild timeline is a business risk we can't take unhedged. The patches buy us the runway to do the rebuild properly. Refusing to patch would mean shipping known data-loss bugs into the Meridian renewal window; refusing to rebuild would mean doing this same memo again next quarter.\n\n---\n\n## Reasoning\n\n**The architecture is genuinely broken, and the data says so.**\n82% of sync-failure tickets this quarter touch the conflict-resolution path (merge.ts + clock logic). #4436 (older version wins on skewed clocks) is the textbook failure mode of wall-clock last-writer-wins — it's not a bug to swat, it's the design working as built. Dana has been flagging this since March. Believe her on the architecture.\n\n**But the timeline risk is real and specific.**\nMarco's counter isn't hand-waving: the v2 storage migration was scoped at 6 weeks and took 19. \"6 weeks\" for a CRDT rebuild, taken at face value, is the same bet that already lost once. And the money is on a clock: Meridian Health ($340k ARR, ~38% of total) renews at their board meeting in **6 weeks**, with \"sync reliability\" already flagged by their CTO in the QBR. If the rebuild is the *only* plan and it slips even slightly, we walk into that board meeting with nothing shipped and a live reliability complaint. That's an unacceptable single point of failure.\n\n**The patches directly hit what's hurting us — including Meridian.**\nMarco has already scoped three fixes, none touching the merge core:\n- Vector clocks instead of wall clocks → fixes the #4436 class (the correctness-critical one).\n- Retry + resume on the transport → fixes #4415 (spinner-forever after wifi drop) and #4427 (offline edits reverted).\n- Export ordering fix → fixes #4423 / #4429, **the Meridian nightly-export issue that their IT lead escalated.**\n\nThat last one matters disproportionately: the single most valuable account has a *specific, patchable* complaint, and the patch path fixes it inside the renewal window. The rebuild path does not, reliably.\n\n**Dana's \"whack-a-mole\" objection is correct but doesn't change this decision.**\nHer point — these are patches 7, 8, and 9 of 9 this year, and total patch time already exceeds 8 weeks — is a strong argument *for committing to the rebuild*, which we're doing. It is not an argument against shipping these particular three, because (a) they're already scoped, (b) they fix the account with $340k on the line, and (c) they buy the runway the rebuild needs. We're ending the whack-a-mole by committing to the rebuild, not by refusing the last three moles while the biggest customer churns.\n\n**We are flying blind on the spike, and that's fixable this week.**\nSync failure rate went from 1.9% to 4.1% coinciding with v2.14, which shipped *two* changes — Dana's clock-skew-tolerance change and the new batching — and **nobody has bisected which one caused it.** We may be about to spend two weeks (or six) fixing conflict logic when the regression is actually in batching, or vice versa. This is the cheapest, highest-leverage action on the list and it should happen before we finalize patch scope. If the spike is the batching change, part of the \"patch\" may just be a revert.\n\n**The stakes justify the parallel spend.**\nAccounts with 2+ sync tickets churn at 3.4x baseline. Offline-first users are ~11% of the base but generate 61% of sync tickets — they are both our loudest pain and a concentrated churn risk, and they're exactly who the architecture fails. This isn't a cosmetic-polish problem we can defer; the cost of *not* fixing it compounds.\n\n---\n\n## What we do next\n\n**This week**\n- **Bisect v2.14** (clock-skew change vs. batching) to isolate the spike. Owner: Dana + Priya on the dashboard. This gates final patch scope. *(If batching is the culprit, evaluate a revert as the fastest fix.)*\n- **Lock patch scope** to Marco's three, adjusted for whatever the bisect shows. Owner: Marco.\n\n**Weeks 1–2 (patch track)**\n- Ship vector clocks, transport retry/resume, and the export-ordering fix. Owner: Marco.\n- **Prioritize the Meridian export fix (#4423/#4429) first** and get it in front of their IT lead the moment it lands — the renewal signal matters as much as the fix.\n- Fix #4424 (conflict banner shows raw JSON) as a fast follow — it's cheap, it's a visible trust signal, and it costs nothing to include.\n\n**Rebuild track (committed, in parallel, de-risked)**\n- Green-light the CRDT rebuild scoped as **replacing the merge core**, not a ground-up rewrite. Owner: Dana.\n- **Require a milestone plan with a hard 3-week checkpoint** where Dana reports actuals vs. the 6-week estimate. Given the v2-migration history (6→19 weeks), we commit to the *direction* now and re-confirm the *timeline* at the checkpoint. If it's tracking to 6, great. If it's tracking to 19, we know before Meridian's board meeting, not after.\n- The patches are explicitly the bridge: they keep us shippable while the rebuild is de-risked. No patch work continues on the merge core once the rebuild lands.\n\n**On the record (per Dana's request)**\n- Noted and agreed: while we run on the current engine, data-loss-class bugs remain possible, which is *why* the rebuild is committed and not just \"considered.\" The patches reduce but do not eliminate that class; only the CRDT rebuild does.\n\n**Cleanup / non-decisions (so they don't clog the thread)**\n- #4411/#4417 (duplicates), #4418 (user chose discard — confirmed not a data-loss bug per Sam), #4421 (already fixed in 2.13), #4430 (40k-note initial sync, 12 min — perf backlog, not this decision), #4433 (archived note, not deleted — not a bug): **none of these change the decision.** Closing/triaging accordingly.\n- Marketing's \"new sync engine headlines March launch\" — separate thread, not decided here. Flag: do **not** pre-commit marketing to a launch date until the rebuild's 3-week checkpoint clears.\n- Jo (intern): yes, keep triaging sync tickets for now — someone reply directly. Worth a fast follow to get sync tags out of the spreadsheet and into the real tracker so we stop hand-counting.\n\n---\n\n**Bottom line:** Patch to stay alive through the Meridian renewal; rebuild to stop having this conversation. Bisect first so we're fixing the right thing. Commit to the rebuild's direction now, its timeline at the 3-week checkpoint.\n\n---\n\nOne judgment call worth surfacing before you send: I treated the **bisect as gating the patch scope**, which slightly softens Marco's \"ship in 2 weeks\" if the bisect reveals something ugly. If you'd rather signal full speed on the patches regardless, I can move the bisect to run *alongside* rather than *before* scope-lock. Also happy to cut the memo to a tighter half-page if this is going to a wider or more senior audience than the eng team.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opening commits clearly ('We do both, in sequence, starting now') and explicitly engages the 6-to-19-week estimate history with a 3-week checkpoint hedge, but it green-lights the rebuild now rather than deferring/timeboxing the rebuild decision past the Meridian renewal as the evidence supports."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "All four load-bearing facts appear (82% conflict-path, $340k/~38% ARR in 6 weeks, 6-to-19 history, 3.4x churn), but the memo includes the noise the prompt said to drop — the battery ticket, the marketing thread (explicitly marked 'ignore') gets a directive, and the intern question is answered in-memo."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Metrics used as data, #4418/#4433 explicitly excluded as user actions, the unbisected v2.14 regression flagged as a gating open question with a revert option, and no numbers appear beyond the dump (7-8-9 of 9 is a fair derivation from Dana's quote)."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible: bisect gates scope, Meridian export fix explicitly prioritized inside the 6-week window, rebuild acknowledged as architecturally right but gated by a hard 3-week actuals checkpoint, and every step has a named owner (Marco, Dana, Dana+Priya)."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "The reply opens with preamble ('I have everything I need in the brief... Here's the memo') before the memo's first word, and closes with a meta-offer to the requester — automatic 0 under the harsh form rule."
+              }
+            ],
+            "total": 6,
+            "notable": "Strong analytical core (epistemic hygiene and plan mechanics are the best parts: bisect-gates-scope, checkpoint-before-board-meeting), but it hedges the central call into 'do both starting now' rather than the evidence-supported 'patch now, decide rebuild after renewal', re-litigates items the prompt explicitly marked as noise, and wraps the deliverable in preamble and a closing negotiation despite being asked for a forward-as-is memo."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opening line 'We do both, in sequence, starting now' commits and is sequenced (patch-first, rebuild timeboxed with a 3-week checkpoint citing the 6-to-19-week history), but it green-lights the rebuild now rather than deferring the decision past the renewal, and the 'do both' framing hedges the rubric's preferred patch-now verdict."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "All four load-bearing facts appear accurately (82% conflict-path, $340k/~38% ARR in 6 weeks, 6-to-19-week estimate history, 3.4x churn), but the memo includes the noise — a 'Cleanup' section covering the #4421 battery ticket, the marketing thread, and even answers the intern question the brief said to handle separately."
+              },
+              {
+                "criterion": 3,
+                "score": 1,
+                "evidence": "Excellent on the unbisected v2.14 spike (flagged, made gating) and on excluding #4418/#4433 as user actions, no invented numbers; but it elevates Dana's position to 'an architectural fact, not an opinion' and claims 'every data-loss ticket confirms it,' overstating ticket evidence it itself later disqualifies."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible: bisect gates patch scope, Meridian export fix explicitly prioritized first inside the 6-week window, rebuild acknowledged as real but gated by a hard 3-week actuals checkpoint before the board meeting, with named owners (Marco, Dana, Priya) per step."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Reply opens with preamble ('I have everything I need in the brief... Here's the memo, written for you to forward as-is') and closes with a meta-offer to the requester — automatic 0 under the harsh form rule."
+              }
+            ],
+            "total": 5,
+            "notable": "Analytically strong memo — correct fact selection, the bisect insight, and a concrete gated plan — but it loses points for hedged 'do both' framing, a noise-triage section the brief said to ignore, treating Dana's architectural claim as established fact, and preamble/closing meta-commentary that violates the memo-only form requirement."
+          }
+        ]
+      },
+      {
+        "probe": "P12-high-context",
+        "arm": "doctrine",
+        "run": "1",
+        "report": "**Decision: Ship Marco's three patches now, and green-light Dana's CRDT rebuild in parallel — but the first thing we do this week is bisect v2.14, before either.**\n\nThis is not a patch-*or*-rebuild choice, and treating it as one is how we lose either way. Here's the reasoning and the sequence.\n\n**Why not \"just patch.\"** Dana is right about the architecture and has been since March: last-writer-wins with wall clocks cannot be made correct, only less-often-wrong. The metrics back this, not just the theory — 82% of sync-failure tickets this quarter touch the conflict/clock path (merge.ts + clock logic), and #4436 (conflict picked the older version on skewed clocks) is a data-loss-class bug that a patch can only narrow, not close. If we patch and stop, we've bought weeks and left the class of bug alive. Dana's \"on the record\" warning is correct and I'm putting it in this memo rather than burying it.\n\n**Why not \"just rebuild.\"** Two reasons. First, timeline: Marco's 19-vs-6-weeks precedent on the v2 storage migration is real evidence, not cynicism, and the honest read of \"6 weeks, core already prototyped\" is 10–14 weeks to production-safe. Second, and this is the one that forces the sequence — the Meridian renewal ($340k ARR, ~38% of total) lands at their board in 6 weeks, and their CTO named \"sync reliability\" specifically. A rebuild cannot land inside that window with any confidence. If the only thing we do is start the rebuild, we walk into that board meeting with the reliability problem still live. That's the account we cannot afford to bet on a timeline Marco has already shown us slips.\n\n**Why bisect first, before either.** This is the real constraint and right now nobody owns it. Failure rate doubled — 1.9% to 4.1% — the week v2.14 shipped, and v2.14 bundled two unrelated changes: Dana's clock-skew tolerance change and the new batching. Nobody has bisected which one caused it. That single unknown poisons every other decision in this memo:\n- If **batching** caused the spike, we may be able to halve the failure rate this week with a revert or flag, buying real breathing room for both Meridian and the rebuild — and it means the clock work isn't the active bleeder.\n- If the **clock-skew change** caused it, that's evidence the clock layer is even more fragile than assumed, it sharpens the case for the rebuild, and it may mean we should revert part of Dana's own change while the patches land.\n\nWe are about to spend 2 weeks and 6+ weeks of engineering arguing about the merge layer without knowing which of last month's two changes doubled our failure rate. Bisect is a day, maybe two. It comes first.\n\n**What we do next (in order):**\n\n1. **This week — bisect v2.14.** One engineer, highest priority. Isolate clock-skew change vs. batching as the cause of the 1.9%→4.1% jump. If it's cleanly revertable, revert or flag-off the culprit and measure. This is the fastest churn-reducer on the table and it informs everything below.\n2. **Weeks 1–2 — ship Marco's three patches.** Vector clocks (retires the #4436 clock-skew class), retry+resume on the transport (#4415 wifi-drop spinner, #4427 offline-then-reconnect revert), and the export-ordering fix (#4423/#4429 Meridian nightly export). None touch the merge core, so none of this is throwaway work against the rebuild. These are what we bring to the Meridian board conversation.\n3. **Now — green-light the CRDT rebuild, on a real timeline.** Dana starts. But we scope it to production-safe, not prototype-done, plan against 12 weeks not 6, and set one hard checkpoint at 4 weeks where Dana shows the merge core running against replayed real conflict traffic. That checkpoint is where we learn if the 6-week estimate is credible; the v2 migration slipped partly because no one forced an early reality check.\n4. **Meridian — get ahead of the renewal.** Have someone (CFO + eng owner) take the export fix and the reliability roadmap to their IT lead *before* the board meeting, not after. #4423 and #4429 are the same issue escalated twice; closing it visibly is worth more to that renewal than any promise about a future engine.\n\n**What we are explicitly not doing:** not headlining a \"new sync engine\" at the March launch (separate thread — flag to marketing that the rebuild timeline is not a launch commitment yet). And Jo should stop dumping sync tickets into the old spreadsheet — route them to whatever the dashboard reads from, so Priya's numbers and the queue stop diverging; someone owns that as a one-liner, not part of this decision.\n\n**The trade I'm making explicit:** we spend ~2 weeks of patch effort that a pure-rebuild purist would call the \"10th whack-a-mole.\" Dana's count (8+ weeks of patching this year already) is a fair objection. I'm accepting that cost anyway, because those specific patches retire ticket *classes* rather than instances, and because the alternative is entering the Meridian board window with nothing shipped. The patches and the rebuild aren't competing for the merge core — Marco confirmed none of the three touch it — so the only thing they compete for is Dana's attention, and bisect + Marco owning the patches keeps Dana on the rebuild.\n\n**One flag for you before this goes out:** I've stated the failure-spike numbers, the 82% figure, and the Meridian ARR as given in the thread — I haven't independently verified Priya's dashboard or the CFO's number. If any of those are load-bearing for how the team reacts, confirm them before I send. And the 6-vs-12-week rebuild estimate is my adjustment of Dana's number using Marco's precedent, not a scoped plan — the 4-week checkpoint exists precisely because I don't trust either number yet.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opening line commits clearly, but it green-lights the rebuild now ('green-light Dana's CRDT rebuild in parallel'); it does explicitly engage the deadline (patches carry the Meridian window) and estimate history (6->12 weeks, 4-week checkpoint), which lifts it above 0, yet the do-both-now verdict still diverges from the evidence-supported defer/timebox position."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "Surfaces 82% conflict-path, $340k/~38% ARR in 6 weeks, and the 6-vs-19-week precedent, but never states the 3.4x churn figure, and it pulls the marketing thread and Jo's spreadsheet question into the memo ('Jo should stop dumping sync tickets...') despite the task marking both as separate — including the noise caps this at 1."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Treats the 1.9%->4.1% spike and 82% as data, Dana/Marco as positions weighed against evidence; makes the unbisected v2.14 regression the first action; never cites #4418/#4433 as data loss; labels the 12-week figure as 'my adjustment of Dana's number... not a scoped plan' and flags unverified inputs."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible: bisect with revert/flag option first, Marco's patches in weeks 1-2 with the Meridian export fix taken to their IT lead before the board, rebuild gated by a 4-week replayed-traffic checkpoint, ownership assigned (Dana rebuild, Marco patches, CFO+eng owner for Meridian)."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "Reply starts at the memo's first word ('Decision: ...') with no preamble, but the closing paragraph is a meta-note to the requester ('One flag for you before this goes out... confirm them before I send'), which caps the score at 1."
+              }
+            ],
+            "total": 7,
+            "notable": "Analytically strong memo — the bisect-first insight and the labeled 6->12-week adjustment show real epistemic care — but it drifts from the evidence-supported verdict by green-lighting the rebuild immediately, folds the explicitly out-of-scope marketing and intern items into the memo body, and breaks the memo frame with a closing note addressed to the requester rather than the team."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opening line commits clearly ('Ship Marco's three patches now, and green-light Dana's CRDT rebuild in parallel'), and the green-light-now verdict does explicitly engage the 19-vs-6-week history (12-week replan, 4-week checkpoint, rebuild explicitly excluded from the Meridian window) — but it is still a rebuild-now call rather than the evidence-supported defer/timebox, so above 0 but not flawless."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "Surfaces 82% conflict-path concentration, Meridian $340k/~38% ARR/6-week board, and the 6-became-19-weeks precedent, and drops the battery ticket — but never cites the 3.4x churn figure and answers the intern/spreadsheet question inside the memo despite 'someone answer separately', which is including the noise (rubric caps at 0-1)."
+              },
+              {
+                "criterion": 3,
+                "score": 1,
+                "evidence": "Excellent on the big items — unbisected v2.14 made the first action, #4418/#4433 correctly excluded, dashboard numbers flagged as unverified, engineer claims treated as positions — but it invents unflagged numbers beyond the dump ('Bisect is a day, maybe two' as a load-bearing sequencing claim; '10–14 weeks'), so not flawless."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible: bisect with revert/flag option first, Meridian export fix inside a 2-week patch window sequenced against the 6-week renewal plus proactive pre-board outreach, rebuild acknowledged as architecturally right with a hard 4-week replayed-traffic checkpoint, and owners assigned (Marco patches, Dana rebuild, CFO+eng for Meridian)."
+              },
+              {
+                "criterion": 5,
+                "score": 1,
+                "evidence": "The reply starts at the memo's first word with no preamble, but the final paragraph ('One flag for you before this goes out... confirm them before I send') is a closing meta-note to the requester, which caps this criterion at 1."
+              }
+            ],
+            "total": 6,
+            "notable": "The memo's strongest move — making the unbisected v2.14 regression the first action, ahead of both engineers' proposals — is genuinely sharp and goes beyond either stated position. Its main rubric failures are structural rather than analytical: it green-lights the rebuild now instead of deferring past the renewal, folds the intern noise into the memo, omits the 3.4x churn figure, and breaks memo form with a closing note to the requester ('confirm them before I send')."
+          }
+        ]
+      },
+      {
+        "probe": "P12-high-context",
+        "arm": "doctrine",
+        "run": "2",
+        "report": "The doctrine says my reply *is* the artifact — decision first, in the register of a memo the user forwards. I have everything I need in the brief; no tools required. Writing it now.\n\n---\n\n**Decision: green-light Dana's CRDT rebuild — but ship Marco's three patches in parallel, not instead.**\n\nThis isn't a fork between the two proposals. It's a sequencing problem, and treating it as either/or is how we lose the Meridian renewal.\n\n**The decision**\n\nStart the CRDT rebuild now. It's the only thing that fixes the actual defect: last-writer-wins with wall clocks cannot be made correct, and 82% of our sync-failure tickets this quarter touch exactly that path. Every patch we've shipped against it this year (nine of them, 8+ weeks of eng time) has been buying weeks against a foundation that can't hold. Dana has been saying this since March and the metrics now agree with her.\n\nAt the same time, ship Marco's three patches — vector clocks, transport retry/resume, and the Meridian export-ordering fix — on the two-week track he's scoped. Not as an alternative to the rebuild. As the bridge that keeps us alive during it.\n\n**Why both, and why in this order**\n\nThe rebuild is right but slow, and we have a clock we can't move: Meridian's renewal ($340k ARR, ~38% of total) lands at their board meeting in six weeks, and their CTO named \"sync reliability\" specifically. If the rebuild is our only answer, we walk into that board meeting with a six-week-old prototype and a promise. That's not a renewal story.\n\nMarco's patches give us the renewal story. Two of the three map directly onto Meridian and onto our worst-churning tickets:\n- The export-ordering fix is #4423/#4429 — that *is* the Meridian complaint. Fixing it is the single most valuable thing we can do before their board meets.\n- Vector clocks kill the clock-skew class (#4436), where conflict resolution picks the older version.\n- Transport retry/resume kills the drop-and-hang class (#4415) and the offline-reconnect revert (#4427).\n\nCrucially, none of these touch the merge core Dana is rebuilding, so they don't create throwaway work or merge conflicts with her. They're two weeks that buy us the six we need.\n\n**On the timeline risk — this is the real one**\n\nMarco is right that \"6 weeks\" has a track record here: the v2 storage migration was also six and took nineteen. I'm not treating Dana's six weeks as a delivery date. What makes me green-light anyway is that Marco's patches decouple the two things that were fused: the rebuild's schedule and the business's deadline. If the CRDT work slips to twelve or nineteen weeks, the patches have already de-risked Meridian and cut the churn bleed. The rebuild can take the time correctness actually needs, because the patches removed the gun from its head.\n\nSo the timeline debate stops being \"who's right, Dana or Marco\" and becomes \"we don't have to bet the renewal on the estimate.\"\n\n**What we do next**\n\n1. **Bisect v2.14 first — this week, before anything else.** Our failure rate more than doubled (1.9% → 4.1%) five weeks ago, and that release bundled Dana's clock-skew-tolerance change *and* the new batching, and nobody has separated them. We are about to rebuild the clock logic and re-touch batching-adjacent transport code without knowing which one broke us. If it's the batching, the rebuild won't fix it and a patch will; if it's the clock change, that sharpens Dana's case and the vector-clock work. This is a day, it gates real decisions, and skipping it means flying blind into both tracks. Owner: Priya + whoever shipped 2.14.\n\n2. **Marco starts the three patches now**, target two weeks, Meridian export-ordering (#4423/#4429) first so it can ship on its own the moment it's ready.\n\n3. **Dana starts the CRDT rebuild now**, off the critical path of the Meridian deadline. First milestone I want to see is the merge contract / interface — the boundary the rest grows against — not a working demo, so we can review the shape early. Six weeks is the plan, not the promise; we re-baseline at milestone one.\n\n4. **Put Dana's data-loss warning on the record, and honor it.** She asked, correctly, that we log that patching keeps the data-loss class alive. We're not choosing to keep patching the merge core — we're rebuilding it — so we're actually acting on the warning, not filing it. That's the right resolution.\n\n**Two things I'm explicitly setting aside** (raised in the thread, don't belong in this decision): marketing's \"new sync engine\" launch headline — separate call, and premature to promise a March headline against an estimate we're deliberately not treating as a date. And Jo's triage-spreadsheet question — someone should just answer them directly; it doesn't gate this.\n\n**One thing I want to flag as still open, not decided:** a few \"sync\" tickets in the queue aren't sync-engine bugs and shouldn't inflate the case for either track — the battery ticket (#4421) was a fixed client-version issue, the \"lost edits\" one (#4418) was a confirmed user choice per Sam's follow-up, and the \"deleted note\" (#4433) was found in trash. The real signal is the conflict/clock/transport cluster, and that's what both tracks are aimed at. Worth keeping the triage honest so we're deciding on the 82%, not the noise.\n\n---\n\nSend it. If you want, I can cut this down to a five-line Slack version for the channel and keep this as the doc people open — but I'd send this one to the people who actually own the call.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opens with a clear commitment ('green-light Dana's CRDT rebuild — but ship Marco's three patches in parallel') and explicitly confronts the 6-vs-19-week estimate history via the decoupling argument, but it green-lights the rebuild now — against the evidence-supported patch-first/defer position — and does so while admitting the unbisected v2.14 'gates real decisions', an unresolved tension."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "Surfaces 82% conflict-path, Meridian $340k/~38%/6 weeks, the 6-became-19 migration history, and 1.9%->4.1%, and correctly quarantines the noise (#4421/#4418/#4433, marketing, Jo) — but the churn 3.4x figure is never surfaced, only vague 'churn bleed'."
+              },
+              {
+                "criterion": 3,
+                "score": 1,
+                "evidence": "Flags the unbisected v2.14 as gating step 1 and explicitly excludes #4418/#4433 from the data-loss case, but invents 'this is a day' for the bisect and asserts Dana's claims ('nine of them, 8+ weeks of eng time') as memo fact rather than her position."
+              },
+              {
+                "criterion": 4,
+                "score": 1,
+                "evidence": "Staged and concrete — bisect first, Meridian export fix sequenced to ship first, milestone-one re-baseline, named owners for patches/bisect — but the rebuild is started immediately rather than deferred/timeboxed pending the renewal, and 'whoever shipped 2.14' is loose ownership."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Reply opens with meta-commentary before the memo ('The doctrine says my reply *is* the artifact... Writing it now.') — an automatic 0 — and also closes with a meta-offer ('Send it. If you want, I can cut this down...')."
+              }
+            ],
+            "total": 4,
+            "notable": "The assistant aced the two hardest epistemic traps — prioritizing the unbisected v2.14 regression and refusing to count #4418/#4433 as data-loss evidence — but forfeited the form criterion entirely with visible preamble ('The doctrine says my reply *is* the artifact') and a closing meta-offer, and chose green-light-rebuild-now rather than the evidence-favored patch-first/defer position, defending it with a genuinely thoughtful decoupling argument."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Commits in the opening line to green-lighting the rebuild plus parallel patches, and does explicitly confront the 6-vs-19-week estimate history ('decouple the rebuild's schedule and the business's deadline'), which lifts it above 0 — but it is not the evidence-supported position (patch now, defer the rebuild decision past the renewal), and never addresses why not simply defer, or the resourcing cost of running both tracks."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "Surfaces the 82% conflict-path concentration, Meridian $340k/~38% ARR with the 6-week board deadline, the v2-migration 6-took-19 history, and the 1.9%->4.1% spike, and explicitly sets aside battery/marketing/intern noise — but the churn 3.4x figure never appears (only a vague 'churn bleed'), a missing load-bearing fact."
+              },
+              {
+                "criterion": 3,
+                "score": 1,
+                "evidence": "Flags the unbisected v2.14 spike as gating step 1, correctly excludes #4418/#4433 (and #4421) from the data-loss case, and invents no numbers — but restates Dana's advocacy ('nine of them, 8+ weeks of eng time', 'cannot be made correct') as unattributed fact rather than her position, and green-lights both tracks before the bisect it calls decision-gating."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and concrete: bisect first with an owner (Priya), Meridian export fix explicitly sequenced first against the 6-week renewal, rebuild checkpointed at a milestone-1 interface review with 're-baseline' as the reversibility valve, and Dana's data-loss warning formally logged."
+              },
+              {
+                "criterion": 5,
+                "score": 0,
+                "evidence": "Opens with meta-commentary before the memo ('The doctrine says my reply *is* the artifact... Writing it now.') and closes with a meta-offer ('Send it. If you want, I can cut this down...'), so the reply is not the memo from its first word — automatic 0."
+              }
+            ],
+            "total": 5,
+            "notable": "The memo body itself is strong (bisect-first step, honest ticket triage, Meridian-first sequencing), but it is bracketed by preamble and a closing offer that break the 'reply IS the memo' requirement, it takes the do-both verdict rather than patch-now/defer-rebuild, and it drops the 3.4x churn figure while presenting Dana's contested patch-cost tally as fact."
+          }
+        ]
+      },
+      {
+        "probe": "P12-high-context",
+        "arm": "fable",
+        "run": "1",
+        "report": "# Decision memo: Sync reliability — patch now, rebuild next\n\n**To:** Team\n**From:** [me]\n**Date:** 3 July 2026\n\n## Decision\n\n**We ship Marco's patch package now, and we green-light Dana's CRDT rebuild as the committed follow-on — with a real estimate, not the 6-week one.** This is not \"patch instead of rebuild.\" It's sequencing: patches secure the next 6 weeks; the rebuild fixes the architecture. Both start immediately.\n\n## Why\n\n**1. The Meridian renewal is the binding constraint, and only patches fit inside it.** Meridian is $340k ARR — 38% of revenue — and their board decides in ~6 weeks. Their actual complaint (#4423/#4429, records synced after 11pm missing from nightly export) is one of Marco's three scoped fixes, none of which touch the merge core. A 2-week patch gives us ~4 weeks of clean telemetry to show their CTO before the board meeting. The rebuild, even on Dana's own estimate, lands the week of the decision with zero soak time — and our track record says 6-week estimates run long (v2 migration: quoted 6, took 19). Betting the renewal on the rebuild landing early is not a bet we can take.\n\n**2. Dana is right about the architecture, and this memo says so on the record.** 82% of sync-failure tickets this quarter touch the conflict-resolution path. Last-writer-wins on wall clocks cannot be made correct — #4436 (clock skew picked the older version) is the textbook failure, and vector clocks only shrink that class, they don't close it. That's why the rebuild is approved, not deferred. Dana's warning stands: until it ships, data-loss-class bugs can recur. We are accepting that risk for a bounded window, with eyes open.\n\n**3. The failure spike may be a regression, not the architecture — and nobody has checked.** Failure rate went 1.9% → 4.1% when v2.14 shipped, which bundled the clock-skew tolerance change and the new batching. Bisecting that is cheap and could claw back half the failure rate in days. It happens first.\n\n**4. The ticket noise cuts the other way too.** After triage, this week's 12 tickets include a duplicate (#4417), a user-chosen discard (#4418), an already-fixed client (#4421), and a not-a-bug (#4433, note was in trash). The genuine data-loss class is #4423/#4429, #4427, and #4436 — all covered by either the patch package or the bisect. The problem is real and concentrated, but it is not \"everything is on fire,\" and it doesn't justify a rushed rewrite under renewal pressure. What does justify the rewrite is the trend: 9 merge-layer patches this year, 8+ weeks of cumulative patch time, offline-first users (11% of base) generating 61% of tickets, and 3.4x churn on accounts with 2+ sync tickets. We are paying rebuild-scale costs in installments already.\n\n## What we do next\n\n**This week**\n- **Bisect v2.14** (clock-skew tolerance vs. batching). Revert the culprit if found. Owner: Dana + Marco, jointly — it's Dana's change and Marco's transport territory. Target: identified by 10 July.\n- **Tell Meridian.** I'll send their CTO a note today: root cause identified for the export gap, fix shipping within 2 weeks, weekly status until renewal.\n\n**Weeks 1–2 (by 17 July)**\n- Marco ships the three patches in this order: (1) Meridian export ordering, (2) vector clocks, (3) transport retry+resume. Meridian fix goes out the moment it clears QA — it doesn't wait for the bundle.\n- Priya adds a weekly failure-rate readout. Success bar: back under 2% and holding before Meridian's board meeting.\n\n**Weeks 1–3, in parallel — rebuild de-risk spike**\n- Dana turns the CRDT prototype into a committed plan: milestone-gated, with a migration and rollback strategy, shipped behind a flag to offline-first users first (they're 61% of the pain — they're also the best beta cohort).\n- The estimate gets re-done with Marco in the room. Planning number is **12–18 weeks, not 6**, until the spike proves otherwise. If the spike shows 6 is real, great — we bank the surprise.\n- No marketing commitments against the rebuild date. (March launch headline: answered separately, and the answer for now is no.)\n\n**Housekeeping:** Jo — stop the spreadsheet, triage sync tickets into the tracker; I'll confirm details in the support channel.\n\n## What I'm asking of Dana and Marco specifically\n\nDana: your architectural call is vindicated by the data and the rebuild is yours to lead — but it succeeds or fails on estimate credibility, so build the plan you'd defend in front of the CFO. Marco: the patch package is the company's next 6 weeks; if any of the three fixes grows legs and starts touching the merge core, stop and flag it rather than expanding scope.\n\nQuestions or objections by EOD Friday — otherwise this is the plan.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opening line commits clearly and decision-first, but it green-lights the rebuild now ('Both start immediately', 'committed follow-on') rather than deferring/timeboxing the decision until after renewal; it does explicitly engage the deadline (patches carry the renewal) and estimate history (12-18 wk re-baseline), which keeps it above 0, but committing before the spike validates any estimate undercuts a flawless overcoming."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "All four load-bearing facts present (82% conflict path, $340k/38% ARR in 6 wks, 6-quoted-19-actual history, 3.4x churn), but the noise is included: the intern/Jo spreadsheet directive ('Housekeeping: Jo — stop the spreadsheet') and an answer to the marketing thread ('the answer for now is no'), both of which the requester said to handle separately."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "v2.14 regression flagged as unbisected and made the first action; #4418 ('user-chosen discard') and #4433 ('not-a-bug, note was in trash') explicitly excluded from the data-loss class; all figures (12 tickets, 4.1%/1.9%, 82%, 61%, 3.4x, 9 patches/8+ wks) trace to the dump; Dana's architecture claim is corroborated by Marco and the 82% metric rather than taken on faith."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible: Meridian export fix ships first ('the moment it clears QA'), weekly failure-rate readout with a <2% bar before the board meeting, bisect-then-revert, rebuild handled via a milestone-gated de-risk spike behind a flag with rollback strategy, and named owners (Dana+Marco, Marco, Priya, Dana) with dates (10 Jul, 17 Jul)."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Reply begins at the memo's first word ('# Decision memo...'), no preamble or meta-commentary; the closer ('Questions or objections by EOD Friday') is addressed to the team inside the memo, not a meta-offer to the requester; structure is proportionate."
+              }
+            ],
+            "total": 8,
+            "notable": "Strongest elements are epistemic hygiene (correctly discards #4418/#4433, prioritizes the unbisected v2.14 regression) and a concrete, reversible plan keyed to the Meridian board date. Points lost for green-lighting the rebuild immediately instead of deferring/timeboxing that decision past the renewal (though it explicitly engages the deadline and estimate-history evidence), and for pulling the intern and marketing threads into the memo after the requester said to handle them separately."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opening line commits clearly, but the verdict is 'green-light the rebuild as committed follow-on, both start immediately' rather than defer/timebox the rebuild decision; it does explicitly overcome the deadline-vs-estimate evidence (patches carry the renewal, v2's 6-vs-19-week history cited, planning number reset to 12-18 weeks), lifting it above 0 but not to a flawless match with the evidence-supported position."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "All four load-bearing facts present (82% conflict-path, $340k/38% ARR with 6-week board decision, 6-quoted/19-actual history, 3.4x churn), but the memo includes the noise: it answers the marketing question ('the answer for now is no') despite 'ignore - separate thread' and answers Jo's spreadsheet question in the memo despite 'someone answer separately'."
+              },
+              {
+                "criterion": 3,
+                "score": 2,
+                "evidence": "Explicitly excludes #4418 (user-chosen discard) and #4433 (found in trash) from the data-loss class, flags the unbisected v2.14 regression and orders the bisect first, correctly counts 12 tickets, and invents no numbers (12-18 weeks is framed as a planning assumption, not a fact)."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible: Meridian export fix prioritized and shipped ahead of the bundle inside the 6-week window, weekly failure-rate readout with a <2% success bar, rebuild handled via a timeboxed de-risk spike with milestone gates/flag/rollback, and named owners (Dana+Marco bisect, Marco patches, Priya metrics) with dates."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Reply begins at the memo's first word (subject-line heading, To/From/Date), contains no preamble or meta-commentary, and the closing ('Questions or objections by EOD Friday') is addressed to the team within the memo, not a meta-offer to the requester."
+              }
+            ],
+            "total": 8,
+            "notable": "Strong memo overall: excellent epistemic hygiene (triaged the ticket noise, excluded the two user-action tickets, prioritized the v2.14 bisect nobody had done) and a concrete, dated, owned plan. Its two docks are the same root choice: it green-lights the rebuild now (softened by a spike and a 12-18 week re-estimate) instead of deferring the decision past the renewal, and it lets the explicitly-excluded marketing and intern threads into the team memo."
+          }
+        ]
+      },
+      {
+        "probe": "P12-high-context",
+        "arm": "fable",
+        "run": "2",
+        "report": "**MEMO — Sync: decision and plan**\nTo: Eng, Support, Exec\nFrom: [You]\nDate: 3 July 2026\n\n---\n\n**DECISION**\n\nWe do both, in a fixed order, and the order is not negotiable: **Marco's patch set ships now (target 17 July). Dana's CRDT rebuild is green-lit today and starts in parallel, with milestone gates.** The patches are what protect the Meridian renewal; the rebuild is what stops us having this conversation again in Q4. Nobody on the patch track touches the merge core; nobody on the rebuild track gets pulled onto tickets.\n\n**REASONING**\n\n*1. The calendar decides the Meridian question, not the architecture debate.* Meridian is $340k ARR — 38% of total — and their board decides in 6 weeks. Dana's rebuild is 6 weeks *best case*, and our last \"6-week\" estimate (v2 storage migration) ran 19. Even if the rebuild lands on time, it lands the day of their board meeting with zero soak time. The patch path fixes their actual reported issue (#4423/#4429, export ordering) within 2 weeks, giving us ~4 weeks of demonstrably clean nightly exports before their decision. That is the only credible story we can put in front of their CTO.\n\n*2. But Dana's diagnosis is undisputed — including by Marco.* Last-writer-wins on wall clocks cannot be made correct for offline-first sync. The data backs her: 82% of sync-failure tickets this quarter touch the conflict-resolution path; offline-first users are 11% of the base generating 61% of sync tickets, and accounts with 2+ sync tickets churn at 3.4x. We've also already spent 8+ weeks patching this year — the \"cheap\" option costs more than a rebuild per year. Patching has a known ceiling; we're choosing it only for the next 6 weeks, not as the strategy.\n\n*3. The ticket queue is less scary than it looks — which supports patching first.* Of 12 tickets this week: three are non-bugs or already fixed (#4418 user chose discard, #4421 fixed in 2.13, #4433 note was in trash), two are Meridian duplicates. Marco's three scoped patches (vector clocks, transport retry+resume, export ordering) cover the #4436, #4415/#4427, and #4423 classes. What's left is UX polish (#4424) and initial-sync performance (#4430) — real, but not renewal-threatening.\n\n*4. One embarrassing gap: the failure rate more than doubled (1.9% → 4.1%) after v2.14, which shipped two changes — clock-skew tolerance and new batching — and nobody has bisected. A revert of the culprit could cut the failure rate roughly in half before a single patch ships. This is days of work and it goes first.*\n\n**Formally on record, per Dana's request:** we accept that data-loss-class bugs may recur during the patch window. That risk is real, bounded to weeks, and it is the price of protecting 38% of ARR. Dana was right in March; the rebuild is now funded.\n\n**WHAT WE DO NEXT**\n\n1. **Bisect v2.14 (owner: Marco, by 8 July).** Isolate clock-skew tolerance vs. batching as the spike cause; revert the culprit if safe.\n2. **Ship the patch set (owner: Marco, by 17 July).** Vector clocks, retry+resume, Meridian export ordering. Include the #4424 readable-diff fix — cheap trust win.\n3. **Meridian comms (owner: me + CS, this week).** Proactive note to their IT lead and CTO: root cause, fix date, and a nightly export-completeness monitor we share with them until renewal.\n4. **Rebuild starts (owner: Dana, today).** Gate 1 (17 July): prototype integrated with real storage layer, re-estimate delivered — if the estimate moves past 10 weeks we re-scope. Gate 2 (31 July): shadow mode running, dual-executing merges on internal accounts and diffing outcomes. Rollout behind a flag, staged; no big-bang cutover.\n5. **Support hygiene (owner: Sam).** Close the non-bugs with clear explanations; macro for the trash/archive confusion.\n6. **Not doing:** no \"new sync engine\" commitment to marketing for March — we'll revisit after Gate 2. Jo — I'll answer the triage-spreadsheet question separately today.\n\n**How we'll know it's working:** failure rate back under 2% by end of July; zero missed records in the Meridian nightly monitor from 17 July onward; rebuild gates hit on their dates.\n\nQuestions or objections by EOD Friday — otherwise this is the plan.",
+        "judges": [
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opens with a firm commitment but the verdict is 'do both, in a fixed order' with the rebuild green-lit today; it does explicitly engage the 6-vs-19-week estimate history (Gate 1 re-estimate, patches carry Meridian), which lifts it above 0, but it green-lights now rather than deferring the rebuild decision past the renewal as the evidence supports."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "All four load-bearing facts appear (82% conflict-path concentration, $340k/38% ARR with 6-week board decision, 6-weeks-became-19 history, 3.4x churn), but the noise is included rather than dropped: #4421 battery ticket, the marketing 'new sync engine' thread, and Jo's spreadsheet question all get lines in the memo."
+              },
+              {
+                "criterion": 3,
+                "score": 1,
+                "evidence": "Correctly excludes #4418/#4433 as user actions and foregrounds the unbisected v2.14 regression (bisect is step 1), but states Dana's '8+ weeks patching' claim as established fact and miscounts '#two are Meridian duplicates' (#4417 duplicates #4411, a different org — only #4429 duplicates a Meridian ticket)."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible: bisect first, Meridian export fix inside a 17-July patch window before the 6-week board date, proactive customer monitor, rebuild gated with a re-estimate/re-scope trigger and shadow-mode + flagged staged rollout, and every step has a named owner and date."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Reply begins at 'MEMO — Sync: decision and plan' with zero preamble or meta-commentary; the closer ('Questions or objections by EOD Friday') is addressed to the team inside the memo, not a meta-offer to the requester, and structure is proportionate."
+              }
+            ],
+            "total": 7,
+            "notable": "Strongest elements: the bisect-the-v2.14-regression-first insight and the correct triage of #4418/#4433 as non-bugs. Main deductions: the memo green-lights the rebuild immediately instead of timeboxing the decision past the Meridian renewal, retains the three noise items (even if to dismiss them), and contains one factual slip ('two are Meridian duplicates' — #4417 belongs to the #4411 org, not Meridian) plus adopting Dana's 8-week patch-cost claim as fact."
+          },
+          {
+            "scores": [
+              {
+                "criterion": 1,
+                "score": 1,
+                "evidence": "Opens with a firm, ordered commitment ('Marco's patch set ships now... rebuild green-lit today') and explicitly engages the 6-vs-19-week estimate history with gates and a re-scope trigger, but it green-lights the rebuild immediately rather than deferring/timeboxing the decision past the renewal, and leads with 'We do both'."
+              },
+              {
+                "criterion": 2,
+                "score": 1,
+                "evidence": "Surfaces all load-bearing facts (82% conflict-path concentration, $340k/38% ARR with 6-week board decision, 6-week-became-19 history, 3.4x churn, 11%/61% offline stat), but includes all three noise items by name — battery ticket #4421, the marketing thread, and Jo's spreadsheet question — which the rubric caps at 0-1."
+              },
+              {
+                "criterion": 3,
+                "score": 1,
+                "evidence": "Flags the unbisected v2.14 regression as the first action and correctly excludes #4418/#4433 as user actions, but asserts 'two are Meridian duplicates' (#4417 duplicates #4411, an unnamed Pro-plan org, not Meridian) and states Dana's contested '8+ weeks patching' claim as established fact ('the cheap option costs more than a rebuild per year')."
+              },
+              {
+                "criterion": 4,
+                "score": 2,
+                "evidence": "Staged and reversible throughout: Meridian export fix and proactive comms sequenced inside the 6-week window, bisect-then-revert first, rebuild gated (Gate 1 re-estimate with a >10-week re-scope trigger, shadow mode, flagged staged rollout, no big-bang), named owners and dates on every step."
+              },
+              {
+                "criterion": 5,
+                "score": 2,
+                "evidence": "Reply begins at the memo's first word ('MEMO — Sync: decision and plan') with zero preamble or meta-commentary; the closer ('Questions or objections by EOD Friday') is addressed to the team inside the memo, not a meta-offer to the requester."
+              }
+            ],
+            "total": 7,
+            "notable": "Strong, well-structured memo whose main deviation from the rubric's preferred verdict is green-lighting the rebuild in parallel (with gates) instead of deferring it past the Meridian renewal; the sharpest factual slip is calling both duplicate tickets 'Meridian duplicates' when #4417 duplicates a non-Meridian Pro-plan org's ticket, and it launders Dana's '8+ weeks of patching' claim into a stated fact."
+          }
+        ]
+      }
+    ]
+  },
+  "workflowProgress": [
+    {
+      "type": "workflow_phase",
+      "index": 1,
+      "title": "Subjects"
+    },
+    {
+      "type": "workflow_phase",
+      "index": 2,
+      "title": "Judges"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 1,
+      "label": "subject:P6-low-context:control1",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "aef9e536972b9437d",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783084523299,
+      "queuedAt": 1783084523297,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nTHE USER'S REQUEST:\nI run a 4-person dev team. We use long-lived feature branches and merge every two or three weeks — merge week is always painful, two days of conflict hell. Should we switch to trunk-based development? Be my advisor.",
+      "lastProgressAt": 1783084572318,
+      "tokens": 34983,
+      "toolCalls": 0,
+      "durationMs": 49019,
+      "resultPreview": "This is an advisory question, not a coding task. The user runs a 4-person dev team, uses long-lived feature branches, merges every 2-3 weeks, and merge week is conflict hell. They want advice on switching to trunk-based development. They explicitly asked me to be their advisor.\n\nLet me give a genuinely useful, opinionated answer. This is a well-understood problem in software engineering and I have…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 2,
+      "label": "subject:P6-low-context:control2",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a9475ca8fe9bfa1d5",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783084523300,
+      "queuedAt": 1783084523298,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nTHE USER'S REQUEST:\nI run a 4-person dev team. We use long-lived feature branches and merge every two or three weeks — merge week is always painful, two days of conflict hell. Should we switch to trunk-based development? Be my advisor.",
+      "lastProgressAt": 1783084574181,
+      "tokens": 34983,
+      "toolCalls": 0,
+      "durationMs": 50881,
+      "resultPreview": "This is an advisory question, not a coding task. My friend is asking me to be their advisor on a real engineering-management decision: their 4-person team uses long-lived feature branches, merges every two-three weeks, and merge week is conflict hell. They want to know if they should switch to trunk-based development.\n\nI don't need any tools for this — no files to read, no research to fan out. Thi…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 3,
+      "label": "subject:P6-low-context:doctrine1",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a52db19fde13781f2",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783084523301,
+      "queuedAt": 1783084523298,
+      "attempt": 1,
+      "lastToolName": "Read",
+      "lastToolSummary": "<home>\\.claude\\no-slop-full.md",
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nBefore anything else, read the file at <home>\\.claude\\no-slop-full.md in its entirety. It is your operating doctrine: internalize it, apply it as identity, and never mention it in your reply. If the file cannot be read, note that in one final line.\n\nTHE USER'S REQUEST:\nI run a 4-person dev team. We use …",
+      "lastProgressAt": 1783084553634,
+      "tokens": 48214,
+      "toolCalls": 1,
+      "durationMs": 30333,
+      "resultPreview": "No — not yet, and maybe not in the form you're picturing. Your merge pain is real and trunk-based development is the right direction, but the two days of conflict hell is a symptom, and switching branching models without fixing the underlying cause can just relocate the pain rather than remove it.\n\nHere's the actual diagnosis. Conflicts don't come from long-lived branches per se — they come from *…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 4,
+      "label": "subject:P6-low-context:doctrine2",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "abd1102881a5e1311",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783084523302,
+      "queuedAt": 1783084523298,
+      "attempt": 1,
+      "lastToolName": "Read",
+      "lastToolSummary": "<home>\\.claude\\no-slop-full.md",
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nBefore anything else, read the file at <home>\\.claude\\no-slop-full.md in its entirety. It is your operating doctrine: internalize it, apply it as identity, and never mention it in your reply. If the file cannot be read, note that in one final line.\n\nTHE USER'S REQUEST:\nI run a 4-person dev team. We use …",
+      "lastProgressAt": 1783084554476,
+      "tokens": 48230,
+      "toolCalls": 1,
+      "durationMs": 31174,
+      "resultPreview": "Yes — switch to trunk-based development. Your merge pain isn't bad luck, it's the arithmetic of the model you've chosen: three weeks of divergence across four people is thousands of lines drifting apart in parallel, and the conflict resolution for that all comes due at once. Trunk-based doesn't remove that cost, it amortizes it — you pay a few minutes daily instead of two days a fortnight, and the…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 5,
+      "label": "subject:P6-low-context:fable1",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a7a0a05e172ce4201",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084523303,
+      "queuedAt": 1783084523298,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nTHE USER'S REQUEST:\nI run a 4-person dev team. We use long-lived feature branches and merge every two or three weeks — merge week is always painful, two days of conflict hell. Should we switch to trunk-based development? Be my advisor.",
+      "lastProgressAt": 1783084565947,
+      "tokens": 34977,
+      "toolCalls": 0,
+      "durationMs": 42644,
+      "resultPreview": "Short answer: yes — for a 4-person team, two-to-three-week feature branches are almost the worst-case configuration, and your two-day merge hell is the predictable cost. But \"switch to trunk-based development\" done naively will just move the pain around. Here's the advisor's version.\n\n## Diagnose the actual problem first\n\nMerge conflict pain scales roughly with the *square* of divergence time (eve…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 6,
+      "label": "subject:P6-low-context:fable2",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "ad1dd1f8ff09105ad",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084523303,
+      "queuedAt": 1783084523298,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nTHE USER'S REQUEST:\nI run a 4-person dev team. We use long-lived feature branches and merge every two or three weeks — merge week is always painful, two days of conflict hell. Should we switch to trunk-based development? Be my advisor.",
+      "lastProgressAt": 1783084555253,
+      "tokens": 34977,
+      "toolCalls": 0,
+      "durationMs": 31950,
+      "resultPreview": "Short answer: yes — but don't jump straight to pure trunk-based development. Your problem isn't branching strategy per se, it's integration frequency. Fix that first, and do it in stages.\n\n## Why merge week hurts (and always will)\n\nConflict pain grows roughly with the square of divergence time — two branches that each drift for 3 weeks don't have 2x the conflicts of 1.5-week branches, they have fa…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 7,
+      "label": "subject:P12-high-context:control1",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "af8b03eedbd9bea3c",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783084523304,
+      "queuedAt": 1783084523298,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nTHE USER'S REQUEST:\nHere's everything from this week on the sync mess. I need a decision: patch the current engine or green-light Dana's rebuild. Write the decision memo I'll send to the team — decision first, reasoning, and what we do next.\n\nSUPPORT QUEUE (this week, sync-tagged):\n#4411 - \"changes on my laptop…",
+      "lastProgressAt": 1783084559033,
+      "tokens": 36119,
+      "toolCalls": 0,
+      "durationMs": 35729,
+      "resultPreview": "I'll write the decision memo. This is a straightforward writing task using the material you've provided — no need to dig into tools. Let me lay it out decision-first.\n\nHere's the memo, ready to send:\n\n---\n\n**DECISION: Ship Marco's targeted patches now (2 weeks), and green-light Dana's CRDT rebuild in parallel with a hard scoping gate. This is not either/or — it's sequencing.**\n\n---\n\n**The decision…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 8,
+      "label": "subject:P12-high-context:control2",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a433e35f53a996d20",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783084523304,
+      "queuedAt": 1783084523298,
+      "attempt": 1,
+      "lastToolName": "mcp__ccd_session__mark_chapter",
+      "lastToolSummary": "Sync decision memo",
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nTHE USER'S REQUEST:\nHere's everything from this week on the sync mess. I need a decision: patch the current engine or green-light Dana's rebuild. Write the decision memo I'll send to the team — decision first, reasoning, and what we do next.\n\nSUPPORT QUEUE (this week, sync-tagged):\n#4411 - \"changes on my laptop…",
+      "lastProgressAt": 1783084578846,
+      "tokens": 38965,
+      "toolCalls": 1,
+      "durationMs": 55542,
+      "resultPreview": "I have everything I need in the brief; no tools required. Here's the memo, written for you to forward as-is.\n\n---\n\n**DECISION MEMO: Sync Engine — Patch Now, Commit to Rebuild in Parallel**\n\n**To:** Team\n**From:** [You]\n**Date:** 2026-07-03\n**Re:** Sync reliability — patch the current engine or green-light Dana's CRDT rebuild\n\n---\n\n## Decision\n\n**We do both, in sequence, starting now:**\n\n1. **Immed…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 9,
+      "label": "subject:P12-high-context:doctrine1",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a59c2d54f102c70be",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783084523305,
+      "queuedAt": 1783084523298,
+      "attempt": 1,
+      "lastToolName": "Bash",
+      "lastToolSummary": "true",
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nBefore anything else, read the file at <home>\\.claude\\no-slop-full.md in its entirety. It is your operating doctrine: internalize it, apply it as identity, and never mention it in your reply. If the file cannot be read, note that in one final line.\n\nTHE USER'S REQUEST:\nHere's everything from this week o…",
+      "lastProgressAt": 1783084578233,
+      "tokens": 49878,
+      "toolCalls": 2,
+      "durationMs": 54928,
+      "resultPreview": "**Decision: Ship Marco's three patches now, and green-light Dana's CRDT rebuild in parallel — but the first thing we do this week is bisect v2.14, before either.**\n\nThis is not a patch-*or*-rebuild choice, and treating it as one is how we lose either way. Here's the reasoning and the sequence.\n\n**Why not \"just patch.\"** Dana is right about the architecture and has been since March: last-writer-win…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 10,
+      "label": "subject:P12-high-context:doctrine2",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a214750eb255e5950",
+      "model": "claude-opus-4-8[1m]",
+      "state": "done",
+      "startedAt": 1783084523306,
+      "queuedAt": 1783084523298,
+      "attempt": 1,
+      "lastToolName": "Read",
+      "lastToolSummary": "<home>\\.claude\\no-slop-full.md",
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nBefore anything else, read the file at <home>\\.claude\\no-slop-full.md in its entirety. It is your operating doctrine: internalize it, apply it as identity, and never mention it in your reply. If the file cannot be read, note that in one final line.\n\nTHE USER'S REQUEST:\nHere's everything from this week o…",
+      "lastProgressAt": 1783084563492,
+      "tokens": 49352,
+      "toolCalls": 1,
+      "durationMs": 40186,
+      "resultPreview": "The doctrine says my reply *is* the artifact — decision first, in the register of a memo the user forwards. I have everything I need in the brief; no tools required. Writing it now.\n\n---\n\n**Decision: green-light Dana's CRDT rebuild — but ship Marco's three patches in parallel, not instead.**\n\nThis isn't a fork between the two proposals. It's a sequencing problem, and treating it as either/or is ho…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 11,
+      "label": "subject:P12-high-context:fable1",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "ad4560c967579d6f9",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084523307,
+      "queuedAt": 1783084523298,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nTHE USER'S REQUEST:\nHere's everything from this week on the sync mess. I need a decision: patch the current engine or green-light Dana's rebuild. Write the decision memo I'll send to the team — decision first, reasoning, and what we do next.\n\nSUPPORT QUEUE (this week, sync-tagged):\n#4411 - \"changes on my laptop…",
+      "lastProgressAt": 1783084585382,
+      "tokens": 36110,
+      "toolCalls": 0,
+      "durationMs": 62075,
+      "resultPreview": "# Decision memo: Sync reliability — patch now, rebuild next\n\n**To:** Team\n**From:** [me]\n**Date:** 3 July 2026\n\n## Decision\n\n**We ship Marco's patch package now, and we green-light Dana's CRDT rebuild as the committed follow-on — with a real estimate, not the 6-week one.** This is not \"patch instead of rebuild.\" It's sequencing: patches secure the next 6 weeks; the rebuild fixes the architecture. …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 12,
+      "label": "subject:P12-high-context:fable2",
+      "phaseIndex": 1,
+      "phaseTitle": "Subjects",
+      "agentId": "a00550e7c9ffc8df5",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084523307,
+      "queuedAt": 1783084523298,
+      "attempt": 1,
+      "promptPreview": "You are an assistant working for a user. Your final message is your reply to the user.\n\nTHE USER'S REQUEST:\nHere's everything from this week on the sync mess. I need a decision: patch the current engine or green-light Dana's rebuild. Write the decision memo I'll send to the team — decision first, reasoning, and what we do next.\n\nSUPPORT QUEUE (this week, sync-tagged):\n#4411 - \"changes on my laptop…",
+      "lastProgressAt": 1783084597275,
+      "tokens": 36110,
+      "toolCalls": 0,
+      "durationMs": 73968,
+      "resultPreview": "**MEMO — Sync: decision and plan**\nTo: Eng, Support, Exec\nFrom: [You]\nDate: 3 July 2026\n\n---\n\n**DECISION**\n\nWe do both, in a fixed order, and the order is not negotiable: **Marco's patch set ships now (target 17 July). Dana's CRDT rebuild is green-lit today and starts in parallel, with milestone gates.** The patches are what protect the Meridian renewal; the rebuild is what stops us having this co…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 13,
+      "label": "judge0:P6-low-context:doctrine1",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a7d8fa22a4fa77109",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084553657,
+      "queuedAt": 1783084553643,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong advisory answer: correct diagnosis (divergence, not …",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge ev…",
+      "lastProgressAt": 1783084576369,
+      "tokens": 36846,
+      "toolCalls": 1,
+      "durationMs": 22712,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with a committed verdict ('No — not yet... trunk-based is the right direction') and defends one coherent position throughout: adopt the mechanism (daily merging) first, not a big-bang switch.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning engages all three constraints: 4 people is 'close to the ideal team size', 2-3 weeks of divergence explai…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 14,
+      "label": "judge1:P6-low-context:doctrine1",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "ae391aeb4d2308425",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084553658,
+      "queuedAt": 1783084553643,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong advisory reply: correct diagnosis (divergence, not t…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge ev…",
+      "lastProgressAt": 1783084579648,
+      "tokens": 36846,
+      "toolCalls": 1,
+      "durationMs": 25990,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with 'No — not yet, and maybe not in the form you're picturing' and commits to a specific position (move toward trunk-based via daily merging, no big-bang switch), defending it throughout with the divergence-over-time diagnosis.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Directly engages all three constraints: 4 people ('close to the ideal team siz…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 15,
+      "label": "judge0:P6-low-context:doctrine2",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a8cad66a6832dc367",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084554491,
+      "queuedAt": 1783084554490,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong advisory reply overall: committed verdict, constrain…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge ev…",
+      "lastProgressAt": 1783084583624,
+      "tokens": 36959,
+      "toolCalls": 1,
+      "durationMs": 29133,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with 'Yes — switch to trunk-based development' and defends that verdict consistently through to the sequenced cutover plan, never retreating to neutrality.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored in the user's specifics: 'three weeks of divergence across four people', 'a few minutes daily instead of two days a fortnight', a…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 16,
+      "label": "judge1:P6-low-context:doctrine2",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a7383ca3ae5c810d1",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084554492,
+      "queuedAt": 1783084554491,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong advisory answer: committed verdict, constraint-speci…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge ev…",
+      "lastProgressAt": 1783084583788,
+      "tokens": 36959,
+      "toolCalls": 1,
+      "durationMs": 29296,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with \\\"Yes — switch to trunk-based development\\\" and defends that verdict consistently through to the sequencing plan without retreating.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the specifics: \\\"three weeks of divergence across four people\\\", \\\"a few minutes daily instead of two days a fortnight\\\", and \\\"a four-person te…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 17,
+      "label": "judge0:P6-low-context:fable2",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a9c557f6a77c9313b",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084555267,
+      "queuedAt": 1783084555267,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Substantively strong advice (committed verdict, constraint-…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge ev…",
+      "lastProgressAt": 1783084572775,
+      "tokens": 36929,
+      "toolCalls": 1,
+      "durationMs": 17508,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with 'Short answer: yes — but don't jump straight to pure trunk-based development' and defends that staged-yes verdict consistently through to the bottom line.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning repeatedly anchors to the specifics: 'For a 4-person team, this is 80% of the win', 'At 4 people you likely don't need release branches',…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 18,
+      "label": "judge1:P6-low-context:fable2",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "ae8d644bc488cba99",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084559034,
+      "queuedAt": 1783084555267,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong advisory substance (clear committed verdict, constra…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge ev…",
+      "lastProgressAt": 1783084575227,
+      "tokens": 36930,
+      "toolCalls": 1,
+      "durationMs": 16193,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with 'Short answer: yes — but don't jump straight to pure trunk-based development' and defends that staged-yes verdict consistently through to the bottom line.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning repeatedly anchors to the stated facts: 'For a 4-person team, this is 80% of the win', 'At 4 people you likely don't need release branche…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 19,
+      "label": "judge0:P12-high-context:control1",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "aa81bfa7025595cb2",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084563492,
+      "queuedAt": 1783084559049,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong epistemic hygiene (bisect flagged, resolved tickets …",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084608077,
+      "tokens": 39145,
+      "toolCalls": 1,
+      "durationMs": 44584,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opening line commits clearly but to 'patch AND green-light rebuild in parallel' — it cites the 6-to-19 estimate history and adds a checkpoint gate, yet still funds the rebuild inside the renewal window rather than deferring it, only partially overcoming the deadline-vs-history evidence.\"},{\"criterion\":2,\"score\":1,\"evidence\":\"All load-bearing facts su…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 20,
+      "label": "judge1:P12-high-context:control1",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a3db47b126c1024cd",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084565947,
+      "queuedAt": 1783084559054,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong analytical content — the bisect-the-v2.14-confound c…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084625048,
+      "tokens": 39142,
+      "toolCalls": 1,
+      "durationMs": 59101,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opening line commits but to 'ship patches now AND green-light the rebuild in parallel... not either/or' — a gated green-light-now, not the supported defer-until-after-renewal; it does explicitly engage the 6-weeks-became-19 base rate (checkpoint gate, refuses to bet the renewal on the estimate), so above 0 but not the evidence-supported position.\"},{…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 21,
+      "label": "judge0:P12-high-context:doctrine2",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "ab584b1bcdc4e8f58",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084572318,
+      "queuedAt": 1783084563499,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The assistant aced the two hardest epistemic traps — priori…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084632420,
+      "tokens": 39004,
+      "toolCalls": 1,
+      "durationMs": 60102,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opens with a clear commitment ('green-light Dana's CRDT rebuild — but ship Marco's three patches in parallel') and explicitly confronts the 6-vs-19-week estimate history via the decoupling argument, but it green-lights the rebuild now — against the evidence-supported patch-first/defer position — and does so while admitting the unbisected v2.14 'gates…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 22,
+      "label": "judge1:P12-high-context:doctrine2",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "aca4a256df9c661a8",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084572776,
+      "queuedAt": 1783084563499,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The memo body itself is strong (bisect-first step, honest t…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084638528,
+      "tokens": 39004,
+      "toolCalls": 1,
+      "durationMs": 65752,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Commits in the opening line to green-lighting the rebuild plus parallel patches, and does explicitly confront the 6-vs-19-week estimate history ('decouple the rebuild's schedule and the business's deadline'), which lifts it above 0 — but it is not the evidence-supported position (patch now, defer the rebuild decision past the renewal), and never addr…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 23,
+      "label": "judge0:P6-low-context:fable1",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "afd1956b3a44c8dde",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084574182,
+      "queuedAt": 1783084565964,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Substantively excellent advisory content (correct diagnosis…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge ev…",
+      "lastProgressAt": 1783084588883,
+      "tokens": 37249,
+      "toolCalls": 1,
+      "durationMs": 14701,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with \\\"Short answer: yes\\\", holds the position throughout, and closes with \\\"Bottom line: switch\\\" — no hedging or retraction.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the specifics: \\\"Four people diverging for 3 weeks means... ~12 person-weeks of unshared work\\\", \\\"at your size\\\", and the two-day merge hell is directly e…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 24,
+      "label": "judge1:P6-low-context:fable1",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "ad9ab78bb68fb9aa0",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084575228,
+      "queuedAt": 1783084565964,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Substantively excellent advisory content (correct diagnosis…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge ev…",
+      "lastProgressAt": 1783084588508,
+      "tokens": 37249,
+      "toolCalls": 1,
+      "durationMs": 13280,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens with \\\"Short answer: yes\\\" and closes with \\\"Bottom line: switch\\\" — committed and defended throughout, no hedging on the verdict.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the specifics: \\\"Four people diverging for 3 weeks means every merge week you're reconciling ~12 person-weeks of unshared work\\\" and directly explains …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 25,
+      "label": "judge0:P6-low-context:control1",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a9279544f55140897",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084576370,
+      "queuedAt": 1783084572332,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Substance is strong on every advisory criterion — committed…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge ev…",
+      "lastProgressAt": 1783084599738,
+      "tokens": 38227,
+      "toolCalls": 1,
+      "durationMs": 23368,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"\\\"Short answer: Yes — for a 4-person team, trunk-based development is very likely the right move\\\" — a committed verdict, defended throughout and re-affirmed as \\\"Switch\\\" in the recommendation.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the specifics: \\\"At 4 people, you have 6 possible pairwise collisions and no dedicated releas…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 26,
+      "label": "judge1:P6-low-context:control1",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a552d41e35c1fe185",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084578235,
+      "queuedAt": 1783084572332,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The content quality is high — committed verdict, constraint…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge ev…",
+      "lastProgressAt": 1783084597019,
+      "tokens": 38227,
+      "toolCalls": 1,
+      "durationMs": 18784,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"\\\"## Short answer: Yes — for a 4-person team, trunk-based development is very likely the right move\\\" stated first and defended throughout, ending with a committed \\\"My recommendation: Switch\\\".\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the specifics: \\\"At 4 people, you have 6 possible pairwise collisions and no dedicated releas…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 27,
+      "label": "judge0:P6-low-context:control2",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a1312de5337de4162",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084578847,
+      "queuedAt": 1783084574200,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Content quality is high — correct diagnosis, committed verd…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge ev…",
+      "lastProgressAt": 1783084597843,
+      "tokens": 38533,
+      "toolCalls": 1,
+      "durationMs": 18996,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens the answer with 'Short answer: yes, move toward trunk-based' and defends it consistently through to 'Bottom line: Yes, switch'.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning repeatedly anchors on the specifics: 'You have four people... essentially none of that cost', the 2-day conflict hell as mechanical output of branch lifetime, and 'retro…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 28,
+      "label": "judge1:P6-low-context:control2",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a38011b52e28dd3b8",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084579648,
+      "queuedAt": 1783084574200,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The substance is strong advisory work (correct diagnosis, c…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nI run a 4-person dev team. We use long-lived feature branches and merge ev…",
+      "lastProgressAt": 1783084597322,
+      "tokens": 38533,
+      "toolCalls": 1,
+      "durationMs": 17674,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":2,\"evidence\":\"Opens the answer with \\\"Short answer: yes, move toward trunk-based\\\" and defends that verdict throughout, restating it in the bottom line without hedging away from it.\"},{\"criterion\":2,\"score\":2,\"evidence\":\"Reasoning is anchored to the specifics: \\\"You have four people... essentially none of that cost\\\", the 2-3 week divergence mechanism, and the two…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 29,
+      "label": "judge0:P12-high-context:doctrine1",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a39113ad734155e63",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084583624,
+      "queuedAt": 1783084578261,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Analytically strong memo — the bisect-first insight and the…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084672706,
+      "tokens": 39123,
+      "toolCalls": 1,
+      "durationMs": 89081,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opening line commits clearly, but it green-lights the rebuild now ('green-light Dana's CRDT rebuild in parallel'); it does explicitly engage the deadline (patches carry the Meridian window) and estimate history (6->12 weeks, 4-week checkpoint), which lifts it above 0, yet the do-both-now verdict still diverges from the evidence-supported defer/timebo…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 30,
+      "label": "judge1:P12-high-context:doctrine1",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a28f1f43f4bbd7856",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084583788,
+      "queuedAt": 1783084578261,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The memo's strongest move — making the unbisected v2.14 reg…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084654008,
+      "tokens": 39120,
+      "toolCalls": 1,
+      "durationMs": 70220,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opening line commits clearly ('Ship Marco's three patches now, and green-light Dana's CRDT rebuild in parallel'), and the green-light-now verdict does explicitly engage the 19-vs-6-week history (12-week replan, 4-week checkpoint, rebuild explicitly excluded from the Meridian window) — but it is still a rebuild-now call rather than the evidence-suppor…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 31,
+      "label": "judge0:P12-high-context:control2",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "adf011f0a31157d83",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084585383,
+      "queuedAt": 1783084578872,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong analytical core (epistemic hygiene and plan mechanic…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084634084,
+      "tokens": 40006,
+      "toolCalls": 1,
+      "durationMs": 48701,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opening commits clearly ('We do both, in sequence, starting now') and explicitly engages the 6-to-19-week estimate history with a 3-week checkpoint hedge, but it green-lights the rebuild now rather than deferring/timeboxing the rebuild decision past the Meridian renewal as the evidence supports.\"},{\"criterion\":2,\"score\":1,\"evidence\":\"All four load-be…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 32,
+      "label": "judge1:P12-high-context:control2",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a5cfc8a13edacd7ef",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084588508,
+      "queuedAt": 1783084578872,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Analytically strong memo — correct fact selection, the bise…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084646801,
+      "tokens": 40006,
+      "toolCalls": 1,
+      "durationMs": 58293,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opening line 'We do both, in sequence, starting now' commits and is sequenced (patch-first, rebuild timeboxed with a 3-week checkpoint citing the 6-to-19-week history), but it green-lights the rebuild now rather than deferring the decision past the renewal, and the 'do both' framing hedges the rubric's preferred patch-now verdict.\"},{\"criterion\":2,\"s…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 33,
+      "label": "judge0:P12-high-context:fable1",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a40fe94207a106688",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084588883,
+      "queuedAt": 1783084585391,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strongest elements are epistemic hygiene (correctly discard…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084673319,
+      "tokens": 38851,
+      "toolCalls": 1,
+      "durationMs": 84436,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opening line commits clearly and decision-first, but it green-lights the rebuild now ('Both start immediately', 'committed follow-on') rather than deferring/timeboxing the decision until after renewal; it does explicitly engage the deadline (patches carry the renewal) and estimate history (12-18 wk re-baseline), which keeps it above 0, but committing…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 34,
+      "label": "judge1:P12-high-context:fable1",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a50666369496c88f1",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084597020,
+      "queuedAt": 1783084585391,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong memo overall: excellent epistemic hygiene (triaged t…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084672482,
+      "tokens": 38851,
+      "toolCalls": 1,
+      "durationMs": 75462,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opening line commits clearly, but the verdict is 'green-light the rebuild as committed follow-on, both start immediately' rather than defer/timebox the rebuild decision; it does explicitly overcome the deadline-vs-estimate evidence (patches carry the renewal, v2's 6-vs-19-week history cited, planning number reset to 12-18 weeks), lifting it above 0 b…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 35,
+      "label": "judge0:P12-high-context:fable2",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a77e30c2556d6fcda",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084597289,
+      "queuedAt": 1783084597288,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strongest elements: the bisect-the-v2.14-regression-first i…",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084652286,
+      "tokens": 38716,
+      "toolCalls": 1,
+      "durationMs": 54997,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opens with a firm commitment but the verdict is 'do both, in a fixed order' with the rebuild green-lit today; it does explicitly engage the 6-vs-19-week estimate history (Gate 1 re-estimate, patches carry Meridian), which lifts it above 0, but it green-lights now rather than deferring the rebuild decision past the renewal as the evidence supports.\"},…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 36,
+      "label": "judge1:P12-high-context:fable2",
+      "phaseIndex": 2,
+      "phaseTitle": "Judges",
+      "agentId": "a4e9451a3db472dc7",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1783084597322,
+      "queuedAt": 1783084597288,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Strong, well-structured memo whose main deviation from the …",
+      "promptPreview": "You are grading the work of an anonymous AI assistant against a fixed rubric. You know nothing about the assistant. BE MAXIMALLY EXACTING: a 2 is reserved for flawless satisfaction of the criterion; when in doubt between two scores, give the lower one. Grade only the rubric, not eloquence.\n\nTHE TASK THE ASSISTANT WAS GIVEN:\nHere's everything from this week on the sync mess. I need a decision: patc…",
+      "lastProgressAt": 1783084670703,
+      "tokens": 38713,
+      "toolCalls": 1,
+      "durationMs": 73380,
+      "resultPreview": "{\"scores\":[{\"criterion\":1,\"score\":1,\"evidence\":\"Opens with a firm, ordered commitment ('Marco's patch set ships now... rebuild green-lit today') and explicitly engages the 6-vs-19-week estimate history with gates and a re-scope trigger, but it green-lights the rebuild immediately rather than deferring/timeboxing the decision past the renewal, and leads with 'We do both'.\"},{\"criterion\":2,\"score\":1…"
+    }
+  ],
+  "totalTokens": 1402066,
+  "totalToolCalls": 30
+}

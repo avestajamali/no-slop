@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 680 372" role="img" font-family="'Segoe UI',system-ui,-apple-system,sans-serif">
+<title>no-slop ranks first across six benchmarked arms</title>
+<desc>Animated bar chart: no-slop FULL 9.71 and COMPACT 9.68 lead jalaalrd and slopless 9.41, humanize 9.06, and bare Opus 8.08 on a 0 to 10 blind-judged scale, n=356.</desc>
+<rect x="0" y="0" width="680" height="372" rx="16" fill="#14161f"/>
+<text x="36" y="46" fill="#f0f2f6" font-size="21" font-weight="600">Measured #1 across six arms</text>
+<text x="36" y="68" fill="#8b93a4" font-size="13">Blind-judged score /10 · n=356 subjects · lme4 regression</text>
+<g font-size="14">
+  <text x="214" y="112" text-anchor="end" fill="#e6e9ef" font-weight="600">no-slop FULL</text>
+  <rect x="228" y="98" width="447" height="20" rx="4" fill="#1baf7a">
+    <animate attributeName="width" values="0;0;447;447;0" keyTimes="0;0;0.14;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
+  <text x="663" y="112" text-anchor="end" fill="#0c3327" font-weight="600">9.71
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.1;0.16;0.9;1" dur="6s" repeatCount="indefinite"/></text>
+  <text x="214" y="152" text-anchor="end" fill="#e6e9ef" font-weight="600">no-slop COMPACT</text>
+  <rect x="228" y="138" width="445" height="20" rx="4" fill="#1baf7a" opacity="0.85">
+    <animate attributeName="width" values="0;0;445;445;0" keyTimes="0;0.04;0.18;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
+  <text x="661" y="152" text-anchor="end" fill="#0c3327" font-weight="600">9.68
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.14;0.2;0.9;1" dur="6s" repeatCount="indefinite"/></text>
+  <text x="214" y="192" text-anchor="end" fill="#aab1bf">jalaalrd</text>
+  <rect x="228" y="178" width="433" height="20" rx="4" fill="#3f4657">
+    <animate attributeName="width" values="0;0;433;433;0" keyTimes="0;0.08;0.22;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
+  <text x="649" y="192" text-anchor="end" fill="#d4d9e2">9.41
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.18;0.24;0.9;1" dur="6s" repeatCount="indefinite"/></text>
+  <text x="214" y="232" text-anchor="end" fill="#aab1bf">slopless</text>
+  <rect x="228" y="218" width="433" height="20" rx="4" fill="#3f4657">
+    <animate attributeName="width" values="0;0;433;433;0" keyTimes="0;0.12;0.26;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
+  <text x="649" y="232" text-anchor="end" fill="#d4d9e2">9.41
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.22;0.28;0.9;1" dur="6s" repeatCount="indefinite"/></text>
+  <text x="214" y="272" text-anchor="end" fill="#aab1bf">humanize</text>
+  <rect x="228" y="258" width="417" height="20" rx="4" fill="#3f4657">
+    <animate attributeName="width" values="0;0;417;417;0" keyTimes="0;0.16;0.3;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
+  <text x="633" y="272" text-anchor="end" fill="#d4d9e2">9.06
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.26;0.32;0.9;1" dur="6s" repeatCount="indefinite"/></text>
+  <text x="214" y="312" text-anchor="end" fill="#7f8698">bare Opus</text>
+  <rect x="228" y="298" width="372" height="20" rx="4" fill="#2f3444">
+    <animate attributeName="width" values="0;0;372;372;0" keyTimes="0;0.2;0.34;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
+  <text x="588" y="312" text-anchor="end" fill="#c0c6d2">8.08
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.3;0.36;0.9;1" dur="6s" repeatCount="indefinite"/></text>
+</g>
+<text x="36" y="352" font-size="12" fill="#697082">Beats every competitor arm, all p &lt; 0.05 · self-preference ruled out (arm×judge p = 0.33)</text>
+</svg>
