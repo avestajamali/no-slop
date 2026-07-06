@@ -1,8 +1,10 @@
 #!/usr/bin/env Rscript
 # no-slop factorial analysis.
 # Input: factorial.csv with columns probe, arm, run, judge, total, c1..c5
-# Design: 6 arms x 2 probes x 30 runs (4 planned; cut to 2 by server rate-limiting),
-# each subject scored by an Opus judge and a Sonnet judge. Subject = (probe,arm,run);
+# Design: 6 arms x 4 probes (P6, P7 original; P17r, P18 extension) x 30 runs
+# (original P6/P7 wave was cut from 4 planned probes to 2 by server rate-limiting;
+# the extension adds P17r + P18). Each subject scored by an Opus judge and a Sonnet
+# judge. Subject = (probe,arm,run);
 # the two judge rows per subject are nested.
 # Model: total ~ arm + probe + judge + arm:judge, random intercept per subject.
 # arm:judge tests whether no-slop's advantage is an artifact of same-family (Opus)

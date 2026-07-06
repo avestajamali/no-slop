@@ -1,0 +1,1572 @@
+{
+  "experiment": "halflife-2",
+  "environment": "B",
+  "arms": {
+    "turn0": {
+      "1": {
+        "arm": "turn0",
+        "run": 1,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays strictly within the brief (Melbourne, since 2019, retail and logistics, team of twelve). No invented awards, client names, or statistics. The two bracketed notes explicitly decline to fabricate a proof point or client name, telling the client to supply real ones instead."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present. Scanned for delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust — none appear. Diction is plain ('turning the data a business already collects into something it can act on')."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation: no 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential'. Claims stay at the brief's altitude; 'the work we're built for' and 'the conversation worth starting' are modest and grounded rather than self-aggrandizing."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots in any form. No triads. Sentences use normal copulas freely ('Meridian Analytics is a data consultancy', 'We're a team of twelve') with no copula-dodging saturation. Sentence shapes are clean."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Mostly prose paragraphs with no bold or headers, but it inserts two bracketed placeholder/instruction blocks (lines 7 and 9) that function as scaffolding within the delivered copy rather than finished prose. This is one structural violation of the 'prose paragraphs, no scaffolds' requirement; em-dash count (three) is not saturated."
+            }
+          ],
+          "total": 9
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "No invented client names, stats, or awards; stays within brief facts (Melbourne, 2019, 12 people, retail/logistics); explicitly asks user for a proof point rather than fabricating one."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon (delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) appears anywhere in the copy."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation language like 'industry-leading' or 'trusted partner'; claims stay modest and grounded, e.g. 'that's the work we're built for.'"
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots, no triads, no copula-dodging saturation; sentences are varied but plainly constructed."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Prose paragraphs throughout, no bold or headers; only a single em-dash ('logistics — sectors where margins are thin'), not saturation."
+            }
+          ],
+          "total": 10
+        },
+        "reply": "Meridian Analytics is a data consultancy in Melbourne, working since 2019 with companies that hold more data than they've been able to use.\n\nMost of our clients are in retail and logistics — sectors where margins are thin and a slow or wrong decision shows up fast in the numbers. That's the work we're built for: turning the data a business already collects into something it can act on with confidence.\n\nWe're a team of twelve, and staying that size is deliberate. It means the people who scope your project are the same ones who do it, and your work never gets handed down a chain until the person you first spoke to has vanished from it.\n\n[What we actually do — the two or three services you want to lead with (e.g. demand forecasting, reporting pipelines). Tell me which and I'll write them in.]\n\n[One proof point — a result you can quantify, or a client you can name — earns more trust here than any description. Add it if you have one.]\n\nIf your reporting is telling you less than it should, that's the conversation worth starting."
+      },
+      "2": {
+        "arm": "turn0",
+        "run": 2,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Copy stays strictly within the brief: 'twelve people,' 'Melbourne,' 'since 2019,' 'retail and logistics.' No awards, client names, statistics, or invented facts. The line-7 examples (stock, routes, demand spikes) are generic industry illustrations, not specific claims about the firm."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present — no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, or robust. Diction is plain and concrete throughout ('earn its keep,' 'cleaning up the reporting')."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation — no 'industry-leading,' 'trusted partner,' 'commitment to excellence,' or 'unlock potential.' The 'we stay small on purpose' framing de-escalates rather than inflates; claims stay at the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. Exactly one triad (line 7: 'stock that moves... routes that cost... demand that spikes'), within the 'at most one' allowance. No copula-dodging saturation — normal copulas used ('Meridian Analytics is,' 'Twelve people means,' 'Retail and logistics are')."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Plain prose paragraphs, no bold scaffolds or headers. Only two em-dashes across the whole piece (line 1 'earn its keep' and line 5), which is not saturation."
+            }
+          ],
+          "total": 10
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays strictly within the brief's facts (12 people, Melbourne, 2019, retail/logistics); no invented clients, awards, or statistics. The trailing note even explicitly flags that no specifics were invented."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present — no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, or robust."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "Register stays modest and matter-of-fact ('we stay small on purpose', 'talk to us'); no industry-leading/trusted-partner/commitment-to-excellence framing."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. One triad appears ('stock that moves faster than the reports, routes that cost more than they should, demand that spikes when the model swore it wouldn't'), which is within the allowed one-triad limit. No copula-dodging saturation."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Plain prose paragraphs throughout, no bold scaffolds or headers, and only a single em-dash in paragraph 1 (no saturation)."
+            }
+          ],
+          "total": 10
+        },
+        "reply": "Meridian Analytics is a data consultancy in Melbourne. We're twelve people, and since 2019 we've worked mostly with retail and logistics companies — the kind of businesses that generate a lot of data and need it to earn its keep.\n\nWhat that means in practice: we help you work out what your numbers are actually telling you, and build the systems that keep telling you once we've gone. Sometimes that's a forecasting model. Sometimes it's cleaning up the reporting so your team stops arguing about whose spreadsheet is right.\n\nWe stay small on purpose. Twelve people means the person who scopes your project is the person who does the work, and the person who does the work is someone you can call. There's no account layer sitting between you and the people who understand your data.\n\nRetail and logistics are where we've spent most of our time, so we tend to know the problems before you finish explaining them: stock that moves faster than the reports, routes that cost more than they should, demand that spikes when the model swore it wouldn't.\n\nIf your data has outgrown the tools you're using to make sense of it, talk to us.\n\nI kept this clear of invented specifics — no client names, headcount-by-team, or performance figures — since none were in the brief; send any you want woven in and I'll place them."
+      },
+      "3": {
+        "arm": "turn0",
+        "run": 3,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Only brief-given facts appear: Melbourne, started 2019, team of twelve, clients in retail and logistics. No awards, client names, or statistics are invented. Where a specific could have been fabricated, the copy inserts honest placeholders instead: '[the services you lead with, e.g. analytics, forecasting; confirm]' and '[One concrete thing that sets Meridian apart... confirm, so this line isn't generic.]'. Nothing beyond the brief is asserted as fact."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock-AI lexicon present. Scanned for delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust and kin — zero hits. Phrasing is plain: 'make sense of that data and act on it', 'give it real attention', 'answering sharper questions'."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation. No 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential'. The register is modest and even self-limiting: 'We take on the work we're genuinely suited to' and 'Staying small is a choice.' Claims stay at the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots in any form. No triad saturation ('make sense of that data and act on it' is a pair). Copula is used freely and directly: 'Meridian Analytics is a Melbourne data consultancy', 'Staying small is a choice', 'that focus is deliberate' — no copula-dodging."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Plain prose paragraphs throughout. No bold scaffolds, no headers, no em-dashes at all. The only non-prose elements are bracketed '[...; confirm]' placeholders, which are none of the structural violations this criterion targets (bold/headers/em-dash saturation)."
+            }
+          ],
+          "total": 10
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 0,
+              "evidence": "The reply is riddled with unfilled bracket placeholders — '[the services you lead with, e.g. analytics, forecasting; confirm]' and '[One concrete thing that sets Meridian apart: a method you're known for, or a result you've delivered; confirm, so this line isn't generic.]'. These aren't fabrications per se, but the deliverable is not finished About-page copy; more importantly the piece invents unearned specificity as a rhetorical claim ('the person who scopes your project is one of the people who delivers it') which is a structural/operational claim about staffing continuity not given in the brief — this is a fabricated business-practice detail presented as fact. Combined with placeholder text masquerading as a finished asset, this is a clear failure of deliverable integrity beyond the brief."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI buzzwords (no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) appear anywhere in the text."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No 'industry-leading', 'trusted partner', 'commitment to excellence' or similar promotional inflation; tone stays measured and grounded throughout."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots, no more than one loose triad-like list, and no copula-dodging pattern saturation; sentences are plain declaratives."
+            },
+            {
+              "criterion": 5,
+              "score": 0,
+              "evidence": "The output is not clean prose delivered as final copy — it contains two unresolved bracketed editorial placeholders standing in for actual sentences (lines 3 and 7), meaning roughly a third of the 'About page' is scaffolding/notes-to-self rather than delivered copy, which is a structural failure of the deliverable itself."
+            }
+          ],
+          "total": 6
+        },
+        "reply": "Meridian Analytics is a Melbourne data consultancy. We started in 2019 and have grown to a team of twelve.\n\nMost of our clients work in retail and logistics, industries that generate enormous amounts of data and live or die by what they do with it. We help them make sense of that data and act on it: [the services you lead with, e.g. analytics, forecasting; confirm].\n\nStaying small is a choice. With twelve people, the person who scopes your project is one of the people who delivers it, and nothing gets lost handing off to a team you've never met. We take on the work we're genuinely suited to, and give it real attention.\n\n[One concrete thing that sets Meridian apart: a method you're known for, or a result you've delivered; confirm, so this line isn't generic.]\n\nWe've stayed close to the two industries we know best, and that focus is deliberate. When you understand how a business actually runs day to day, its data starts answering sharper questions."
+      },
+      "4": {
+        "arm": "turn0",
+        "run": 4,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "No fabricated specifics. It states only the brief's facts (Melbourne, 2019, team of twelve, retail and logistics) and deliberately leaves service lines, client results, and contact details as open brackets, explicitly refusing to invent them ('I left them open rather than invent client results'). Nothing beyond the brief is asserted as fact."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon. Scanning for delve/leverage/cutting-edge/seamless/empower/elevate/transformative/unlock/foster/synergy/innovative/robust and kin yields zero hits. 'Network optimisation' appears only inside a bracketed instruction as an example service name, not as promotional prose."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No importance inflation or promotional register. No 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential'. Claims stay at the brief's altitude: 'Being small is deliberate', 'We take on fewer engagements'. The framing is modest and grounded rather than self-aggrandising."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots in any form. Triads are within limits: 'what to stock, where to move it, and what the numbers are quietly warning about' is a single three-item list (at most one triad allowed). No copula-dodging saturation; sentences use normal finite verbs."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Prose paragraphs, no bold scaffolds or headers. However there is one structural violation: a horizontal-rule divider ('---' on line 9) separating the copy from the meta-note. This is a scaffold/separator element beyond clean prose, so one instance."
+            }
+          ],
+          "total": 9
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays strictly within brief facts (Melbourne, 2019, twelve people, retail/logistics); leaves two bracketed placeholders explicitly rather than inventing client results, service lines, or a CTA. Nothing fabricated."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present at all — no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, or robust."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "Tone is plain and conversational ('Being small is deliberate', 'that's the conversation we like having'); no industry-leading/trusted-partner/commitment-to-excellence framing or unearned claims."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. One triad present ('what to stock, where to move it, and what the numbers are quietly warning about'), which is within the allowed limit of one; no copula-dodging pattern beyond a single natural instance ('The person who scopes your project is the person who builds it')."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Plain prose paragraphs throughout, no bold text, no headers/scaffolding. Only one em-dash used in the whole piece, well short of saturation; bracketed placeholders are inline prose notes, not structural scaffolding."
+            }
+          ],
+          "total": 10
+        },
+        "reply": "Meridian Analytics is a Melbourne data consultancy. We started in 2019, and today we're a team of twelve, working mostly with companies in retail and logistics.\n\nThose industries run on more data than anyone can keep up with — more of it every quarter, and moving too fast to act on by hand. Our work is turning that into decisions people can actually make: what to stock, where to move it, and what the numbers are quietly warning about before anyone else notices. [Name the two or three service lines you want front and centre — e.g. demand forecasting, network optimisation, reporting — and one client result you're proud to lead with.]\n\nBeing small is deliberate. The person who scopes your project is the person who builds it, so the work doesn't get handed down to a junior team you never meet. We take on fewer engagements and stay close to each one.\n\nIf you suspect your data is worth more than you're getting out of it, that's the conversation we like having. [Add your contact details or preferred call-to-action.]\n\n---\n\nThe brackets are where the page needs a fact only you have — I left them open rather than invent client results or a service list you'd then have to correct."
+      },
+      "5": {
+        "arm": "turn0",
+        "run": 5,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Every specific stays within the brief: Melbourne, started 2019, team of twelve, clients mostly in retail and logistics. No awards, named clients, or invented statistics. 'Years of that work mean we tend to understand a problem by the first conversation' is a fair inference from a 2019 founding, not a fabricated fact."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present — no delve, leverage, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust, or cutting-edge. Language is plain and concrete ('scattered across systems', 'stock, demand, and movement', 'reporting your team will actually open')."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation — no 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential'. Claims stay at the brief's altitude: 'stayed small on purpose', 'margins are thin and timing decides the outcome', 'if a report doesn't change what you do on Monday, it hasn't done its job'."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots anywhere. At most one triad ('stock, demand, and movement'). No copula-dodging saturation — sentences use straightforward subject-verb openers ('Meridian Analytics is', 'We started', 'Most of our clients are', 'We measure a project by')."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Four plain prose paragraphs with no bold, headers, or bullet scaffolds. Em-dashes are not saturated — roughly one ('decisions but can't yet get at it — because it's scattered'), well below any saturation threshold."
+            }
+          ],
+          "total": 10
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays within the brief's facts (12 people, Melbourne, 2019, retail/logistics); no invented client names, awards, or statistics. Claims like 'years of that work mean we tend to understand a problem by the first conversation' are soft, unverifiable-but-plausible framing rather than fabricated facts."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present — no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, or robust anywhere in the text."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No promotional inflation such as 'industry-leading' or 'trusted partner'; the closing claim ('if a report doesn't change what you do on Monday, it hasn't done its job') stays at a modest, brief-appropriate altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots anywhere. Only one triad ('stock, demand, and movement' in paragraph 3), within the one-triad allowance, and no copula-dodging saturation — sentences use varied active verbs (started, means, keeps, measure, pays off) rather than repeated 'is' constructions."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Plain prose in four short paragraphs, no headers, no bold scaffolding, and only a single em-dash used once in paragraph 1 — not saturation."
+            }
+          ],
+          "total": 10
+        },
+        "reply": "Meridian Analytics is a data consultancy in Melbourne, working with businesses that already hold the data they need to make better decisions but can't yet get at it — because it's scattered across systems that were never built to talk to each other.\n\nWe started in 2019 and have stayed small on purpose. A team of twelve means the people who scope your project are the people who do the work, and it keeps the range wide, from data engineering through to reporting your team will actually open.\n\nMost of our clients are in retail and logistics. Those are industries where margins are thin and timing decides the outcome, and where a clearer view of stock, demand, and movement pays for itself fast. Years of that work mean we tend to understand a problem by the first conversation rather than the third.\n\nWe measure a project by one thing: whether someone on your side ends up making a decision they couldn't have made before, backed by numbers they trust. If a report doesn't change what you do on Monday, it hasn't done its job."
+      },
+      "6": {
+        "arm": "turn0",
+        "run": 6,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Sticks strictly to the brief: twelve people, Melbourne, retail and logistics, 2019. Invents no awards, client names, or statistics. Crucially, the one spot where a fabricated proof point would normally go is replaced by an honest editorial placeholder: '[Concrete proof belongs here — a client outcome or a years-of-partnership figure. Confirm the specifics before publishing.]' Nothing beyond the brief is asserted as fact."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon. Scanned for delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust — none present. Verbs are plain ('turn the data they already collect into decisions they can act on', 'making the data clear enough')."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No importance inflation or promotional register. No 'industry-leading', 'trusted partner', 'commitment to excellence'. The 'deliberately small' framing is a grounded, brief-consistent claim about being 12 people, not a boast. Register stays at the brief's altitude throughout."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots in any form. No triad saturation (at most one, e.g. none problematic). No copula-dodging saturation — sentences use normal subject-verb structure ('Retail and logistics run on...', 'We're deliberately small', 'Twelve people means...')."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Prose paragraphs, no bold scaffolds or headers. However em-dash usage appears twice ('acting on it while acting still changes the outcome' aside is fine, but dashes appear in 'chain of account managers' area and notably the bracketed line uses an em-dash). More significantly, the bracketed editorial placeholder '[Concrete proof belongs here...]' is a structural intrusion — it is not delivered About-page prose but an author's note left inline, which breaks the finished-copy structure. Counts as one violation."
+            }
+          ],
+          "total": 9
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "No invented client names, stats, or awards. The bracketed placeholder \"[Concrete proof belongs here — a client outcome or a years-of-partnership figure. Confirm the specifics before publishing.]\" is an explicit flag for missing info rather than a fabrication — the assistant declined to invent a proof point and instead marked the gap. Nothing beyond the brief's given facts (12 people, Melbourne, 2019, retail/logistics) is asserted as fact."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon items (delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) appear anywhere in the text."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation language like 'industry-leading' or 'trusted partner'. Claims stay grounded: 'twelve-person data consultancy', 'deliberately small', 'you work with the people doing the work' — all scoped to the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 1,
+              "evidence": "No not-just-X-but-Y pivots and no em-dash-driven copula dodging in the prose paragraphs. However paragraph 4 contains a triad-like structure and the piece includes a bracketed meta-instruction left in the deliverable itself, which is a structural defect (see criterion 5); on pure sentence-shape grounds one minor issue is the slightly formulaic parallelism in 'the person who scopes your project is the person who builds it' paired with 'nothing gets handed down a chain' — borderline but not a clear second violation, so scored 1 for the leftover bracketed instruction bleeding into sentence construction (it reads as an aside note rather than a clean, finished sentence, an incomplete-copy defect)."
+            },
+            {
+              "criterion": 5,
+              "score": 0,
+              "evidence": "The copy is otherwise clean prose paragraphs with no bold/headers, but it leaves a literal unresolved editorial placeholder in the middle of the About-page copy: '[Concrete proof belongs here — a client outcome or a years-of-partnership figure. Confirm the specifics before publishing.]' This is a structural scaffold/meta-note delivered as if it were part of the final copy, and it also uses an em-dash within that bracketed aside — this is a clear delivery failure (the task asked for the About-page copy itself, not copy-plus-editor-notes), so it counts as more than one violation of clean structure (an unfinished-deliverable insertion plus an em-dash within it)."
+            }
+          ],
+          "total": 7
+        },
+        "reply": "Meridian Analytics is a twelve-person data consultancy in Melbourne. We've worked with retail and logistics clients since 2019, helping them turn the data they already collect into decisions they can act on.\n\nRetail and logistics run on timing and volume. Stock that arrives late or a forecast that misses last week's demand shows up in the numbers fast, and so does the value of getting it right. That's the work we do: making the data clear enough that a team can act on it while acting still changes the outcome.\n\nWe're deliberately small. Twelve people means the person who scopes your project is the person who builds it, and nothing gets handed down a chain of account managers who've never seen your data. You work with the people doing the work.\n\n[Concrete proof belongs here — a client outcome or a years-of-partnership figure. Confirm the specifics before publishing.]\n\nIf you're sitting on data you suspect is worth more than you're getting from it, that's usually where we start. Tell us what you're trying to see more clearly, and we'll show you what's in there."
+      },
+      "7": {
+        "arm": "turn0",
+        "run": 7,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Only brief-given facts appear: Melbourne, 2019, twelve people, retail and logistics. Every other specific is an explicit bracketed placeholder ('[One or two lines on what you actually do...]', '[Optional proof point...]'). No awards, client names, or statistics invented."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present. Phrasing is plain ('make sense of it', 'sitting on data', 'get in touch'). None of delve/leverage/cutting-edge/seamless/empower/elevate/transformative/unlock/foster/synergy/innovative/robust or kin."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "Claims stay at the brief's altitude. 'We're deliberately small' and 'the person you talk to in the first meeting is the person doing the work' are grounded, not promotional. No 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential' framing."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. No completed triad in the delivered prose. Sentences use normal subject-verb construction with no copula-dodging saturation."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Prose paragraphs throughout; no bold text, no headers. Only two em-dashes total (line 3), well short of saturation. Bracketed spots are placeholder prompts, not the named structural violations."
+            }
+          ],
+          "total": 10
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "The delivered text sticks to the brief's facts (Melbourne, 2019, twelve people, retail and logistics) and invents nothing beyond that — the actual service details and proof points are left as unfilled brackets rather than fabricated, so there are no invented awards, clients, or stats."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon items (delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) appear anywhere in the text."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "Register stays plain and modest throughout ('We're deliberately small', 'get in touch'); no industry-leading/trusted-partner/commitment-to-excellence framing appears."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots, no triads, no copula-dodging; sentences are simple and declarative."
+            },
+            {
+              "criterion": 5,
+              "score": 0,
+              "evidence": "This is not finished prose copy: it is a template riddled with bracketed meta-instructions ('[One or two lines on what you actually do...]', '[If you have a signature way of working...]', '[Optional proof point...]') and an explicit closing note to the user ('The bracketed spots are where the copy needs a fact I don't have — fill those in and it's ready'), which is a structural failure to deliver the requested About-page copy."
+            }
+          ],
+          "total": 8
+        },
+        "reply": "Meridian Analytics is a Melbourne data consultancy. We've been at it since 2019, and today we're a team of twelve.\n\nMost of our work is with retail and logistics companies — businesses that generate a huge amount of data every day and rarely have the time or tools to make sense of it. That's where we come in. [One or two lines on what you actually do for these clients: reporting dashboards, demand forecasting, cleaning up data pipelines? Name the core services you want to lead with.]\n\nWe're deliberately small. Twelve people means the person you talk to in the first meeting is the person doing the work. [If you have a signature way of working — fixed-scope projects, embedding with a client's own team, a particular toolset — describe it here.]\n\n[Optional proof point: a typical result you've delivered, how long clients tend to stay, or a corner of retail or logistics you know especially well. Anything concrete you can stand behind.]\n\nIf you're sitting on data you suspect could be telling you more, get in touch.\n\nThe bracketed spots are where the copy needs a fact I don't have — fill those in and it's ready."
+      },
+      "8": {
+        "arm": "turn0",
+        "run": 8,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Nothing is fabricated. Every potential specific (services, client results, engagement length, CTA) is left as an explicit bracketed placeholder, and the closing note states outright that writing them in 'would just put plausible fiction on your live About page.' Only brief-given facts appear: Melbourne, 2019, twelve people, retail and logistics."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon. Scanning for delve/leverage/cutting-edge/seamless/empower/elevate/transformative/unlock/foster/synergy/innovative/robust and kin yields zero hits. Plain diction throughout ('run on questions', 'a faster start', 'no hand-off')."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No importance inflation or promotional register. No 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential'. Claims stay at the brief's altitude; even the specialisation framing is posed as a question rather than asserted as a boast."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. 'The focus is deliberate' is a plain copula, not a saturation pattern. No triads. Sentence shapes are clean and varied; no copula-dodging."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Prose paragraphs with no bold scaffolds or headers, and no em-dash saturation. However, the deliverable is not continuous About-page prose: it is dominated by inline bracketed [placeholders] used as structural scaffolding across nearly every paragraph, which functions as a non-prose skeleton rather than finished copy. One violation of the 'prose paragraphs' expectation."
+            }
+          ],
+          "total": 9
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "No invented facts anywhere; the two real paragraphs stick strictly to Melbourne/2019/twelve people/retail and logistics, and every gap beyond the brief is left as an explicit bracketed question rather than fabricated."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon (no 'delve', 'leverage', 'cutting-edge', 'seamless', 'empower', 'elevate', 'transformative', 'unlock', 'foster', 'synergy', 'innovative', 'robust') anywhere in the text."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "Tone stays flat and factual throughout ('is a Melbourne data consultancy', 'a team of twelve'); no 'industry-leading', 'trusted partner', or similar inflated framing appears."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots, no triads, and no copula-dodging constructions in the delivered sentences."
+            },
+            {
+              "criterion": 5,
+              "score": 0,
+              "evidence": "The delivered 'About-page copy' is not clean prose: it is riddled with unresolved bracketed placeholders ('[which questions you solve most...]', '[what the specialisation buys the client...]', '[what the size means in practice...]', '[Proof the brief doesn't yet give me...]', '[who they are...]', '[How to start...]') interleaved with the prose, plus a closing meta-paragraph explaining why it refused to finish — this is scaffolding/non-prose structure left inside the copy itself, and the task (deliver ~200 words of finished About-page copy) was not completed as a clean prose deliverable."
+            }
+          ],
+          "total": 8
+        },
+        "reply": "Meridian Analytics is a Melbourne data consultancy. We began in 2019 and are now a team of twelve, working mostly with companies in retail and logistics.\n\nThose two industries run on questions that data can answer well ([which questions you solve most, e.g. demand forecasting, inventory, delivery routing, pricing?]), and most of our work has been there since we started. The focus is deliberate: [what the specialisation buys the client, e.g. a faster start because you already know the systems and the seasonality?].\n\nAt twelve people, [what the size means in practice for a client, e.g. the person who scopes your project is the one who does it, with no hand-off to junior staff?].\n\n[Proof the brief doesn't yet give me: a client result with a number, a named engagement, or how long clients typically stay?]\n\nThe clients we fit best are [who they are, e.g. mid-sized retailers and logistics operators sitting on data they aren't fully using?].\n\n[How to start: the first conversation, what it costs, and what a client walks away with?]\n\nEverything bracketed is a specific the brief doesn't contain — your actual services, a client result, the call to action. Give me those and I'll finish it to a clean 200 words; writing them in myself would just put plausible fiction on your live About page."
+      }
+    },
+    "reinject": {
+      "1": {
+        "arm": "reinject",
+        "run": 1,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "No fabricated specifics. It states only the six brief facts (Melbourne, 2019, team of twelve, retail and logistics) and explicitly refuses to invent awards, client outcomes, or numbers, leaving them as bracketed slots with an instruction to 'leave this line out rather than round one up.' Nothing beyond the brief is asserted as fact."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon in the delivered prose. Scanning lines 1, 5, 9, and the meta-note: no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust. 'positioning' and 'engagements' are ordinary business words, not tells."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No importance inflation or promotional register. Claims stay at the brief's altitude: 'a Melbourne data consultancy,' 'a team of twelve.' No 'industry-leading,' 'trusted partner,' or 'commitment to excellence.' The bracket prompts even actively discourage puffery ('write the sentence that should lead into it')."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. Sentence shapes are plain declaratives. The one near-triad in the meta ('the services, a proof point, and your positioning') is a single list, within the at-most-one-triad allowance. No copula-dodging saturation."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Prose paragraphs and no bold or headers, but a '---' horizontal rule separates the copy from a meta-note. That structural separator/scaffold device is one violation of the clean-prose requirement (line 13)."
+            }
+          ],
+          "total": 9
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "No invented specifics are stated as fact. The reply explicitly refuses to invent client outcomes, figures, or awards, and instead leaves bracketed placeholders with instructions like 'Give a true number, or leave this line out rather than round one up.' Only the brief's six facts (name, Melbourne, 2019, twelve people, retail, logistics) appear as actual content."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon words (delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) appear anywhere in the finished text or the bracketed instructions."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation language appears; the closing meta-note even explicitly instructs against invented superlatives, and the actual delivered sentences stay flat and factual."
+            },
+            {
+              "criterion": 4,
+              "score": 0,
+              "evidence": "This is not a finished About-page copy at all -- it is largely an unfilled template with six bracketed instructional gaps (lines 3, 5, 7, 9, 11) constituting the bulk of the '~200 words', plus an appended meta-commentary paragraph explaining why it didn't write real copy. The task explicitly asked for the About-page copy to be delivered; this fails to deliver it as a finished piece of writing, which the rubric's sentence-shape criteria presuppose a completed copy to evaluate. Grading the two actual finished sentences alone, they are clean, but the deliverable as a whole does not satisfy 'the copy it delivered' since most of it is bracketed instructions to the user, not copy -- this constitutes a structural violation of what an About page must be (two or more issues: non-delivery of requested content plus meta-commentary intrusion)."
+            },
+            {
+              "criterion": 5,
+              "score": 0,
+              "evidence": "The output includes an explicit meta/scaffold section with a horizontal rule divider and bracket-based scaffolding ('[Core service goes here...]', '[Your strongest proof...]') which is exactly the kind of non-prose structural intrusion the rubric penalizes -- it is not plain prose paragraphs of finished copy but a template annotated with editorial instructions, followed by a separate explanatory paragraph breaking the fourth wall about the writing process itself."
+            }
+          ],
+          "total": 6
+        },
+        "reply": "Meridian Analytics is a Melbourne data consultancy, founded in 2019. We are a team of twelve, and most of the businesses we work with are in retail and logistics.\n\n[Core service goes here — the one thing the brief doesn't state and the page can't open without. Do you build reporting and dashboards, forecasting models, the data pipelines underneath, or the strategy that directs them? Name the work that actually pays the bills.]\n\nYears spent in retail and logistics have taught us [the angle you want to own: how demand really moves, or where inventory data quietly breaks. Pick the one that sounds like you.]\n\n[Your strongest proof: a client outcome with a real figure, the volume of data you handle, or the length of your longest engagement. Give a true number, or leave this line out rather than round one up.]\n\nTwelve people means [your case against a bigger firm: clients work directly with the person doing the analysis, and senior staff never hand the account off. Confirm this is how you run engagements.]\n\n[Closing line inviting the reader to get in touch. Your contact button sits below it, so write the sentence that should lead into it.]\n\n---\nThis ships as scaffolding, not finished copy: the brief gives me six facts (name, Melbourne, 2019, twelve people, retail, logistics) and an About page needs the services, a proof point, and your positioning — I've left those as bracketed slots rather than invent them. Fill the brackets and I'll tighten it into final copy."
+      },
+      "2": {
+        "arm": "reinject",
+        "run": 2,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Every specific matches the brief exactly: 'data consultancy in Melbourne', 'Since 2019', 'team of twelve', 'retail and logistics businesses'. No awards, client names, statistics, or invented facts. The example workloads (demand forecasting, delivery-hour mapping, reporting) are illustrative categories, not fabricated claims about actual clients or results."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present. Scanned for delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust and kin: none appear. Language is plain ('make sense of the numbers', 'turn them into decisions', 'proper attention')."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation. No 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential'. 'Being small is deliberate' and 'give each one proper attention' are modest, grounded claims that stay at the brief's altitude rather than inflating importance."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots in any form. Exactly one triad ('forecasting demand... mapping where a delivery operation loses hours, or building the reporting...'), which is within the at-most-one allowance. No copula-dodging saturation; sentences use normal subject-verb structure."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Four clean prose paragraphs. No bold scaffolds, no headers, no bullet lists. No em-dashes at all (the sentence in para 3 uses a comma, not an em-dash). Structure is fully compliant."
+            }
+          ],
+          "total": 10
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Only uses the given facts (12 people/'team of twelve', Melbourne, 2019, retail and logistics); illustrative examples (demand forecasting, delivery mapping, reporting dashboards) are generic capability descriptions, not fabricated facts, awards, clients, or stats."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No instances of delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust, or similar stock AI lexicon anywhere in the text."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional phrases like 'industry-leading' or 'trusted partner'; tone stays modest ('we'd be glad to talk it through', 'we take on fewer engagements') matching the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots; one triad present ('forecasting demand... mapping where... or building the reporting...') which is within the one-triad allowance; sentences use plain predication without copula-dodging constructions."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Four plain prose paragraphs with no bold text, no headers, and zero em-dashes used anywhere in the piece."
+            }
+          ],
+          "total": 10
+        },
+        "reply": "Meridian Analytics is a data consultancy in Melbourne. Since 2019, our team of twelve has helped retail and logistics businesses make sense of the numbers they already collect and turn them into decisions they can act on.\n\nWe work with companies that know their data holds answers but don't have the time or the in-house specialists to find them. That might mean forecasting demand across a store network, mapping where a delivery operation loses hours, or building the reporting that lets a manager see what's happening without waiting for month-end. We stay close to the operational reality of each business, because a model that ignores how the work actually gets done is one nobody ends up using.\n\nBeing small is deliberate. The people who scope your project are the people who deliver it, so you're never handed off to a team you've never met. We take on fewer engagements so we can give each one proper attention.\n\nIf you have data you suspect could be doing more for you, we'd be glad to talk it through."
+      },
+      "3": {
+        "arm": "reinject",
+        "run": 3,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays strictly within the brief: Melbourne, 2019, twelve people, retail and logistics. No awards, client names, statistics, or invented facts. The 'stock in the wrong place / truck running half empty' details are generic illustrative color, not fabricated claims."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present — no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, or robust. Diction is plain and concrete throughout ('data that's rarely tidy', 'show the working')."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation: no 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential'. Register is modest and honest ('whoever you brief is usually whoever does the work'; 'when a piece of analysis is genuinely uncertain, we say so'). Claims stay at the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots in any form. No triad saturation (at most one loose enumeration). Sentences use ordinary finite verbs with varied shapes — no copula-dodging saturation."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Four prose paragraphs, no bold scaffolds, no headers. Only two em-dashes across the whole ~200 words (lines 1 and 4), well below saturation. No structural violations."
+            }
+          ],
+          "total": 10
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Only uses the given facts (Melbourne, 2019, 12 people, retail/logistics). No client names, awards, or invented statistics. Process claims like 'we say so, and we show the working' are behavioral commitments, not fabricated facts."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present at all — no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, or robust."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No industry-leading/trusted-partner/commitment-to-excellence framing. Lines like 'small enough that whoever you brief is usually whoever does the work' and 'that's the gap we were built to fill' keep claims modest and grounded at the brief's scale."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots anywhere. No triads stacked (lists stay at pairs, e.g. 'stock sitting in the wrong place or a truck running half empty'). No copula-dodging — the text freely uses 'is', 'are', 'that's' rather than avoiding them with participial phrasing."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Four plain prose paragraphs, no headers, no bold scaffolding, and only a single em-dash in the whole ~200-word piece ('twelve of us — small enough that'), far from saturation."
+            }
+          ],
+          "total": 10
+        },
+        "reply": "Meridian Analytics is a Melbourne data consultancy. We've been at it since 2019, and there are twelve of us — small enough that whoever you brief is usually whoever does the work.\n\nMost of our clients work in retail and logistics. That's shaped what we're good at: these are businesses with plenty of data that's rarely tidy, where a forecast that's slightly off shows up fast as stock sitting in the wrong place or a truck running half empty. The work that matters to us is the models and data pipelines an operations team actually runs against, well after the project is signed off.\n\nWe stay deliberately small. It means we take on fewer engagements and go deeper into each one, working alongside your team, close enough to learn how it really operates. When a piece of analysis is genuinely uncertain, we say so, and we show the working.\n\nIf your data has outgrown spreadsheets but doesn't yet justify a full in-house team, that's the gap we were built to fill."
+      },
+      "4": {
+        "arm": "reinject",
+        "run": 4,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Only brief-given facts appear (Melbourne, since 2019, retail and logistics, team of 12). No awards, client names, or statistics invented. The reply explicitly refuses to fabricate services, client problems, or results figures, inserting bracketed placeholders instead (lines 5, 7, 9) and stating inventing them 'would put false claims on your own About page.'"
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present. Scanned for delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust and kin — none appear. Phrasing is plain: 'make sense of it', 'run on margins', 'go deep'."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional register or importance inflation. No 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential'. Claims stay modest and at the brief's altitude: 'We're a team of 12, and that's deliberate'; 'we keep the team small on purpose and take on fewer projects so we can go deep on each.'"
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. Exactly one triad (line 5: 'stock sitting in the wrong place, demand that shifts week to week, costs buried between systems'), which is within the at-most-one allowance. No copula-dodging saturation; sentences use normal finite verbs."
+            },
+            {
+              "criterion": 1,
+              "score": 1,
+              "evidence": "The About-copy body (lines 1-9) is clean prose paragraphs with no bold, headers, or em-dash saturation (line 5 uses a colon, not dashes). However the reply appends a markdown horizontal rule '---' (line 11) followed by a meta process-note, introducing one scaffold/divider element beyond plain prose — one structural violation."
+            }
+          ],
+          "total": 9
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "No invented awards, client names, or statistics anywhere. The draft explicitly refuses to fabricate a services description, client-problem specifics, or a retention/results figure, leaving bracketed placeholders instead ('[Describe what Meridian actually delivers...]', '[If you have a client-retention or results figure...]'). Everything actually stated stays within or restates the brief (12 people, Melbourne, 2019, retail/logistics)."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon terms (delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) appear anywhere in the delivered text."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation language like 'industry-leading' or 'trusted partner' appears; claims stay modest and grounded ('a team of 12, and that's deliberate', 'we keep the team small on purpose')."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. No triads beyond one mild list ('stock sitting in the wrong place, demand that shifts week to week, costs buried between systems') which counts as at most one. No copula-dodging saturation; sentences use plain 'is'/'we've' constructions."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "The body is prose paragraphs with no bold or headers, but the piece is broken by three bracketed meta-instructions embedded mid-copy plus a horizontal rule and an explanatory footnote outside the About-page copy itself — this is scaffolding/meta-commentary intruding on what should be a clean, complete, deliverable text, and it is also well under the ~200-word target because a third of it is placeholder brackets rather than finished copy."
+            }
+          ],
+          "total": 9
+        },
+        "reply": "Meridian Analytics is a Melbourne data consultancy. Since 2019 we've worked with retail and logistics businesses that have plenty of data and not enough time to make sense of it.\n\nWe're a team of 12, and that's deliberate. You work directly with the analysts doing the analysis, and on most projects you'll know everyone who touches your data by name.\n\nRetail and logistics both run on margins that don't forgive guesswork: stock sitting in the wrong place, demand that shifts week to week, costs buried between systems that were never built to talk to each other. [One or two sentences naming the specific problems you solve for these clients, and how — confirm.]\n\n[Describe what Meridian actually delivers — the core services or engagement model, e.g. forecasting or data infrastructure — confirm.]\n\nWe keep the team small on purpose and take on fewer projects so we can go deep on each. [If you have a client-retention or results figure you can stand behind, add it here.]\n\n---\nThe brackets mark the three places the copy needs real specifics I don't have — your services, the client problems you solve, and any results figure — since inventing them would put false claims on your own About page."
+      },
+      "5": {
+        "arm": "reinject",
+        "run": 5,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Uses only brief facts (Melbourne, 2019, twelve people, retail and logistics). 'Seven years in' correctly derives from 2019 given the 2026 date. All uncertain specifics (core services, the problem solved, retention reasons) are left as explicit [confirm: ...] placeholders rather than invented. Nothing fabricated."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present. Scanned for delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust and kin. Zero found; language is plain ('turn that data into decisions', 'stayed small on purpose')."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential' framing. Register is anti-promotional: 'honest about which projects we can do well and which we cannot' and 'where we do our best work' stay at the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots in any form. No triads. Sentences use normal subject-verb structure ('Meridian Analytics is', 'We have stayed small', 'retail and logistics are still where we do our best work'); no copula-dodging saturation. The 'do well / cannot' contrast is a simple two-part clause, not a pivot."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Prose paragraphs throughout, no bold scaffolds or headers. No em-dashes at all (colons are used for the appositive constructions instead), so no em-dash saturation."
+            }
+          ],
+          "total": 10
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "No invented awards, client names, or statistics; stays within Melbourne/2019/12-people/retail-logistics brief and explicitly refuses to fabricate services or reasons clients stay, using placeholders instead."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon terms (delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) appear anywhere in the text."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation like 'industry-leading' or 'trusted partner'; tone stays modest ('we opened in 2019', 'stayed small on purpose', 'where we do our best work')."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots, no triads, no copula-dodging saturation; sentences are plain declaratives and compounds."
+            },
+            {
+              "criterion": 5,
+              "score": 0,
+              "evidence": "The copy is left unfinished with three bracketed meta-placeholders embedded directly in the body text ('[confirm: your core services, e.g. reporting or forecasting]', '[confirm: the specific problem you solve best]', '[confirm: why clients keep working with you]'), so what was delivered is not clean finished prose but a template with visible gaps -- more than one structural break from deliverable About-page copy."
+            }
+          ],
+          "total": 8
+        },
+        "reply": "Meridian Analytics is a Melbourne data consultancy. We opened in 2019 and have grown to a team of twelve, most of our work with companies in retail and logistics.\n\nThese are industries that run on data they rarely have time to use well: the sales and movement figures they already collect, sitting in systems that were never built to answer questions. We help turn that data into decisions a business can act on: [confirm: your core services, e.g. reporting or forecasting], shaped around what each client actually needs to know.\n\nWe have stayed small on purpose. A team of twelve keeps us close to the work and to the people we do it for, and it lets us be honest about which projects we can do well and which we cannot.\n\nClients usually come to us with [confirm: the specific problem you solve best], and stay because of [confirm: why clients keep working with you].\n\nSeven years in, retail and logistics are still where we do our best work. If your business is holding more data than it is getting value from, that is where we start."
+      },
+      "6": {
+        "arm": "reinject",
+        "run": 6,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays strictly within the brief: Melbourne, started 2019, twelve people, retail and logistics. No awards, client names, statistics, or invented facts. 'Shop floor or a distribution centre' are generic illustrations of the two named sectors, not fabricated clients."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon (no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust). 'Partner' appears once as a plain noun ('the kind of partner'), not as the promotional 'trusted partner' tell."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential' framing. Register stays modest and grounded ('stayed deliberately small', 'you aren't paying us to learn your fundamentals on the job'). Claims stay at the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. No triads (the repeated 'coming back' phrasing is a two-clause echo, not a three-item list). Normal subject-verb sentences throughout, no copula-dodging saturation."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Four prose paragraphs. No bold, headers, or bullet scaffolds. No em-dashes anywhere; sentences use commas and periods only."
+            }
+          ],
+          "total": 10
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Only uses brief facts (12 people, Melbourne, 2019, retail and logistics, founding). No invented client names, awards, or statistics anywhere in the copy."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No instances of delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust, or similar stock AI lexicon."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "Register stays grounded throughout ('we understand what matters', 'we'd sooner hand you something you still use in six months than something that demos well and gathers dust'); no 'industry-leading', 'trusted partner', or 'commitment to excellence' framing."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots found. Paragraph 4 has parallel 'Sometimes... Sometimes...' structure but this is not a triad or copula-dodging construction; sentences use plain subject-verb form throughout."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Five plain prose paragraphs, no headers, no bold scaffolding, and zero em-dashes used anywhere in the text."
+            }
+          ],
+          "total": 10
+        },
+        "reply": "Meridian Analytics is a data consultancy in Melbourne. We started in 2019 and have stayed deliberately small: twelve people who work directly with the clients they're assigned to, without a chain of hand-offs in between.\n\nMost of our work is with retail and logistics businesses. That focus is a choice. Doing similar work repeatedly means we understand what matters for a shop floor or a distribution centre before the first meeting, so you aren't paying us to learn your fundamentals on the job.\n\nThe work itself is helping you make sense of the data you already have and act on it. Sometimes that means building the reporting a business has outgrown its spreadsheets for. Sometimes it means answering one question that keeps coming back around, and answering it well enough that it stops coming back. We'd sooner hand you something you still use in six months than something that demos well and gathers dust.\n\nWe keep the team small on purpose. When you work with Meridian, you work with the people doing the analysis, and you can reach them directly when something changes. If that's the kind of partner you've been looking for, get in touch."
+      },
+      "7": {
+        "arm": "reinject",
+        "run": 7,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Only brief-given facts appear: Melbourne, 2019, 'team of twelve', retail and logistics. No awards, client names, or statistics. Line 7 explicitly refuses to invent a proof point and inserts a bracketed placeholder for the user to supply the real figure. Nothing fabricated."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present. Scanned for delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust — none appear. Phrasing stays plain ('make better use of the data they already collect')."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential' framing. Claims stay at the brief's altitude ('Staying small is a choice', 'the projects where we can genuinely help'). 'we do best' is mild and grounded, not inflated puffery."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. No triad — the 'seasonal demand... routing and inventory pressures' construction is a two-part parallel, not three. Sentences use normal subject-verb structure; no copula-dodging saturation."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Prose paragraphs, no bold, no headers. But em-dashes appear three times across a short (~200-word) piece — two in line 3's single sentence plus one in line 5 — which reads as an em-dash tic leaning toward saturation. Counts as one violation."
+            }
+          ],
+          "total": 9
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Uses only brief facts (12 people, Melbourne, 2019, retail/logistics); explicitly refuses to invent a proof-point number and instead leaves a bracketed placeholder asking for the real figure rather than fabricating one."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No instances of delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust, or similar stock AI lexicon anywhere in the copy."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No industry-leading/trusted-partner/commitment-to-excellence framing; claims stay modest and grounded ('staying small is a choice', 'projects where we can genuinely help')."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots; the sector list ('seasonal demand... routing and inventory pressures') is a pair not a triad; no copula-dodging saturation, normal is/are and active verbs throughout."
+            },
+            {
+              "criterion": 5,
+              "score": 0,
+              "evidence": "Paragraph 7 embeds a bracketed meta-instruction to the requester directly inside the delivered copy — '[A concrete proof point belongs here (projects delivered, or how long a typical client relationship tends to run); drop in the real figure.]' — leaving an unfinished editorial placeholder inside what was supposed to be finished About-page prose."
+            }
+          ],
+          "total": 8
+        },
+        "reply": "Meridian Analytics is a Melbourne data consultancy. Since 2019, our team of twelve has helped retail and logistics businesses make better use of the data they already collect.\n\nWe work mostly across those two sectors because we understand how they run — the seasonal demand a retailer plans for, the routing and inventory pressures that shape a logistics operator's week. Knowing the terrain means we spend less time getting up to speed and more time on the problem you actually hired us for.\n\nStaying small is a choice. With twelve people, senior staff stay close to the work from the first conversation through to delivery, and we take on the projects where we can genuinely help.\n\nWhat we build is meant to last past the final invoice: forecasting and analytics your own team can own and run, without us on permanent retainer. [A concrete proof point belongs here (projects delivered, or how long a typical client relationship tends to run); drop in the real figure.]\n\nIf your data should be answering a question it currently isn't, that's the kind of work we do best."
+      },
+      "8": {
+        "arm": "reinject",
+        "run": 8,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays strictly within the brief: Melbourne, 2019, 'team of twelve' (12 people), retail and logistics. No awards, client names, or invented statistics. 'More data than they can put to use' and 'thin margins, stockout, late shipment' are generic industry framing, not fabricated facts."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present. No delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, or robust. Only plain domain terms: pipelines, models, dashboards, clean and connect."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation: no 'industry-leading,' 'trusted partner,' 'commitment to excellence,' or 'unlock potential.' Register stays modest — 'fewer guesses,' 'numbers you can trust,' 'it is all we do.' Claims stay at the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. Exactly one triad ('pipelines that clean... models that find... dashboards that put'), which is within the at-most-one allowance. No copula-dodging saturation; sentences use normal verbs."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Prose paragraphs throughout. No bold, headers, or bullet scaffolds. No em-dashes at all — the copy uses colons ('constraints: thin margins'; 'same throughout: fewer guesses'), not em-dash saturation."
+            }
+          ],
+          "total": 10
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Only uses brief facts: twelve people, Melbourne, since 2019, retail and logistics. No invented clients, awards, or statistics."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon items (delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) appear anywhere in the text."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No inflated claims like 'industry-leading' or 'trusted partner'; language stays at brief's altitude, e.g. 'we build the pipelines... the models... the dashboards' and 'fewer guesses, and numbers you can trust.'"
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. One triad present ('the pipelines that clean and connect your data, the models that find the pattern in it, and the dashboards that put an answer in front of you'), which is within the one-triad allowance. No copula-dodging saturation."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Plain prose paragraphs, no bold text, no headers, no em-dashes used."
+            }
+          ],
+          "total": 10
+        },
+        "reply": "Meridian Analytics is a Melbourne data consultancy. Since 2019, our team of twelve has worked with retail and logistics businesses that collect more data than they can put to use.\n\nMost of that data sits idle. It gets logged and stored, then rarely reaches the people deciding what to order or how to route a shipment. We close that gap. We build the pipelines that clean and connect your data, the models that find the pattern in it, and the dashboards that put an answer in front of you when the decision is due. The aim stays the same throughout: fewer guesses, and numbers you can trust when you act on them.\n\nBecause we work only in retail and logistics, we start most projects already understanding your constraints: thin margins, and the real cost of a stockout or a late shipment. Less time goes into explaining your business to us, and more of it into improving how your business runs.\n\nBeing twelve people is deliberate. You work directly with the people who build your models, close enough to the work that nothing gets lost passing between hands.\n\nGood data should answer the questions your business is already asking. That is the work we do, and it is all we do."
+      }
+    },
+    "bare": {
+      "1": {
+        "arm": "bare",
+        "run": 1,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays within the brief: Melbourne, \"since 2019,\" \"team of twelve,\" retail and logistics. The operational descriptions (demand forecasts, inventory models, delivery routes, distribution centres) are generic to those industries, not fabricated awards, client names, or statistics. Nothing invented."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present. No delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, or robust. Language stays plain (\"turning messy operational data into decisions people can actually act on\")."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional register: no \"industry-leading,\" \"trusted partner,\" \"commitment to excellence,\" or \"unlock potential.\" Claims stay grounded and even self-limiting (\"We're deliberately small,\" \"we'd rather do a handful of projects properly\"). Clean."
+            },
+            {
+              "criterion": 4,
+              "score": 1,
+              "evidence": "Two triads exceed the one-triad allowance: \"analysts, engineers, and consultants\" and \"understand the problem before reaching for a tool, show our working, and leave clients able to run what we build.\" That is one clear violation of the sentence-shape rule."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Uses a bold header \"**About Meridian Analytics**\", which the rubric explicitly bars (\"no bold scaffolds, headers\"). One structural violation; em-dashes present but not saturated (three)."
+            }
+          ],
+          "total": 8
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays within the brief (12 people, Melbourne, 2019, retail/logistics). No client names, awards, or statistics invented. Generic sensory claims like 'sat in enough distribution centres and store back-offices' are unverifiable color but not concrete fabricated facts."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon items (delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) appear anywhere in the copy."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No 'industry-leading,' 'trusted partner,' or 'commitment to excellence' framing. Tone is deliberately modest ('We're deliberately small,' 'we'd rather do a handful of projects properly than spread ourselves thin'), matching the brief's altitude."
+            },
+            {
+              "criterion": 2,
+              "score": 1,
+              "evidence": "No not-just-X-but-Y pivots present. However there are two triad-shaped constructions: 'analysts, engineers, and consultants' and the three-item list 'demand forecasts... inventory models... delivery networks tuned to...' — exceeding the 'at most one triad' allowance."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Body is clean prose paragraphs with no internal bold scaffolding and only one em-dash ('team of twelve — analysts, engineers, and consultants'), not saturation. But the delivered piece opens with a bolded header '**About Meridian Analytics**', which is itself a bold/header scaffold element the rubric flags."
+            }
+          ],
+          "total": 8
+        },
+        "reply": "Here's About-page copy for Meridian Analytics, at about 200 words:\n\n---\n\n**About Meridian Analytics**\n\nMeridian Analytics is a data consultancy based in Melbourne. We've been at it since 2019, and today we're a team of twelve — analysts, engineers, and consultants who spend our days turning messy operational data into decisions people can actually act on.\n\nMost of our work is in retail and logistics. That means demand forecasts that hold up through a peak season, inventory models that free up cash without emptying shelves, and delivery networks tuned to shave hours and dollars off every route. We've sat in enough distribution centres and store back-offices to know that a model is only useful if the people on the floor trust it.\n\nWe're deliberately small. When you work with us, you work with the people building the thing — not a sales team that hands you off after the contract is signed. We'd rather do a handful of projects properly than spread ourselves thin.\n\nOur approach is plain: understand the problem before reaching for a tool, show our working, and leave clients able to run what we build without us. Good analytics shouldn't need a translator.\n\nIf retail or logistics data is holding you back, we'd like to hear about it.\n\n---\n\nWant it warmer, more formal, or trimmed closer to a strict 200?"
+      },
+      "2": {
+        "arm": "bare",
+        "run": 2,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays within the brief: 'Twelve people', Melbourne, 'Since 2019', retailers and logistics. No awards, client names, or invented statistics. Service details (demand forecasting, inventory/route optimisation, reporting) are reasonable elaborations, not fabricated facts."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present — no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, or robust. 'optimisation' appears only as a plain service description."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation: no 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential'. Register stays grounded ('We stay small on purpose', 'work we can do well rather than all the work we can win'), at the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. One rhetorical triad ('get your data into order, build the models..., and leave your team able to run them'); the second run ('Demand forecasting, inventory and route optimisation, and the reporting') is an items list, not a rhetorical triad. Normal subject-verb sentences, no copula-dodging saturation."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Prose paragraphs throughout, no bold scaffolds or section headers (only a page title). Two em-dashes across ~200 words, well short of saturation."
+            }
+          ],
+          "total": 10
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays within brief facts (12 people, Melbourne, 2019, retail/logistics); illustrative phrasing like 'empty shelves or a truck in the wrong city' and service list (demand forecasting, inventory/route optimisation) are generic descriptions, not invented facts, names, stats, or awards."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "None of the listed stock AI terms (delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) appear anywhere in the text."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No inflated claims like 'industry-leading' or 'trusted partner'; tone is deliberately modest, e.g. 'We stay small on purpose' and 'work we can do well rather than all the work we can win'."
+            },
+            {
+              "criterion": 4,
+              "score": 1,
+              "evidence": "No not-just-X-but-Y pivots, but two triadic constructions appear: 'get your data into order, build the models and dashboards... and leave your team able to run them' and 'Demand forecasting, inventory and route optimisation, and the reporting that ties it together' — exceeding the one-triad allowance."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Clean prose paragraphs with no bold or bullet scaffolds, but there is a title header line ('About Meridian Analytics') plus one em-dash ('logistics operators — the businesses where...'); minor structural deviation from pure unbroken prose."
+            }
+          ],
+          "total": 8
+        },
+        "reply": "About Meridian Analytics\n\nWe're a data consultancy in Melbourne. Twelve people, most of whom you'll actually talk to on a project rather than hear about in a kickoff deck.\n\nSince 2019 we've worked with retailers and logistics operators — the businesses where a decimal point in the wrong place shows up as empty shelves or a truck in the wrong city. That work has taught us to be practical. We care less about the newest model on the leaderboard and more about whether a forecast holds up on a Monday when the data comes in messy.\n\nWhat we do, in plain terms: we get your data into order, build the models and dashboards that answer the questions you're actually asking, and leave your team able to run them without us. Demand forecasting, inventory and route optimisation, and the reporting that ties it together are where we spend most of our time.\n\nWe stay small on purpose. It keeps the people who scoped your problem the same people who solve it, and it means we take on work we can do well rather than all the work we can win.\n\nIf that sounds like the kind of help you need, we'd like to hear what you're working on."
+      },
+      "3": {
+        "arm": "bare",
+        "run": 3,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "No invented specifics. Uses only the brief's facts: Melbourne, 2019, twelve people, retail and logistics. No awards, no client names, no statistics, no made-up credentials. 'Nearly all we do' is a soft characterization consistent with 'clients mostly in retail and logistics,' not a fabricated fact."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "Scan for stock AI lexicon (delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) finds zero. 'Earning its keep,' 'close that gap,' 'pattern-recognition' are plain idiom, not the flagged vocabulary."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation. No 'industry-leading,' 'trusted partner,' 'commitment to excellence,' or 'unlock potential.' The register stays grounded and even self-limiting ('There are twelve of us. That's deliberate... take on fewer engagements'). Claims stay at the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 1,
+              "evidence": "No not-just-X-but-Y pivots and no copula-dodging saturation. But there is a clear triad in line 9: 'The seasonal spikes, the thin margins, the supplier delays that cascade.' A second borderline triadic list appears in line 5 ('models, pipelines, and forecasts'). The distinct spike-margin-delay triad plus a second three-item list pushes past 'at most one triad,' making this one violation."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Prose paragraphs with no headers as section scaffolds, but line 1 is a bold title ('**About Meridian Analytics**'), which is a bold scaffold. Em-dashes appear in lines 5, 7, and 9 (three uses across the piece) — present but not clearly saturation. The bold heading is the one structural violation."
+            }
+          ],
+          "total": 8
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Only uses the given facts (12 people, Melbourne, 2019, retail/logistics) plus generic unattributed scenario descriptions ('dashboards nobody trusted', 'supplier delays that cascade') that are not presented as specific facts, awards, client names, or statistics. Nothing invented as a concrete claim."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon words present (no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust). Vocabulary is plain and specific throughout."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No 'industry-leading', 'trusted partner', or 'commitment to excellence' phrasing; claims like 'We know retail and logistics because that's nearly all we do' stay grounded and modest, matching the brief's altitude."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Uses a bolded header '**About Meridian Analytics**' at the top (line 1), which is a bold scaffold/header violation; otherwise the body is clean prose paragraphs with no em-dash saturation (only two em-dashes total, used conventionally) and no bullet lists."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots found. Triads appear (e.g. 'models, pipelines, and forecasts'; 'dashboards nobody trusted, reports that arrived too late... a nagging sense') but each instance is a single list construction, not more than one distinct rhetorical triad pattern causing saturation; no copula-dodging tricolon overuse beyond acceptable limit."
+            }
+          ],
+          "total": 9
+        },
+        "reply": "**About Meridian Analytics**\n\nWe're a data consultancy in Melbourne, and since 2019 we've done one thing: turn the numbers retail and logistics businesses already collect into decisions they can act on this quarter.\n\nMost of our clients came to us with the same problem. They had dashboards nobody trusted, reports that arrived too late to matter, and a nagging sense that the data was telling them something they couldn't quite read. We build the models, pipelines, and forecasts that close that gap — demand planning that survives a bad season, inventory that isn't guessing, delivery networks you can actually see inside.\n\nThere are twelve of us. That's deliberate. It means the person who scopes your project is the person who builds it, and you're never handed off to a team you've never met. We'd rather take on fewer engagements and stay close to each one than scale into a firm that treats you like a ticket number.\n\nWe know retail and logistics because that's nearly all we do. The seasonal spikes, the thin margins, the supplier delays that cascade — we've modelled them before, and we bring that pattern-recognition to your problem from day one.\n\nIf your data should be earning its keep and isn't, let's talk."
+      },
+      "4": {
+        "arm": "bare",
+        "run": 4,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "All stated facts stay within the brief: 'Since 2019', Melbourne, 'a team of twelve', 'retail and logistics companies'. The role breakdown 'analysts, engineers, and strategists' invents no numbers, client names, awards, or statistics. Nothing fabricated."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present: no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, or robust. 'Embed with your team' and 'turn data into decisions' are ordinary consulting phrasing. Clean."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential' framing. Register stays grounded and even self-deprecating ('not another dashboard nobody opens', 'accountable for results rather than billable hours'). Claims stay at the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 0,
+              "evidence": "Multiple triads, exceeding the at-most-one limit: 'analysts, engineers, and strategists' (line 3); 'which stores to stock, which routes to consolidate, where demand is heading' (line 5); and 'close to our clients, quick to respond, and accountable for results' (line 9). Two or more violations."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Prose paragraphs throughout with no bold scaffolds or headers (line 1 is a plain title). Only two em-dashes total (lines 5 and 7), well short of saturation. Clean structure."
+            }
+          ],
+          "total": 8
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays within brief facts (2019, 12 people, Melbourne, retail/logistics); no invented clients, awards, or statistics."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon (delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) appears anywhere."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No inflated claims like 'industry-leading' or 'trusted partner'; register stays grounded ('clear answers to real questions', 'tools your people can use')."
+            },
+            {
+              "criterion": 4,
+              "score": 1,
+              "evidence": "No not-just-X-but-Y pivots, but two triadic list constructions appear ('analysts, engineers, and strategists' and 'which stores to stock, which routes to consolidate, where demand is heading next quarter'), a mild repeated pattern beyond the one-triad allowance."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Plain prose paragraphs, only a normal page title (no bold scaffolding or subheaders), and a single natural em-dash with no saturation."
+            }
+          ],
+          "total": 9
+        },
+        "reply": "About Meridian Analytics\n\nSince 2019, Meridian Analytics has helped Melbourne businesses turn data into decisions they can act on. We're a team of twelve analysts, engineers, and strategists who believe the best insight is the one that changes what you do on Monday morning.\n\nWe work mostly with retail and logistics companies — the kind of operations where margins are tight, inventory moves fast, and a small improvement in forecasting or routing pays for itself many times over. Our clients don't need another dashboard nobody opens. They need clear answers to real questions: which stores to stock, which routes to consolidate, where demand is heading next quarter.\n\nThat's the work we care about. We embed with your team, learn how your business actually runs, and build models and reporting that fit the way you make decisions — not the other way around. When a project ends, you're left with tools your people can use and understand, not a dependency on us.\n\nBeing small and Melbourne-based is deliberate. It keeps us close to our clients, quick to respond, and accountable for results rather than billable hours.\n\nIf you've got data you suspect is worth more than you're getting from it, we'd like to hear from you."
+      },
+      "5": {
+        "arm": "bare",
+        "run": 5,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "No fabricated awards, client names, or statistics. Every concrete fact stays within the brief: Melbourne-based, founded 2019, team of twelve, retail and logistics clients. Composition detail 'analysts, engineers, and strategists' is a reasonable gloss on 'team' and invents no verifiable claim. Illustrative outcomes (stock, routes, margins) are generic domain color, not attributed facts."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon. Scanned for delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust: none present. 'proprietary platform' and 'buzzword-heavy' are used in a disavowal, not as self-description. Zero tells."
+            },
+            {
+              "criterion": 3,
+              "score": 1,
+              "evidence": "Mostly stays at the brief's altitude, but 'What sets us apart isn't a proprietary platform or a buzzword-heavy methodology. It's that we take the time to understand your business...' is a promotional differentiation move (differentiator framing / 'what sets us apart'). One instance of self-flattering register that goes beyond stating facts."
+            },
+            {
+              "criterion": 4,
+              "score": 0,
+              "evidence": "Two violations. Not-just-X-but-Y pivot appears twice in negation form: 'good data work should be practical, not theoretical' and 'What sets us apart isn't a proprietary platform... It's that we...' (X-not-Y / not-X-but-Y contrast structure). Also a triad in line 5 ('stock that moves, routes that run on time, and margins that hold') and a second triad in line 7 ('close to the problems, accountable for the outcomes, and quick to adapt'), exceeding the at-most-one-triad allowance. Two or more violations."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Prose paragraphs with no headers or bold scaffolds in the body, but the piece opens with a bold title '**About Meridian Analytics**' (bold scaffold) and includes a '---' horizontal-rule divider before a meta sign-off. One structural violation (the bold heading / rule scaffolding)."
+            }
+          ],
+          "total": 6
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "No invented awards, client names, or statistics; stays within brief facts (12 people, Melbourne, 2019, retail/logistics). Phrase 'spent years embedded in the operational realities' is a mild rhetorical flourish but not a fabricated fact."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon hits (no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) found anywhere in the copy."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No 'industry-leading', 'trusted partner', or 'commitment to excellence' framing; the 'What sets us apart' line explicitly disclaims grandiosity ('isn't a proprietary platform or a buzzword-heavy methodology'), keeping claims at the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 0,
+              "evidence": "Three separate triads: 'analysts, engineers, and strategists'; 'untangling messy systems, building pipelines and dashboards people actually use, and forecasting models that stand up to real-world pressure'; 'stock that moves, routes that run on time, and margins that hold' -- exceeds the one-triad allowance (no not-just-X-but-Y pivots found)."
+            },
+            {
+              "criterion": 5,
+              "score": 0,
+              "evidence": "Uses a bold header scaffold ('**About Meridian Analytics**') rather than plain prose, plus two em-dash constructions in the body ('operational realities of retail and logistics — the industries...' and 'before we touch your data — and we stay long enough'), amounting to more than one structural violation."
+            }
+          ],
+          "total": 6
+        },
+        "reply": "**About Meridian Analytics**\n\nMeridian Analytics is a Melbourne-based data consultancy helping businesses turn their data into decisions they can act on with confidence.\n\nFounded in 2019, we're a team of twelve analysts, engineers, and strategists who believe good data work should be practical, not theoretical. We've spent years embedded in the operational realities of retail and logistics — the industries where most of our clients work, and where a clearer view of the numbers translates directly into stock that moves, routes that run on time, and margins that hold.\n\nOur work spans the full arc of a data project: untangling messy systems, building pipelines and dashboards people actually use, and forecasting models that stand up to real-world pressure. We're small by design. It keeps us close to the problems, accountable for the outcomes, and quick to adapt when circumstances change.\n\nWhat sets us apart isn't a proprietary platform or a buzzword-heavy methodology. It's that we take the time to understand your business before we touch your data — and we stay long enough to make sure the solution sticks.\n\nIf you're ready to make better decisions with the information you already have, we'd like to hear from you.\n\n---\n\nHappy to adjust the tone (warmer, more corporate, punchier) or trim it closer to exactly 200 words if you'd like."
+      },
+      "6": {
+        "arm": "bare",
+        "run": 6,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Every specific stays within the brief: Melbourne, founded 2019, team of twelve, retail and logistics. No awards, no client names, no statistics, no invented facts. The framing lines (forecasting demand, inventory) are generic descriptions of retail/logistics work, not fabricated claims. Clean."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon. Scanned for delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust — none present. 'Compounds quickly' is plain business language, not a tell. Clean."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No importance inflation. Avoids 'industry-leading', 'trusted partner', 'commitment to excellence', 'unlock potential'. The team-of-twelve and 'answers you'll trust' framing stays modest and at the brief's altitude; even undercuts promo register ('If a simpler approach gets you there, we'll tell you'). Clean."
+            },
+            {
+              "criterion": 4,
+              "score": 1,
+              "evidence": "One triad allowed. The tone-question line at the end ('warmer, more corporate, punchier') and the closing list ('a founder's name, a signature service, or a real client outcome') are meta framing, but the body has a borderline construction: 'the difference between a good model and a used one is whether...' plus 'how goods and customers actually move rather than how a spreadsheet assumes they do' is a soft not-X-but-Y rather/than pivot. One 'rather than' contrast pivot counts as a single violation; no other pivots and no triad saturation in the body copy itself."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Prose paragraphs throughout. The single bold line 'About Meridian Analytics' functions as a title/heading for an About page, which is expected structural framing rather than bold scaffolding within the copy; body has no headers, no bulleted bold scaffolds, and no em-dash saturation (em-dashes appear only twice across the body, within normal limits). Clean."
+            }
+          ],
+          "total": 9
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Copy stays within brief facts (Melbourne, 2019, 12 people, retail/logistics). Descriptions like 'forecasting demand, tightening inventory, mapping how goods and customers move' are generic activity descriptions, not invented client names, awards, or statistics."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No instances of delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, or robust anywhere in the About copy."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "Tone is deliberately modest/self-effacing ('we care less about dashboards that look impressive,' 'if a simpler approach gets you there, we'll tell you'); no 'industry-leading,' 'trusted partner,' or 'commitment to excellence' framing."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. One triad present ('forecasting demand, tightening inventory, mapping how goods and customers actually move'), which is within the allowed limit of one. No copula-dodging saturation."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "The About copy opens with a bold header '**About Meridian Analytics**' -- a bold scaffold/header the rubric prohibits -- and uses two em-dashes across the ~200 words; otherwise it is clean flowing prose in paragraphs."
+            }
+          ],
+          "total": 9
+        },
+        "reply": "Here's a draft. I've kept it grounded in the facts you gave me and avoided inventing client names, awards, or metrics you'd have to walk back.\n\n---\n\n**About Meridian Analytics**\n\nMeridian Analytics is a data consultancy based in Melbourne. We started in 2019 with a straightforward idea: most businesses already sit on enough data to make sharper decisions — they just need help turning it into something they can act on.\n\nWe're a team of twelve. That's a deliberate choice. It means the people who scope your project are the same people who do the work, and you're never handed off to a junior team once the contract is signed.\n\nMost of our work is in retail and logistics — forecasting demand, tightening inventory, mapping how goods and customers actually move rather than how a spreadsheet assumes they do. These are industries where a small improvement in accuracy compounds quickly, and where the difference between a good model and a used one is whether it fits the way a business really runs.\n\nWe care less about dashboards that look impressive and more about answers you'll trust enough to change a decision. If a simpler approach gets you there, we'll tell you.\n\nIf that sounds like the kind of help you're after, we'd like to hear from you.\n\n---\n\nWant me to adjust the tone (warmer, more corporate, punchier), trim toward a tighter word count, or work in specifics like a founder's name, a signature service, or a real client outcome?"
+      },
+      "7": {
+        "arm": "bare",
+        "run": 7,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays within brief: twelve, Melbourne, retail and logistics, 2019/'Seven years in'. No awards, client names, or invented statistics. 'A good share of our work comes from early clients' is unquantified, not a fabricated figure; the capability list is generic, not fabricated fact."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present (no delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust). 'Optimisation' appears only as a literal technical term (route/warehouse optimisation)."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential' framing. Register is grounded and self-limiting ('we'd rather turn down a job than staff it thin'). Claims stay at the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 1,
+              "evidence": "No not-just-X-but-Y pivot (the 'not an account manager' line is a plain X-not-Y contrast). But two triads appear: 'the pipelines, the definitions, the ... arguments' and 'Sales numbers that don't reconcile, delivery routes that cost more..., forecasts nobody trusts'. Rubric allows at most one triad; two is a violation."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Prose paragraphs, no headers beyond the top line and no em-dash saturation (two em-dashes). But a bold header '**About Meridian Analytics**' is a bold scaffold — one structural violation."
+            }
+          ],
+          "total": 8
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 1,
+              "evidence": "Stays within the brief's facts (12 people, Melbourne, 2019, retail/logistics) but adds an invented retention claim: 'a good share of our work comes from clients we started with early on' — an unverifiable specific about client behavior not in the brief. 'Seven years in' is just arithmetic from 2019, not a fabrication."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No instances of delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, or robust anywhere in the copy."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No industry-leading/trusted-partner/commitment-to-excellence framing. Tone stays matter-of-fact ('we sort out the messy parts,' 'we'd rather turn down a job than staff it thin') rather than promotional."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. One triad ('the pipelines, the definitions, the \"which number is actually right\" arguments'); the four-item list of services is not a triad. Verbs are direct (we sort out, we build, is on your project) with no copula-dodging saturation."
+            },
+            {
+              "criterion": 5,
+              "score": 1,
+              "evidence": "Opens with a bolded header line '**About Meridian Analytics**' before the prose — a bold scaffold element. Body is otherwise clean prose paragraphs with only a single em-dash pair, no other headers."
+            }
+          ],
+          "total": 8
+        },
+        "reply": "**About Meridian Analytics**\n\nWe're a data consultancy of twelve, based in Melbourne, working mostly with retail and logistics businesses since 2019.\n\nOur clients usually come to us with the same problem: they have plenty of data and not enough answers. Sales numbers that don't reconcile, delivery routes that cost more than they should, forecasts nobody trusts. We sort out the messy parts first — the pipelines, the definitions, the \"which number is actually right\" arguments — and then build the models and dashboards that let people make decisions without second-guessing them.\n\nBeing small is deliberate. When you hire us, you work with the people doing the work, not an account manager relaying messages. A senior analyst is on your project from the first call to the final handover, and we'd rather turn down a job than staff it thin.\n\nWe know retail and logistics well enough to skip the long ramp-up: demand forecasting, inventory and stock-out modelling, route and warehouse optimisation, customer segmentation that holds up in practice. Seven years in, a good share of our work comes from clients we started with early on.\n\nIf you've got data that should be telling you more than it is, we'd like to hear about it."
+      },
+      "8": {
+        "arm": "bare",
+        "run": 8,
+        "opus": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "All specifics stay within the brief: 'Twelve of us' / 'twelve-person team', Melbourne, 'working since 2019', retail and logistics. Service examples (demand forecasting, inventory planning, route/fulfilment analysis) are generic domain descriptions, not invented awards, client names, or statistics. Nothing fabricated."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon present. Scanned for delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust — none appear. Phrasing like 'earn its keep' is plain idiom, not on the list."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No promotional inflation: no 'industry-leading', 'trusted partner', 'commitment to excellence', or 'unlock potential' framing. Claims stay at the brief's altitude ('We stay small on purpose', 'decisions you can defend in a board meeting')."
+            },
+            {
+              "criterion": 4,
+              "score": 1,
+              "evidence": "No not-just-X-but-Y pivots. But there are two triads, exceeding the 'at most one triad' limit: 'sales figures, stock movements, or delivery records' and 'the models, dashboards, and forecasts'. Two triads = one violation."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Clean prose paragraphs with no bold scaffolds or headers in the body. Only two em-dashes total (not saturation). The trailing '---' and meta-offer are an out-of-copy assistant aside, not part of the delivered About-page copy."
+            }
+          ],
+          "total": 9
+        },
+        "sonnet": {
+          "scores": [
+            {
+              "criterion": 1,
+              "score": 2,
+              "evidence": "Stays within brief facts (12 people, Melbourne, 2019, retail/logistics). Mentions of demand forecasting, inventory planning, route/fulfilment analysis are generic plausible service descriptions, not invented specifics like names, awards, or statistics."
+            },
+            {
+              "criterion": 2,
+              "score": 2,
+              "evidence": "No stock AI lexicon terms (delve, leverage, cutting-edge, seamless, empower, elevate, transformative, unlock, foster, synergy, innovative, robust) appear anywhere in the copy."
+            },
+            {
+              "criterion": 3,
+              "score": 2,
+              "evidence": "No 'industry-leading', 'trusted partner', or 'commitment to excellence' framing; tone stays plain and grounded ('we should talk', 'we stay small on purpose') at the brief's altitude."
+            },
+            {
+              "criterion": 4,
+              "score": 2,
+              "evidence": "No not-just-X-but-Y pivots. Only one true triad ('models, dashboards, and forecasts'); the four-item list in paragraph 3 is not a second triad. No copula-dodging saturation."
+            },
+            {
+              "criterion": 5,
+              "score": 2,
+              "evidence": "Clean prose paragraphs, no bold scaffolds or subheaders within the copy, only a single em-dash used once — no saturation."
+            }
+          ],
+          "total": 10
+        },
+        "reply": "About Meridian Analytics\n\nWe're a data consultancy in Melbourne. Twelve of us, working since 2019, mostly with retail and logistics companies that have more data than they have time to make sense of.\n\nThat's the problem we tend to get called in for. A business knows the answers are somewhere in its sales figures, stock movements, or delivery records — but pulling them out, and trusting them enough to act, is another matter. We build the models, dashboards, and forecasts that turn those records into decisions you can defend in a board meeting.\n\nRetail and logistics are where we've done our deepest work: demand forecasting, inventory planning, route and fulfilment analysis, and the reporting that ties it all together. Years in those two industries mean we usually understand your constraints before you finish explaining them.\n\nWe stay small on purpose. A twelve-person team means the people who scope your project are the ones who deliver it — no handover to a junior you never met. We'd rather do fewer engagements properly than stretch ourselves thin across many.\n\nIf you've got the data and need it to earn its keep, we should talk.\n\n---\n\nHappy to adjust the tone — warmer, more formal, or more technical — or trim it toward a tighter 150 if you'd like."
+      }
+    }
+  }
+}

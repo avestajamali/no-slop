@@ -13,10 +13,10 @@ Presentation and review material for the no-slop project.
 
 | File | Shows | Loop |
 |---|---|---|
-| `assets/hero-leaderboard.svg` | The six regression arms racing to their measured means; no-slop first | 6s |
+| `assets/hero-leaderboard.svg` | The six regression arms racing to their four-probe marginal means at n=716; no-slop compact first | 6s |
 | `assets/before-after.svg` | Four documented machine-tell substitutions, tell to plain | 9s |
-| `assets/significance.svg` | Cohen's d against every competitor arm, plus the tier-parity result | 6.5s |
-| `assets/half-life.svg` | The measured decay: doctrine at turn 1 vs turn 9, turn-9 bare above it | 6s |
+| `assets/significance.svg` | Cohen's d against every competitor arm at n=716, plus the tier-parity result | 6.5s |
+| `assets/half-life.svg` | The n=8 replication: re-injected and turn-0 doctrine both above bare at turn 9 | 6s |
 
 Every number in every asset traces to [`../evals/canonical-results.json`](../evals/canonical-results.json),
 the single source of truth. If a doc and the JSON disagree, the JSON is correct and the

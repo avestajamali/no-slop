@@ -7,10 +7,10 @@ against the three strongest competitor packs. Raw data: `raw/halflife-*.json`,
 `raw/overrefusal-pressure-*.json`, `raw/gaphunt-*.json`, `raw/v12-reval-*.json`,
 `raw/settling-*.json`.
 
-## 1. Doctrine half-life (the decay is real, and worse than suspected)
+## 1. Doctrine half-life (decay measured, the below-bare read did not hold)
 
 Same copy task, doctrine loaded at turn 0, scored at turn 1 vs after eight distractor
-exchanges (n=3, harsh judges):
+exchanges. The n=3 wave measured (harsh judges):
 
 | Cell | Mean |
 |---|---|
@@ -18,12 +18,42 @@ exchanges (n=3, harsh judges):
 | doctrine, turn 9 | **6.67** |
 | bare, turn 9 | 7.83 |
 
-At conversational distance the doctrine doesn't just fade; the doctrine arm scored
-*below bare*. Community reports of CLAUDE.md decay are now a measured number. The fix
-direction is architectural, not textual: just-in-time re-injection at the task moment
-(skills-style routing), which the roadmap already carries. Until then: for tell-heavy
-deliverables deep in a session, re-invoke the doctrine (or the /no-slop skill) rather
-than trusting the turn-0 copy.
+At conversational distance the doctrine faded; in this n=3 read the doctrine arm even
+scored *below bare*. Community reports of CLAUDE.md decay had a first measured number
+here. The fix direction is architectural, not textual: just-in-time re-injection at the
+task moment (skills-style routing), which the roadmap already carries. Until then, for
+tell-heavy deliverables deep in a session, re-invoke the doctrine (or the /no-slop
+skill) rather than trusting the turn-0 copy. The below-bare figure was a three-subject
+cell, and the n=8 replication below did not reproduce it; read the two subsections
+together.
+
+### Half-life, revisited at n=8 (halflife-2, 2026-07-06)
+
+The n=3 read above was thin enough to warrant a proper replication. This one runs three
+arms at eight subjects each: doctrine at turn 0, doctrine re-injected just before the
+task, and bare. All 24 subjects run the P7 copy task at conversational distance, sitting
+behind an eight-distractor simulated transcript, and every subject is dual-judged by an
+Opus model and a Sonnet model. Six of the eight distractors were reconstructed for this
+run rather than reused verbatim, so the simulated conversation is not the same one the
+n=3 wave used; the replication is directional and not cell-comparable to that original.
+
+| Arm | Mean | sd |
+|---|---|---|
+| doctrine, turn 0 | **9.06** | 0.82 |
+| doctrine, re-inject | **9.25** | 0.93 |
+| bare | 8.31 | 1.07 |
+
+Effect sizes on the subject means: turn 0 vs bare d=0.79; re-inject vs bare d=0.94;
+re-inject vs turn 0 d=0.21, inside the noise band for this n.
+
+Two honest conclusions come out of it. First, the below-bare decay was an n=3 read that
+did not survive n=8: at eight subjects the turn-0 doctrine holds 9.06 against bare's 8.31
+rather than falling under it. This is the project's own small-n rule turned on its own
+headline weakness, and the rule wins. Second, just-in-time re-injection is the
+strongest arm directionally, 9.25 against the turn-0 9.06, which is consistent with the
+roadmap's architectural fix; but the margin over turn 0 (d=0.21) is not significant at
+this n, so the re-injection win stays a direction rather than a proven gain until a
+larger wave settles it.
 
 ## 2. Over-refusal control (no systematic overcorrection)
 

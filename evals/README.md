@@ -1,11 +1,12 @@
 # Evidence index
 
-Thirteen-plus blind-judged trial waves (about 2,700 agents), with all raw judge data
+Thirteen-plus blind-judged trial waves (about 3,900 agents), with all raw judge data
 preserved and scrubbed: numbered rounds 1–10c, then the 2026-07-04 waves — the
 competitive leaderboard, the evolutionary tournament, the n=356 factorial, and the
-blind-spot battery with its settling matches. There is no round
-8; that number went to a landscape survey, and the raw files skip it. Read in order,
-or jump to the summary you need:
+blind-spot battery with its settling matches — then the 2026-07-06 extension wave that
+grew the factorial to four probes (n=716) and re-ran the half-life battery at n=8. There
+is no round 8; that number went to a landscape survey, and the raw files skip it. Read in
+order, or jump to the summary you need:
 
 | Doc | What it covers |
 |---|---|
@@ -17,8 +18,8 @@ or jump to the summary you need:
 | [`results-round6-7.md`](results-round6-7.md) | The Fable benchmark: doctrine-Opus beats the unguided reference model on low-context advice; the high-context gap decomposed. |
 | [`NIGHT-REPORT.md`](NIGHT-REPORT.md) | Rounds 9–10c: framing hypothesis falsified, criticism mining → v9, COMPACT tier validated across all probe classes, enforcement layer built. |
 | [`leaderboard.md`](leaderboard.md) | The competitive head-to-head: every retrievable published pack across eight probe types, the v11 confirmation match, and the final standings. |
-| [`results-blindspots.md`](results-blindspots.md) | The honest-limits battery: doctrine half-life, over-refusal control, sycophancy under pressure, the six-probe expansion, v12 revalidation and settling. |
-| [`results-factorial.md`](results-factorial.md) | The powered regression: n=356 subjects / 676 blind judgments, 6 arms × 2 probes × dual judge models, lme4 mixed model. no-slop the significant #1 over every competitor; judge self-preference ruled out. |
+| [`results-blindspots.md`](results-blindspots.md) | The honest-limits battery: doctrine half-life (with the n=8 halflife-2 revisit that retired the below-bare read), over-refusal control, sycophancy under pressure, the six-probe expansion, v12 revalidation and settling. |
+| [`results-factorial.md`](results-factorial.md) | The powered regression across two stages: the original 6 arms × 2 probes × dual judge models at n=356 / 676 blind judgments, then the 2026-07-06 extension to 4 probes at n=716 / 1,396. lme4 mixed model both times; no-slop the significant #1 over every competitor, judge self-preference ruled out at both stages. |
 | [`canonical-results.json`](canonical-results.json) | The single machine-readable source of truth: every headline number (regression, leaderboard, blind spots, tiers, scale) that the README, the animated assets, and the Fable handoff all draw from. |
 | [`regression/`](regression/) | The R analysis (`analysis.R`), the factorial dataset (`factorial.csv`), the saved model output (`model-output.txt`), plus the deterministic pre-screens (Slop Index, stylometric distance) and baselines. |
 | [`fixtures/`](fixtures/) | The planted-defect codebases. Each fails exactly as designed — verified before any trial used them. |

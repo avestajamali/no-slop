@@ -1,7 +1,7 @@
 {
   "product": "no-slop",
   "version": "v12",
-  "date": "2026-07-04",
+  "date": "2026-07-06",
   "one_line": "A behavioral doctrine + enforcement layer that makes Claude Opus write and judge like a stronger model; measured #1 vs every published competitor.",
   "headline_regression": {
     "design": "6 arms x 2 probes (P6 advice, P7 copy) x 30 runs x dual Opus+Sonnet judges",
@@ -80,6 +80,54 @@
     },
     "per_criterion_note": "substance (c1-c3) near-ceiling for all arms; separation lives in c4 sentence-shape and c5 form (bare c5=0.84 vs noslop_full 1.90)"
   },
+  "headline_regression_extended": {
+    "design": "6 arms x 4 probes (P6 advice, P7 copy, P17r rewrite-reconstructed, P18 empathy) x 30 runs x dual Opus+Sonnet judges; extension subjects headless-clean, judges in-session",
+    "n_subjects": 716,
+    "n_observations": 1396,
+    "model": "lme4 total~arm+probe+judge+arm:judge+(1|subject)",
+    "arm_effect_p": "<2.2e-16",
+    "probe_effect_p": "<2.2e-16",
+    "judge_effect_p": 0.026,
+    "arm_judge_interaction_p": 0.285,
+    "arm_probe_interaction_p": "2.3e-16",
+    "self_preference": "still ruled out (interaction n.s. at 4 probes)",
+    "arm_means": {
+      "noslop_compact": 8.929,
+      "noslop_full": 8.887,
+      "humanize": 8.046,
+      "slopless": 7.996,
+      "jalaalrd": 7.826,
+      "bare": 6.883
+    },
+    "noslop_full_vs": {
+      "bare": {
+        "diff": 2.0,
+        "p": 9.7e-18,
+        "d": 1.21
+      },
+      "humanize": {
+        "diff": 0.84,
+        "p": 1.5e-05,
+        "d": 0.57
+      },
+      "jalaalrd": {
+        "diff": 0.91,
+        "p": 1.6e-05,
+        "d": 0.58
+      },
+      "slopless": {
+        "diff": 0.77,
+        "p": 0.00018,
+        "d": 0.49
+      },
+      "noslop_compact": {
+        "diff": -0.04,
+        "p": 0.82,
+        "d": -0.03
+      }
+    },
+    "ranking_note": "a no-slop tier ranks #1 on each of the four probes; bare ranks last on all four"
+  },
   "leaderboard_headline": {
     "note": "harsh blind judging; each cell at its highest-n same-round measurement, across 8 probe types",
     "fields": {
@@ -109,7 +157,14 @@
       "turn1": 8.5,
       "turn9_doctrine": 6.67,
       "turn9_bare": 7.83,
-      "finding": "doctrine decays over conversational distance; fix = re-injection not more text"
+      "finding": "doctrine decays over conversational distance; fix = re-injection not more text",
+      "halflife2": {
+        "n_per_arm": 8,
+        "turn9_doctrine": 9.06,
+        "turn9_reinject": 9.25,
+        "turn9_bare": 8.31,
+        "finding": "below-bare decay did not reproduce at n=8 (original was n=3); re-injection directionally strongest; distractors reconstructed - not cell-comparable to the n=3 run"
+      }
     },
     "over_refusal": {
       "doctrine": 8.04,
@@ -133,7 +188,7 @@
   },
   "tiers": {
     "FULL": "~5,700 words, always-on identity",
-    "COMPACT": "~3,900 words, matched FULL at n=356 (d=0.05)",
+    "COMPACT": "~3,900 words, matched FULL at n=716 (d=0.03)",
     "KERNEL": "~700 words, subagent preamble",
     "SKILL": "invocable",
     "OUTPUT_STYLE": "harness slot"
@@ -145,7 +200,7 @@
     "reflect loop"
   ],
   "scale": {
-    "total_agents_approx": 2700,
+    "total_agents_approx": 3900,
     "trial_rounds": "13+",
     "adversarial_panels": 5,
     "judge_families": [
@@ -154,8 +209,8 @@
     ]
   },
   "known_limits": [
-    "factorial scope capped at 2 probe types by server rate-limiting (P17/P18 available to extend)",
+    "extension rewrite probe is a reconstruction (P17r) - historical P17 cells not comparable",
     "wrapper/preamble floor persists in chat-delivered artifacts (mechanical fix: artifact-to-file)",
-    "half-life decay over long sessions (fix: re-injection)"
+    "half-life edge held at n=8 (doctrine 9.06 vs bare 8.31); the below-bare n=3 decay did not reproduce, re-injection directionally strongest"
   ]
 }

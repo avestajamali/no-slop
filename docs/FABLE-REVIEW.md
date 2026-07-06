@@ -4,7 +4,7 @@ You are a fresh Claude Fable agent asked to audit no-slop before it goes public 
 GitHub. This document is self-contained: it carries everything you need to understand
 the product, check its evidence, and pick up the open work, without the conversation
 that built it. Every number here is drawn from `evals/canonical-results.json` (version
-v12, dated 2026-07-04), which is the single source of truth. Where a figure appears, it
+v12, dated 2026-07-06), which is the single source of truth. Where a figure appears, it
 matches that file exactly. If you find any number in the public docs that disagrees with
 the canonical JSON, treat the JSON as correct and the doc as the bug.
 
@@ -35,7 +35,7 @@ and harness slots. Word counts and roles below are the canonical figures.
 - FULL — about 5,700 words, the always-on identity edition. Maximum effect; load into
   always-loaded context so it shapes every response from the first token.
 - COMPACT — about 3,900 words. All rule behaviors intact, rationale compressed. It
-  matched FULL at n=356 with an effect size of d=0.05 (statistically indistinguishable).
+  matched FULL at n=716 with an effect size of d=0.03 (statistically indistinguishable; d=0.05 at the original n=356).
   The recommended tier when tokens matter.
 - KERNEL — about 700 words, the top-procedures distillation. Doubles as a subagent
   preamble; it ends with a clause written specifically for delegated agents.
@@ -77,6 +77,13 @@ Type-II Wald results:
   control, and it clears: no-slop's advantage does not depend on being graded by its own
   model family. The standing "all judges are LLMs, so this is self-preference" critique is
   answered directly — the ranking is identical under a different-family judge.
+
+The 2-probe scope cap was later lifted. A 2026-07-06 wave extended the probe factor to
+four types (P6, P7, P17r de-slop rewrite, P18 empathy) at n=716 subjects and 1,396
+judge-observations. Probe difficulty now differs sharply (probe χ²=918.08, p<2e-16), but
+the arm ranking still generalises: a no-slop tier ranks first on all four probes and bare
+ranks last on all four, and the arm:judge self-preference interaction remains
+non-significant (χ²=6.22, p=0.285). See `results-factorial.md`, the extension section.
 
 Arm means (marginal, pooled over probe and judge, out of 10):
 
@@ -146,7 +153,7 @@ v5 8.67, v5h 9.0, v6 8.75, v7 9.25, v11 confirmation 9.88.
 
 ### Scale of the program
 
-About 2,700 agents total, 13-plus trial rounds, five adversarial panels, two judge model
+About 3,900 agents total, 13-plus trial rounds, five adversarial panels, two judge model
 families (Opus 4.8 and Sonnet 5).
 
 ## Methodology and its honesty caveats
@@ -183,10 +190,11 @@ extend the probe factor when the server is calmer.
 First, the wrapper/preamble floor: agentic Opus at prompt position emits a one-line
 preamble before a requested artifact regardless of the prompt (six variants tested,
 magnitude shrank about 90%, the binary never flipped). The mechanical fix is the
-artifact-to-file harness mechanism. Second, the half-life floor: the doctrine decays over
-conversational distance. Same copy task, doctrine loaded at turn 0, scored 8.5 at turn 1
-but 6.67 after eight distractor exchanges — below bare Opus at turn 9 (7.83). The fix
-direction is architectural, not more text: just-in-time re-injection at the task moment.
+artifact-to-file harness mechanism. Second, the half-life floor, now retired: the n=3
+wave measured the doctrine at 8.5 on turn 1 but 6.67 after eight distractor exchanges,
+below bare Opus at turn 9 (7.83). The n=8 halflife-2 replication overturned that read:
+the doctrine held 9.06 against bare 8.31 at turn 9, and just-in-time re-injection was
+directionally strongest at 9.25 (see results-blindspots.md).
 
 *Blind-spot battery, the honest non-wins.* Over-refusal: doctrine 8.04 versus bare
 7.42 overall, no systematic overcorrection, and the doctrine strengthens needed caveats
@@ -220,28 +228,32 @@ each of these rolls up into.
 
 Prioritized, highest-leverage first. Each is scoped so you can start without more context.
 
-1. **Extend the factorial to P17 and P18.** The factorial is the strongest result and its
-   only real weakness is the 2-probe scope cap forced by server rate-limiting. P17 (de-slop
-   rewrite) and P18 (empathy plus substance) are already built and available. Running them
-   into the same lme4 model would turn the probe factor from 2 levels to 4 and make the
-   "generalizes across probe type" claim far harder to contest. This is the single change
-   that most strengthens the headline evidence.
+1. **Extend the factorial to four probes. DONE (2026-07-06).** The probe factor now runs
+   four levels — P6, P7, P17r (de-slop rewrite, stimulus reconstructed, so not equated with
+   the historical P17) and P18 (empathy). The extended fit lands n=716 subjects and 1,396
+   judge-observations across 24 cells: arm χ²=302.58 p<2e-16, probe χ²=918.08 p<2e-16 (probe
+   difficulty differs sharply, but the ranking still generalises — a no-slop tier is first
+   on all four probes and bare last on all four), and the arm:judge self-preference
+   interaction stays non-significant (χ²=6.22, p=0.285). This is the single largest boost to
+   the headline evidence, and it is in. See the extension section of `results-factorial.md`.
 
-2. **Human-label calibration subset.** Every score in the project is an LLM judgment. A
-   modest set of human labels on a stratified subset of transcripts, correlated against the
-   LLM judges, would either validate the judge or quantify its bias. The self-preference
-   control rules out one specific artifact; it does not establish that the judges track
-   human preference at all. This is the deepest un-checked assumption in the evidence chain.
+2. **Human-label calibration subset. Open, kit built.** The labeling kit exists; the
+   labels themselves are not yet collected. Every score in the project is still an LLM
+   judgment, so a stratified human-labeled subset correlated against the LLM judges — to
+   validate the judge or quantify its bias — remains the deepest un-checked assumption in
+   the evidence chain. Awaiting the labels.
 
-3. **Just-in-time re-injection for the half-life decay.** The half-life floor (doctrine
-   below bare at turn 9) is architectural: the fix is skills-style routing that re-injects
-   the doctrine at the task moment rather than trusting the turn-0 copy. Building and
-   measuring that re-injection would convert a documented weakness into a solved one, and
-   it likely shares a root cause with the pressure-resistance non-win.
+3. **Just-in-time re-injection for the half-life decay. DONE (2026-07-06).** The
+   re-injection arm was built and measured in the halflife-2 wave (n=8 per arm, dual-judged).
+   Re-injecting the doctrine just before the task scored 9.25 against bare's 8.31 (d=0.94)
+   and the turn-0 arm's 9.06, so it is directionally the strongest arm, consistent with the
+   roadmap's architectural fix. The same wave also retired the old below-bare decay claim as
+   an n=3 read that did not survive n=8. The re-injection margin over turn 0 (d=0.21) is not
+   yet significant at this n. See the halflife-2 subsection of `results-blindspots.md`.
 
-4. **Cross-model subject test.** Every subject in the trials is Claude Opus. The doctrine
-   claims model-independence ("nothing in it depends on a specific model"). That claim is
-   currently asserted, not measured. Running the doctrine as subject on a non-Anthropic
+4. **Cross-model subject test. Open.** Every subject in the trials is still Claude Opus, so
+   the doctrine's model-independence claim ("nothing in it depends on a specific model")
+   remains asserted rather than measured; running the doctrine as subject on a non-Anthropic
    capable model would test whether the transfer holds off the family it was distilled from.
 
 ## Where every file lives
@@ -295,7 +307,7 @@ Repo root: the repository itself.
 - `LICENSE` — the repository license.
 - `docs/FABLE-REVIEW.md` — this document.
 - `docs/README.md` — the docs-directory overview.
-- `docs/assets/` — three animated SVGs the root README embeds.
+- `docs/assets/` — four animated SVGs the root README embeds.
 
 One reading order for the audit: `canonical-results.json`, then `results-factorial.md` and
 `regression/model-output.txt` together to check the headline stats against their source,

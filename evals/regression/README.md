@@ -21,3 +21,12 @@ Workflow for any doctrine edit: (1) generate outputs on the fixed probes
 (`../probes.md`, `../probes-round2.md` P12), (2) `slop_index.py` + `lint_tells.py`
 them, (3) only if both are clean, spend a blind-judged round on the behavioral
 criteria. Baseline numbers: `baseline.md`.
+
+The powered factorial also lives here. `analysis.R` fits the mixed model over
+`factorial.csv` and saves `model-output.txt`; `armprobe.R` runs the arm:probe
+interaction test. `factorial.csv` now carries the four-probe extension (6 arms ×
+P6, P7, P17r, P18 × 30 runs, 1,396 judge-observations across 716 subjects). The
+published two-probe artifacts are preserved unchanged as `factorial-2probe.csv`
+and `model-output-2probe.txt`; the P6/P7 rows in the extended file are a
+byte-superset of that original. `halflife2.csv` holds the half-life replication's
+per-subject rows.

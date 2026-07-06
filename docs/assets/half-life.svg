@@ -1,27 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 680 312" role="img" font-family="'Segoe UI',system-ui,-apple-system,sans-serif">
-<title>The doctrine decays over conversational distance</title>
-<desc>Animated bar chart: on the same task the doctrine scores 8.50 at turn 1 but 6.67 by turn 9, falling below bare at 7.83; the turn-9 doctrine bar is marked as the gap. Doctrine loaded at turn 0, n=3, harsh judges.</desc>
+<title>The decay did not survive a bigger sample</title>
+<desc>Animated bar chart: at turn 9 on the same copy task, re-injected doctrine scores 9.25 and turn-0 doctrine 9.06, both above bare at 8.31. n=8 per arm, dual judges. The earlier n=3 below-bare read did not reproduce.</desc>
 <rect x="0" y="0" width="680" height="312" rx="16" fill="#14161f"/>
-<text x="36" y="46" fill="#f0f2f6" font-size="20" font-weight="600">The doctrine decays over conversational distance</text>
-<text x="36" y="68" fill="#8b93a4" font-size="13">Same task · doctrine loaded at turn 0 · score /10 · n=3 · harsh judges</text>
+<text x="36" y="46" fill="#f0f2f6" font-size="20" font-weight="600">The decay did not survive a bigger sample</text>
+<text x="36" y="68" fill="#8b93a4" font-size="13">Turn 9, same copy task · n=8 per arm · dual judges · earlier n=3 below-bare read did not hold · distractors reconstructed</text>
 <g font-size="14">
-  <text x="214" y="116" text-anchor="end" fill="#e6e9ef" font-weight="600">doctrine, turn 1</text>
-  <rect x="228" y="102" width="391" height="20" rx="4" fill="#1baf7a">
-    <animate attributeName="width" values="0;0;391;391;0" keyTimes="0;0;0.16;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
-  <text x="631" y="116" text-anchor="end" fill="#5dcaa5" font-weight="600">8.50
+  <text x="214" y="116" text-anchor="end" fill="#e6e9ef" font-weight="600">doctrine, re-inject</text>
+  <rect x="228" y="102" width="426" height="20" rx="4" fill="#1baf7a">
+    <animate attributeName="width" values="0;0;426;426;0" keyTimes="0;0;0.16;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
+  <text x="642" y="116" text-anchor="end" fill="#0c3327" font-weight="600">9.25
     <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.12;0.18;0.9;1" dur="6s" repeatCount="indefinite"/></text>
-  <text x="214" y="164" text-anchor="end" fill="#aab1bf">bare, turn 9</text>
-  <rect x="228" y="150" width="360" height="20" rx="4" fill="#3f4657">
-    <animate attributeName="width" values="0;0;360;360;0" keyTimes="0;0.05;0.21;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
-  <text x="600" y="164" text-anchor="end" fill="#d4d9e2">7.83
+  <text x="214" y="164" text-anchor="end" fill="#e6e9ef" font-weight="600">doctrine, turn 0</text>
+  <rect x="228" y="150" width="417" height="20" rx="4" fill="#1baf7a" opacity="0.85">
+    <animate attributeName="width" values="0;0;417;417;0" keyTimes="0;0.05;0.21;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
+  <text x="633" y="164" text-anchor="end" fill="#0c3327" font-weight="600">9.06
     <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.17;0.23;0.9;1" dur="6s" repeatCount="indefinite"/></text>
-  <text x="214" y="212" text-anchor="end" fill="#e6e9ef" font-weight="600">doctrine, turn 9</text>
-  <rect x="228" y="198" width="307" height="20" rx="4" fill="#e5695f">
-    <animate attributeName="width" values="0;0;307;307;0" keyTimes="0;0.1;0.26;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
-  <text x="547" y="212" text-anchor="end" fill="#e5695f" font-weight="600">6.67
+  <text x="214" y="212" text-anchor="end" fill="#aab1bf">bare, turn 9</text>
+  <rect x="228" y="198" width="382" height="20" rx="4" fill="#3f4657">
+    <animate attributeName="width" values="0;0;382;382;0" keyTimes="0;0.1;0.26;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
+  <text x="598" y="212" text-anchor="end" fill="#d4d9e2">8.31
     <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.22;0.28;0.9;1" dur="6s" repeatCount="indefinite"/></text>
-  <line x1="588" y1="170" x2="588" y2="198" stroke="#e5695f" stroke-width="1.5" stroke-dasharray="3 3"/>
-  <text x="596" y="188" fill="#e5695f" font-size="12">1.16 below bare</text>
 </g>
-<text x="36" y="284" fill="#697082" font-size="12">Fix: re-inject at the task moment — not more text.</text>
+<text x="36" y="284" fill="#697082" font-size="12">Re-injection is directionally strongest (d 0.94 vs bare); its margin over turn 0 (d 0.21) is within noise.</text>
 </svg>

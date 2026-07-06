@@ -1,20 +1,20 @@
 === N ===
-judge-rows: 676  subjects: 356  cells: 12 
+judge-rows: 1396  subjects: 716  cells: 24 
 
 === per-cell mean total (max 10) ===
-                 P6   P7
-bare           8.33 7.83
-humanize       8.75 9.37
-jalaalrd       9.61 9.30
-noslop_compact 9.95 9.42
-noslop_full    9.88 9.53
-slopless       9.28 9.50
+               P17r  P18   P6   P7
+bare           6.70 4.67 8.33 7.83
+humanize       7.38 6.68 8.75 9.37
+jalaalrd       7.17 6.03 9.61 9.30
+noslop_compact 9.33 7.02 9.95 9.42
+noslop_full    9.23 6.90 9.88 9.53
+slopless       6.98 6.58 9.28 9.50
 
 === per-arm marginal mean (pooled over probe+judge) ===
-   noslop_full noslop_compact       jalaalrd       slopless       humanize 
-         9.708          9.683          9.409          9.408          9.058 
+noslop_compact    noslop_full       humanize       slopless       jalaalrd 
+         8.929          8.887          8.046          7.996          7.826 
           bare 
-         8.083 
+         6.883 
 
 === mixed model: total ~ arm + probe + judge + arm:judge + (1|subject) ===
 
@@ -23,50 +23,52 @@ Analysis of Deviance Table (Type II Wald chisquare tests)
 
 Response: total
              Chisq Df Pr(>Chisq)    
-arm       135.9946  5  < 2.2e-16 ***
-probe       1.4555  1     0.2277    
-judge      63.3304  1  1.748e-15 ***
-arm:judge   5.7409  5     0.3323    
+arm       302.5821  5    < 2e-16 ***
+probe     918.0756  3    < 2e-16 ***
+judge       4.9802  1    0.02564 *  
+arm:judge   6.2235  5    0.28507    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 --- fixed effects (ref arm = bare, ref judge = opus) ---
                               Estimate Std. Error t value
-(Intercept)                      7.809      0.148  52.913
-armhumanize                      1.133      0.197   5.752
-armjalaalrd                      1.258      0.214   5.879
-armnoslop_compact                1.717      0.197   8.712
-armnoslop_full                   1.767      0.197   8.966
-armslopless                      1.300      0.213   6.093
-probeP7                         -0.117      0.097  -1.206
-judgesonnet                      0.667      0.155   4.306
-armhumanize:judgesonnet         -0.317      0.219  -1.446
-armjalaalrd:judgesonnet          0.122      0.240   0.507
-armnoslop_compact:judgesonnet   -0.233      0.219  -1.066
-armnoslop_full:judgesonnet      -0.283      0.219  -1.294
-armslopless:judgesonnet         -0.033      0.234  -0.142
+(Intercept)                      6.596      0.136  48.389
+armhumanize                      1.217      0.167   7.290
+armjalaalrd                      1.075      0.173   6.200
+armnoslop_compact                2.100      0.167  12.582
+armnoslop_full                   2.108      0.167  12.632
+armslopless                      1.086      0.173   6.270
+probeP18                        -1.486      0.111 -13.400
+probeP6                          1.476      0.114  12.957
+probeP7                          1.358      0.111  12.248
+judgesonnet                     -0.100      0.137  -0.729
+armhumanize:judgesonnet         -0.108      0.194  -0.558
+armjalaalrd:judgesonnet          0.060      0.202   0.296
+armnoslop_compact:judgesonnet   -0.108      0.194  -0.558
+armnoslop_full:judgesonnet      -0.208      0.194  -1.074
+armslopless:judgesonnet          0.239      0.199   1.201
 
 === no-slop_full vs each arm (marginal means, Welch t on subject means) ===
-noslop_full - bare            diff=+1.62  t=  8.41  p=2.424e-12  d=+1.54
-noslop_full - humanize        diff=+0.65  t=  3.76  p=0.0003277  d=+0.69
-noslop_full - jalaalrd        diff=+0.25  t=  2.29  p=0.02387  d=+0.43
-noslop_full - noslop_compact  diff=+0.03  t=  0.27  p=0.7886  d=+0.05
-noslop_full - slopless        diff=+0.25  t=  2.49  p=0.01437  d=+0.45
+noslop_full - bare            diff=+2.00  t=  9.35  p=9.708e-18  d=+1.21
+noslop_full - humanize        diff=+0.84  t=  4.43  p=1.461e-05  d=+0.57
+noslop_full - jalaalrd        diff=+0.91  t=  4.40  p=1.649e-05  d=+0.58
+noslop_full - noslop_compact  diff=-0.04  t= -0.23  p=0.8167  d=-0.03
+noslop_full - slopless        diff=+0.77  t=  3.81  p=0.0001771  d=+0.49
 
 === judge-model check: per-arm mean by judge ===
                opus sonnet
-bare           7.75   8.42
-humanize       8.88   9.23
-jalaalrd       8.98   9.78
-noslop_compact 9.47   9.90
-noslop_full    9.52   9.90
-slopless       9.02   9.68
+bare           6.93   6.83
+humanize       8.15   7.94
+jalaalrd       7.79   7.86
+noslop_compact 9.03   8.82
+noslop_full    9.04   8.73
+slopless       7.81   8.16
 
 Opus-minus-Sonnet per arm (negative = Sonnet judges score that arm higher):
           bare       humanize       jalaalrd noslop_compact    noslop_full 
-         -0.67          -0.35          -0.80          -0.43          -0.38 
+          0.10           0.21          -0.08           0.21           0.31 
       slopless 
-         -0.66 
+         -0.35 
 
 arm:judge interaction p-value (is no-slop's edge judge-dependent?):
 Data: d
@@ -74,34 +76,34 @@ Models:
 m0: total ~ arm + probe + judge + (1 | subject)
 m: total ~ arm + probe + judge + arm:judge + (1 | subject)
    npar    AIC    BIC  logLik -2*log(L)  Chisq Df Pr(>Chisq)
-m0   10 1996.5 2041.7 -988.27    1976.5                     
-m    15 2000.8 2068.6 -985.42    1970.8 5.6972  5     0.3368
+m0   12 4633.2 4696.1 -2304.6    4609.2                     
+m    17 4637.0 4726.1 -2301.5    4603.0 6.2057  5     0.2867
 
 === per-criterion arm means (0-2) ===
 c1 :
-noslop_compact    noslop_full       jalaalrd       humanize       slopless 
-          1.99           1.98           1.89           1.89           1.87 
+noslop_compact    noslop_full       humanize       slopless       jalaalrd 
+          1.98           1.97           1.92           1.91           1.90 
           bare 
-          1.86 
+          1.81 
 c2 :
-      jalaalrd noslop_compact    noslop_full       slopless           bare 
-          2.00           2.00           2.00           2.00           1.94 
-      humanize 
-          1.94 
+noslop_compact    noslop_full           bare       slopless       humanize 
+          1.79           1.77           1.56           1.53           1.49 
+      jalaalrd 
+          1.43 
 c3 :
-      jalaalrd noslop_compact    noslop_full       slopless       humanize 
-          2.00           2.00           2.00           2.00           1.96 
+      jalaalrd       humanize noslop_compact    noslop_full       slopless 
+          1.94           1.91           1.90           1.90           1.86 
           bare 
-          1.95 
+          1.81 
 c4 :
-   noslop_full       slopless       humanize noslop_compact       jalaalrd 
-          1.83           1.80           1.77           1.77           1.73 
+   noslop_full noslop_compact       slopless       humanize       jalaalrd 
+          1.57           1.49           1.49           1.46           1.39 
           bare 
-          1.49 
+          1.15 
 c5 :
-noslop_compact    noslop_full       jalaalrd       slopless       humanize 
-          1.93           1.90           1.78           1.74           1.50 
+noslop_compact    noslop_full       humanize       slopless       jalaalrd 
+          1.77           1.69           1.27           1.21           1.16 
           bare 
-          0.84 
+          0.55 
 
 === done ===

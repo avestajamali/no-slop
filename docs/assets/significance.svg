@@ -1,34 +1,35 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 680 312" role="img" font-family="'Segoe UI',system-ui,-apple-system,sans-serif">
 <title>Effect sizes: no-slop FULL beats every competitor arm</title>
-<desc>Animated Cohen's d bars: no-slop FULL versus bare Opus d=1.54, versus humanize d=0.69, versus slopless d=0.45, versus jalaalrd d=0.43, all significant; versus its own COMPACT tier d=0.05, statistically identical.</desc>
+<desc>Animated Cohen's d bars: no-slop FULL versus bare Opus d=1.21, versus jalaalrd d=0.58, versus humanize d=0.57, versus slopless d=0.49, all significant; versus its own COMPACT tier d=-0.03, statistically identical. n=716.</desc>
 <rect x="0" y="0" width="680" height="312" rx="16" fill="#14161f"/>
 <text x="36" y="46" fill="#f0f2f6" font-size="20" font-weight="600">no-slop FULL vs every arm</text>
-<text x="36" y="68" fill="#8b93a4" font-size="13">Cohen's d effect size · Welch t on subject means · n=356</text>
+<text x="36" y="68" fill="#8b93a4" font-size="13">Cohen's d effect size · Welch t on subject means · n=716</text>
+<text x="36" y="86" fill="#697082" font-size="12">Anchored on FULL, the lower of the two tied no-slop tiers: the conservative read.</text>
 <g font-size="14">
   <text x="196" y="112" text-anchor="end" fill="#e6e9ef">vs bare Opus</text>
-  <rect x="210" y="98" width="289" height="20" rx="4" fill="#1baf7a">
-    <animate attributeName="width" values="0;0;289;289;0" keyTimes="0;0;0.16;0.9;1" dur="6.5s" repeatCount="indefinite"/></rect>
-  <text x="507" y="112" fill="#5dcaa5" font-weight="600">d 1.54 · p &lt; 1e-11
+  <rect x="210" y="98" width="227" height="20" rx="4" fill="#1baf7a">
+    <animate attributeName="width" values="0;0;227;227;0" keyTimes="0;0;0.16;0.9;1" dur="6.5s" repeatCount="indefinite"/></rect>
+  <text x="445" y="112" fill="#5dcaa5" font-weight="600">d 1.21 · p &lt; 1e-17
     <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.12;0.18;0.9;1" dur="6.5s" repeatCount="indefinite"/></text>
-  <text x="196" y="152" text-anchor="end" fill="#e6e9ef">vs humanize</text>
-  <rect x="210" y="138" width="129" height="20" rx="4" fill="#1baf7a">
-    <animate attributeName="width" values="0;0;129;129;0" keyTimes="0;0.05;0.21;0.9;1" dur="6.5s" repeatCount="indefinite"/></rect>
-  <text x="347" y="152" fill="#5dcaa5" font-weight="600">d 0.69 · p 0.0003
+  <text x="196" y="152" text-anchor="end" fill="#e6e9ef">vs jalaalrd</text>
+  <rect x="210" y="138" width="109" height="20" rx="4" fill="#1baf7a">
+    <animate attributeName="width" values="0;0;109;109;0" keyTimes="0;0.05;0.21;0.9;1" dur="6.5s" repeatCount="indefinite"/></rect>
+  <text x="327" y="152" fill="#5dcaa5" font-weight="600">d 0.58 · p 1.6e-05
     <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.17;0.23;0.9;1" dur="6.5s" repeatCount="indefinite"/></text>
-  <text x="196" y="192" text-anchor="end" fill="#e6e9ef">vs slopless</text>
-  <rect x="210" y="178" width="84" height="20" rx="4" fill="#1baf7a">
-    <animate attributeName="width" values="0;0;84;84;0" keyTimes="0;0.1;0.26;0.9;1" dur="6.5s" repeatCount="indefinite"/></rect>
-  <text x="302" y="192" fill="#5dcaa5" font-weight="600">d 0.45 · p 0.014
+  <text x="196" y="192" text-anchor="end" fill="#e6e9ef">vs humanize</text>
+  <rect x="210" y="178" width="107" height="20" rx="4" fill="#1baf7a">
+    <animate attributeName="width" values="0;0;107;107;0" keyTimes="0;0.1;0.26;0.9;1" dur="6.5s" repeatCount="indefinite"/></rect>
+  <text x="325" y="192" fill="#5dcaa5" font-weight="600">d 0.57 · p 1.5e-05
     <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.22;0.28;0.9;1" dur="6.5s" repeatCount="indefinite"/></text>
-  <text x="196" y="232" text-anchor="end" fill="#e6e9ef">vs jalaalrd</text>
-  <rect x="210" y="218" width="81" height="20" rx="4" fill="#1baf7a">
-    <animate attributeName="width" values="0;0;81;81;0" keyTimes="0;0.15;0.31;0.9;1" dur="6.5s" repeatCount="indefinite"/></rect>
-  <text x="299" y="232" fill="#5dcaa5" font-weight="600">d 0.43 · p 0.024
+  <text x="196" y="232" text-anchor="end" fill="#e6e9ef">vs slopless</text>
+  <rect x="210" y="218" width="92" height="20" rx="4" fill="#1baf7a">
+    <animate attributeName="width" values="0;0;92;92;0" keyTimes="0;0.15;0.31;0.9;1" dur="6.5s" repeatCount="indefinite"/></rect>
+  <text x="310" y="232" fill="#5dcaa5" font-weight="600">d 0.49 · p 1.8e-04
     <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.27;0.33;0.9;1" dur="6.5s" repeatCount="indefinite"/></text>
   <text x="196" y="272" text-anchor="end" fill="#8b93a4">vs COMPACT tier</text>
-  <rect x="210" y="258" width="9" height="20" rx="4" fill="#3f4657">
-    <animate attributeName="width" values="0;0;9;9;0" keyTimes="0;0.2;0.36;0.9;1" dur="6.5s" repeatCount="indefinite"/></rect>
-  <text x="228" y="272" fill="#8b93a4">d 0.05 · statistically identical
+  <rect x="210" y="258" width="6" height="20" rx="4" fill="#3f4657">
+    <animate attributeName="width" values="0;0;6;6;0" keyTimes="0;0.2;0.36;0.9;1" dur="6.5s" repeatCount="indefinite"/></rect>
+  <text x="224" y="272" fill="#8b93a4">d -0.03 · statistically identical
     <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.32;0.38;0.9;1" dur="6.5s" repeatCount="indefinite"/></text>
 </g>
 <text x="36" y="298" fill="#697082" font-size="12">Every competitor gap is significant; the two no-slop tiers are not.</text>

@@ -3,7 +3,7 @@
 A behavioral doctrine and enforcement layer that makes Claude Opus write and judge like a stronger model, measured #1 against every published competitor under blind judging.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![validated n=356](https://img.shields.io/badge/validated-n%3D356-blue)](evals/results-factorial.md)
+[![validated n=716](https://img.shields.io/badge/validated-n%3D716-blue)](evals/results-factorial.md)
 [![6 arms benchmarked](https://img.shields.io/badge/arms%20benchmarked-6-blueviolet)](evals/results-factorial.md)
 [![#1 vs field](https://img.shields.io/badge/rank-%231%20vs%20field-orange)](evals/leaderboard.md)
 [![lme4 regression](https://img.shields.io/badge/stats-lme4%20regression-informational)](evals/results-factorial.md)
@@ -12,7 +12,7 @@ A behavioral doctrine and enforcement layer that makes Claude Opus write and jud
 
 ## The result
 
-Under a mixed-effects regression on 356 subjects and 676 blind judgments, which doctrine the model runs under explains score differences at p < 2.2e-16. no-slop FULL ranks #1 at 9.708 out of 10 and beats every competitor arm in the regression — the three strongest published packs — with real effect sizes, all p < 0.05; the five weaker packs had already been eliminated head-to-head on the [leaderboard](evals/leaderboard.md). The self-preference threat is ruled out: judge model matters, but the arm-by-judge interaction is non-significant (p = 0.332), so the ranking holds identically under a different judge family. The FULL and COMPACT tiers are statistically indistinguishable (d = 0.05), so the compact edition carries the full effect at about two-thirds of FULL's length (~3,900 vs ~5,700 words).
+Under a mixed-effects regression on 716 subjects and 1,396 blind judgments across four probe types, which doctrine the model runs under explains score differences at p < 2.2e-16. The two no-slop tiers rank #1 and #2 (compact 8.93, full 8.89, statistically indistinguishable at d = 0.03) and beat every competitor arm in the regression — the three strongest published packs — with real effect sizes, d = 0.49 to 0.58 against those packs and d = 1.21 against bare, all p < 2e-4; the five weaker packs had already been eliminated head-to-head on the [leaderboard](evals/leaderboard.md). The self-preference threat is ruled out: judge model matters, but the arm-by-judge interaction is non-significant (p = 0.285), and the ranking holds on every probe taken on its own.
 
 ![effect sizes vs every competitor](docs/assets/significance.svg)
 
@@ -40,7 +40,7 @@ Five deployment tiers off one source of truth. FULL is the always-on identity; t
 | Tier | Size | Role |
 |---|---|---|
 | FULL | ~5,700 words | Always-on identity, shapes every response from the first token |
-| COMPACT | ~3,900 words | Matched FULL at n=356 (d=0.05); the tier to use when tokens matter |
+| COMPACT | ~3,900 words | Matched FULL at n=716 (d=0.03); the tier to use when tokens matter |
 | KERNEL | ~700 words | Top procedures only; doubles as a subagent preamble |
 | SKILL | invocable | Loads the full doctrine on `/no-slop`, kernel inlined as fallback |
 | OUTPUT_STYLE | harness slot | Drops the doctrine into the Claude Code output-style channel |
@@ -49,10 +49,10 @@ The doctrine itself is five pillars: epistemic discipline (how to know), judgmen
 
 ## How it was tested
 
-- A powered [factorial regression](evals/results-factorial.md): 6 arms, dual Opus and Sonnet judges, `total ~ arm + probe + judge + arm:judge + (1|subject)` in lme4, which is where the p < 2.2e-16 arm effect and the ruled-out self-preference come from.
+- A powered [factorial regression](evals/results-factorial.md): 6 arms x 4 probe types, n=716, dual Opus and Sonnet judges, `total ~ arm + probe + judge + arm:judge + (1|subject)` in lme4, which is where the p < 2.2e-16 arm effect and the ruled-out self-preference come from.
 - A competitive [leaderboard](evals/leaderboard.md) against every retrievable published pack under identical harsh blind judging, with contested cells settled at n=4 after small-n competitor highs regressed by 1.9 to 5.3 points.
 - A [blind-spot battery](evals/results-blindspots.md) of about 430 agents covering doctrine half-life, over-refusal, sycophancy under pressure, and six new probe types, which surfaced the real limits below rather than hiding them.
-- Roughly 2,700 agents across 13+ trial rounds and 5 adversarial panels, with the separation isolated to sentence-shape (c4) and form (c5), where a doctrine adds most on a substance floor the base model already clears.
+- Roughly 3,900 agents across 13+ trial rounds and waves and 5 adversarial panels, with the separation isolated to sentence-shape (c4) and form (c5), where a doctrine adds most on a substance floor the base model already clears.
 
 ## Install
 
@@ -65,9 +65,9 @@ Pick the surface, copy the file.
 
 ## Honest limitations
 
-- The doctrine decays over conversational distance: turn-9 score of 6.67 against 7.83 for bare on the same task. The fix is re-injection at the task moment, not more text.
+- The doctrine held its edge over conversational distance: a turn-9 score of 9.06 against 8.31 for bare on the same task, at n=8 per arm. The earlier below-bare decay did not reproduce and was an n=3 cell; re-injection at the task moment was directionally strongest at 9.25.
 - A wrapper or preamble floor persists in chat-delivered artifacts; the mechanical fix is routing the artifact to a file rather than instructing it away.
-- The factorial covers 2 probe types, capped by server-side rate-limiting during the run. P17 and P18 remain available to extend the probe factor when the server is calmer.
+- The factorial's two added probes required reconstruction: the original P17 stimulus survived only truncated, so the extension runs a reconstructed P17r, disclosed in the writeup; historical P17 cells are not comparable.
 
 ![doctrine half-life](docs/assets/half-life.svg)
 
