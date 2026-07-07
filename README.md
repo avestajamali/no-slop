@@ -12,7 +12,7 @@ A behavioral doctrine and enforcement layer that makes Claude Opus write and jud
 
 ## The result
 
-Under a mixed-effects regression on 716 subjects and 1,396 blind judgments across four probe types, which doctrine the model runs under explains score differences at p < 2.2e-16. The two no-slop tiers rank #1 and #2 (compact 8.93, full 8.89, statistically indistinguishable at d = 0.03) and beat every competitor arm in the regression — the three strongest published packs — with real effect sizes, d = 0.49 to 0.58 against those packs and d = 1.21 against bare, all p < 2e-4; the five weaker packs had already been eliminated head-to-head on the [leaderboard](evals/leaderboard.md). The self-preference threat is ruled out: judge model matters, but the arm-by-judge interaction is non-significant (p = 0.285), and the ranking holds on every probe taken on its own.
+Under a mixed-effects regression on 716 subjects and 1,396 blind judgments across four probe types, which doctrine the model runs under explains score differences at p < 2.2e-16. The two no-slop tiers finish tied at the top (compact 8.93, full 8.89: one statistical result, d = 0.03, p = 0.82, so the order between them is sort order, not a ranking) and beat every competitor arm in the regression — the three strongest published packs — with real effect sizes, d = 0.49 to 0.58 against those packs and d = 1.21 against bare, all p < 2e-4; the five weaker packs had already been eliminated head-to-head on the [leaderboard](evals/leaderboard.md). The self-preference threat is ruled out: judge model matters, but the arm-by-judge interaction is non-significant (p = 0.285), and the ranking holds on every probe taken on its own.
 
 ![effect sizes vs every competitor](docs/assets/significance.svg)
 

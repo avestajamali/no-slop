@@ -51,8 +51,8 @@ significant while the ranking still generalises; see the extension section.)
 
 | Rank | Arm | Mean /10 |
 |---|---|---|
-| 1 | **no-slop FULL** | **9.708** |
-| 2 | no-slop COMPACT | 9.683 |
+| 1= | **no-slop FULL** | **9.708** |
+| 1= | no-slop COMPACT | 9.683 |
 | 3 | jalaalrd | 9.409 |
 | 4 | slopless | 9.408 |
 | 5 | humanize | 9.058 |
@@ -188,12 +188,16 @@ the judge main effect.
 
 | Rank | Arm | Mean /10 |
 |---|---|---|
-| 1 | **no-slop COMPACT** | **8.929** |
-| 2 | no-slop FULL | 8.887 |
+| 1= | **no-slop COMPACT** | **8.929** |
+| 1= | no-slop FULL | 8.887 |
 | 3 | humanize | 8.046 |
 | 4 | slopless | 7.996 |
 | 5 | jalaalrd | 7.826 |
 | 6 | bare | 6.883 |
+
+The top two rows are one statistical result, not a ranking: d = 0.03, p = 0.82.
+COMPACT listed first is sort order. The same tie held in the opposite nominal order
+at two probes, which is how a genuine tie behaves across samples.
 
 ### no-slop FULL vs every arm (Welch t on subject means, Cohen's d)
 

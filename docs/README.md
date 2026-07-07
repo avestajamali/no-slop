@@ -13,7 +13,7 @@ Presentation and review material for the no-slop project.
 
 | File | Shows | Loop |
 |---|---|---|
-| `assets/hero-leaderboard.svg` | The six regression arms racing to their four-probe marginal means at n=716; no-slop compact first | 6s |
+| `assets/hero-leaderboard.svg` | The six regression arms racing to their four-probe marginal means at n=716; the two no-slop tiers marked as one statistical tie at the top | 6s |
 | `assets/before-after.svg` | Four documented machine-tell substitutions, tell to plain | 9s |
 | `assets/significance.svg` | Cohen's d against every competitor arm at n=716, plus the tier-parity result | 6.5s |
 | `assets/half-life.svg` | The n=8 replication: re-injected and turn-0 doctrine both above bare at turn 9 | 6s |

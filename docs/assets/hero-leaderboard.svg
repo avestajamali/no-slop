@@ -1,10 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 680 372" role="img" font-family="'Segoe UI',system-ui,-apple-system,sans-serif">
 <title>no-slop ranks first across six arms and four probe types</title>
-<desc>Animated bar chart: no-slop COMPACT 8.93 and FULL 8.89 lead humanize 8.05, slopless 8.00, jalaalrd 7.83, and bare Opus 6.88 on a 0 to 10 blind-judged scale, across four probe types, n=716 subjects.</desc>
+<desc>Animated bar chart: no-slop COMPACT 8.93 and FULL 8.89, statistically tied at the top (d=0.03), lead humanize 8.05, slopless 8.00, jalaalrd 7.83, and bare Opus 6.88 on a 0 to 10 blind-judged scale, across four probe types, n=716 subjects.</desc>
 <rect x="0" y="0" width="680" height="372" rx="16" fill="#14161f"/>
 <text x="36" y="46" fill="#f0f2f6" font-size="21" font-weight="600">Measured #1 across six arms, four probes</text>
 <text x="36" y="68" fill="#8b93a4" font-size="13">Blind-judged score /10 · n=716 subjects · four probe types · lme4 regression</text>
 <g font-size="14">
+  <rect x="220" y="98" width="2" height="60" rx="1" fill="#1baf7a" opacity="0.55"/>
   <text x="214" y="112" text-anchor="end" fill="#e6e9ef" font-weight="600">no-slop COMPACT</text>
   <rect x="228" y="98" width="411" height="20" rx="4" fill="#1baf7a">
     <animate attributeName="width" values="0;0;411;411;0" keyTimes="0;0;0.14;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
@@ -15,6 +16,7 @@
     <animate attributeName="width" values="0;0;409;409;0" keyTimes="0;0.04;0.18;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
   <text x="625" y="152" text-anchor="end" fill="#0c3327" font-weight="600">8.89
     <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.14;0.2;0.9;1" dur="6s" repeatCount="indefinite"/></text>
+  <text x="228" y="171" font-size="11" fill="#8b93a4">the two tiers are one statistical result: d = 0.03, p = 0.82 — order is sort, not rank</text>
   <text x="214" y="192" text-anchor="end" fill="#aab1bf">humanize</text>
   <rect x="228" y="178" width="370" height="20" rx="4" fill="#3f4657">
     <animate attributeName="width" values="0;0;370;370;0" keyTimes="0;0.08;0.22;0.9;1" dur="6s" repeatCount="indefinite"/></rect>
